@@ -1,11 +1,11 @@
 import { AnimatePresence } from "framer-motion";
-import { Toast, Toaster } from "../../modules/toaster";
+import { Toast } from "../../modules/toaster";
 import R_Toast from "../Toast/Toast";
 import "./Toaster.scss";
 
 interface ToasterProps {
   toasts: Toast[];
-  toaster: Toaster;
+  onToastClick: (id: number) => any;
 }
 
 export default function R_Toaster(props: ToasterProps) {
@@ -16,7 +16,7 @@ export default function R_Toaster(props: ToasterProps) {
           return (
             <R_Toast
               key={toast.id}
-              onClick={(id) => props.toaster.removeToastById(id)}
+              onClick={(id) => props.onToastClick(id)}
               toast={toast}
             />
           );

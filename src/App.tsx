@@ -1,18 +1,33 @@
-import { useMemo, useState } from "react";
-import { Toast } from "./modules/toaster";
+import { useEffect, useState } from "react";
+import { Toast, Toaster } from "./modules/toaster";
 import R_Toaster from "./components/Toaster/Toaster";
-import { App } from "./modules/app";
 import "./App.scss";
 import R_Nav from "./components/Nav/Nav";
 import R_FAB from "./components/FAB/FAB";
 
-export interface AppState {
-  toasts: Toast[];
-}
+const toaster = new Toaster();
+let initiated = false;
 
 function R_App() {
   const [toasts, setToasts] = useState<Toast[]>([]);
-  const app = useMemo(() => new App({ setToasts }), []);
+
+  function bakeToast(toast: Toast) {
+    toaster.bake(toast, setToasts);
+  }
+
+  function removeToast(id: number) {
+    toaster.removeToastById(id, setToasts);
+  }
+
+  function init() {
+    bakeToast(new Toast("Hi there!", "plus"));
+  }
+
+  useEffect(() => {
+    if (initiated) return;
+    initiated = true;
+    init();
+  }, []);
 
   return (
     <>
@@ -27,7 +42,7 @@ function R_App() {
         </div>
       </div>
       <R_Nav defaultNavTabId="devices" />
-      <R_Toaster toaster={app.toaster} toasts={toasts} />
+      <R_Toaster onToastClick={removeToast} toasts={toasts} />
     </>
   );
 }
