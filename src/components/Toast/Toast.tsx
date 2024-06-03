@@ -18,7 +18,7 @@ export default function R_Toast(props: ToastProps) {
       className="toast"
       onClick={() => props.onClick(props.toast.id)}
     >
-      {props.toast.iconId && <R_Icon iconId={props.toast.iconId} />}
+      {props.toast.iconId && <R_Icon side iconId={props.toast.iconId} />}
       {props.toast.message}
       <div className="close-overlay">
         <R_Icon iconId="close" side />

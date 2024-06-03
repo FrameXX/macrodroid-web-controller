@@ -7,6 +7,11 @@
   justify-content: center;
   align-items: center;
   flex-direction: row;
+  transition: opacity var(--transition-duration-medium) linear;
+
+  &.faded {
+    opacity: 0;
+  }
 
   #logo {
     width: 500px;
@@ -60,7 +65,7 @@
 
 @keyframes puzzle-2 {
   0% {
-    filter: drop-shadow(1.5px 1.5px 1.5px hsla(0, 0%, 0%, 30%));
+    filter: drop-shadow(2px 2px 2px hsla(0, 0%, 0%, 30%));
     transform: scale(0.6);
   }
 
@@ -70,14 +75,14 @@
   }
 
   100% {
-    filter: drop-shadow(1.5px 1.5px 1.5px hsla(0, 0%, 0%, 30%));
+    filter: drop-shadow(2px 2px 2px hsla(0, 0%, 0%, 30%));
     transform: scale(0.6);
   }
 }
 
 @keyframes puzzle-1 {
   0% {
-    filter: drop-shadow(2px 2px 2px hsla(0, 0%, 0%, 30%));
+    filter: drop-shadow(3px 3px 3px hsla(0, 0%, 0%, 30%));
     transform: scale(0.7);
   }
 
@@ -87,7 +92,7 @@
   }
 
   100% {
-    filter: drop-shadow(2px 2px 2px hsla(0, 0%, 0%, 30%));
+    filter: drop-shadow(3px 3px 3px hsla(0, 0%, 0%, 30%));
     transform: scale(0.7);
   }
 }
