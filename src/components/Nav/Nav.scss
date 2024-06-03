@@ -1,5 +1,5 @@
 nav {
-  position: fixed;
+  --size: 80px;
   bottom: 0;
   left: 0;
   display: flex;
@@ -14,7 +14,7 @@ nav {
     right: 0;
     justify-content: space-evenly;
     width: 100%;
-    height: 85px;
+    height: var(--size);
   }
 }
 
@@ -25,6 +25,6 @@ nav {
     flex-direction: column;
     justify-content: start;
     height: 100%;
-    width: 85px;
+    width: var(--size);
   }
 }
