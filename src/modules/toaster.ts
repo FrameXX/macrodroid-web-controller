@@ -72,7 +72,7 @@ export class Toast {
 
   constructor(
     public readonly message: string,
-    public readonly iconId?: string,
+    public readonly iconId: string,
     readingDurationMs?: number,
   ) {
     if (!readingDurationMs) {
