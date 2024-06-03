@@ -1,0 +1,12 @@
+.toaster {
+  align-items: center;
+  position: fixed;
+  display: flex;
+  flex-direction: column-reverse;
+  top: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+  padding: 8px;
+  pointer-events: none;
+}

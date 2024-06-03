@@ -1,0 +1,35 @@
+@media (prefers-reduced-motion) {
+  :root {
+    --transition-duration-multiplier-config: 0;
+  }
+}
+
+@media (not (prefers-reduced-motion)) {
+  :root {
+    --transition-duration-multiplier-config: 1;
+  }
+}
+
+:root {
+  --transition-duration-multiplier: var(
+    --transition-duration-multiplier-config
+  );
+  --transition-duration-short: calc(
+    100ms * var(--transition-duration-multiplier)
+  );
+  --transition-duration-medium: calc(
+    200ms * var(--transition-duration-multiplier)
+  );
+  --transition-duration-long: calc(
+    300ms * var(--transition-duration-multiplier)
+  );
+  --transition-duration-delayed: calc(
+    400ms * var(--transition-duration-multiplier)
+  );
+  --transition-duration-calm: calc(
+    1000ms * var(--transition-duration-multiplier)
+  );
+  --transition-duration-splashscreen: 500ms;
+  --transition-timing-bounce: cubic-bezier(0.5, 1.25, 0.55, 1.05);
+  --transition-timing-jump: cubic-bezier(0.35, 1, 0.5, 1);
+}

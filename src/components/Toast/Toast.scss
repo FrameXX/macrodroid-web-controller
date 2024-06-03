@@ -1,0 +1,35 @@
+.toast {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  user-select: none;
+  contain: paint;
+  pointer-events: all;
+  margin: 8px;
+  position: relative;
+  padding: 12px;
+  border-width: var(--border-width);
+  border-style: solid;
+  border-color: var(--color-accent);
+  background: var(--color-surface);
+  color: var(--color-text);
+  width: fit-content;
+
+  .close-overlay {
+    background-color: var(--color-surface);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    opacity: 0;
+    transition: opacity var(--transition-duration-medium) linear;
+
+    &:hover {
+      opacity: 0.9;
+    }
+  }
+}

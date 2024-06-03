@@ -1,0 +1,22 @@
+.icon {
+  user-select: none;
+  flex-shrink: 0;
+  margin: 4px;
+  width: 1.8rem;
+  height: 1.8rem;
+  display: inline;
+  fill: currentColor;
+
+  &.side {
+    margin: 4px 8px 4px 0;
+  }
+
+  &.big {
+    width: 2.2rem;
+    height: 2.2rem;
+
+    &.side {
+      margin: 4px 12px 4px 0;
+    }
+  }
+}

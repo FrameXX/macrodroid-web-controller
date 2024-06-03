@@ -1,0 +1,20 @@
+@use "./partials/splashscreen";
+@use "./partials/fonts";
+@use "./partials/colors";
+@use "./partials/shadows";
+@use "./partials/transition_durations";
+@use "./partials/constants";
+
+:root {
+  font-family: "Roboto", "system-ui", "Arial";
+}
+
+body {
+  margin: 0;
+}
+
+button,
+input,
+select {
+  font-family: inherit;
+}
