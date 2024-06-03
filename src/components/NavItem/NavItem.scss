@@ -1,0 +1,28 @@
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  color: var(--color-primary-item-inactive);
+  cursor: pointer;
+  user-select: none;
+
+  &.active {
+    color: var(--color-primary-item);
+  }
+}
+
+// NARROW
+@media screen and (max-width: 700px) {
+  .nav-item {
+    height: 100%;
+  }
+}
+
+// WIDE
+@media screen and (min-width: 701px) {
+  .nav-item {
+    padding: 16px 0;
+  }
+}
