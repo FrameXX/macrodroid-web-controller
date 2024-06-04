@@ -14,6 +14,7 @@ export default function R_PairDeviceWizard(props: AddDeviceWizardProps) {
 
   const animate: TargetAndTransition = {
     translateY: props.open ? "none" : "-100%",
+    display: props.open ? "block" : "none",
   };
 
   return (
