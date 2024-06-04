@@ -4,6 +4,7 @@
 @use "./partials/shadows";
 @use "./partials/transition_durations";
 @use "./partials/constants";
+@import url("./components/Icon/Icon.scss");
 
 [hidden] {
   display: none !important;
@@ -12,6 +13,7 @@
 :root {
   font-family: "Roboto", "system-ui", "Arial";
   color: var(--color-text);
+  box-sizing: border-box;
 }
 
 body {
@@ -53,4 +55,13 @@ button,
 button {
   border: none;
   outline-color: transparent;
+}
+
+h1,
+h2 {
+  font-family: "Helvetica", "Roboto", "system-ui", "Arial";
+}
+
+a {
+  color: var(--color-accent);
 }

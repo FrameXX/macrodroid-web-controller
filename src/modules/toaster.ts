@@ -1,5 +1,7 @@
 import { Random } from "./random";
 
+type ToastSeverity = "success" | "info" | "error";
+
 type SetToasts = (newValue: Toast[]) => any;
 
 export class Toaster {
@@ -75,6 +77,7 @@ export class Toast {
   constructor(
     public readonly message: string,
     public readonly iconId: string,
+    public readonly severity: ToastSeverity = "info",
     readingDurationMs?: number,
   ) {
     if (!readingDurationMs) {

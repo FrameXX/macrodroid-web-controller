@@ -10,7 +10,7 @@ interface NavItemProps {
 }
 
 export default function R_NavItem(props: NavItemProps) {
-  const scale = props.active ? 1.15 : 1;
+  const scale = props.active ? 1.1 : 1;
   return (
     <motion.div
       animate={{ scale }}

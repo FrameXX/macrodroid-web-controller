@@ -1,0 +1,18 @@
+.wizard-navigator {
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-around;
+  height: 115px;
+  align-items: center;
+
+  .filler {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}

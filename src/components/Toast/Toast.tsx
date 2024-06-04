@@ -15,7 +15,7 @@ export default function R_Toast(props: ToastProps) {
       initial={{ opacity: 0, translateY: "-200%", scale: 0.7 }}
       animate={{ opacity: 1, translateY: "none", scale: 1 }}
       exit={{ opacity: 0, translateY: "-200%", scale: 0.7 }}
-      className="toast"
+      className={`toast ${props.toast.severity}`}
       onClick={() => props.onClick(props.toast.id)}
     >
       {props.toast.iconId && <R_Icon side iconId={props.toast.iconId} />}

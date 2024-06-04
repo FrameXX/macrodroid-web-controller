@@ -3,12 +3,18 @@
   justify-content: center;
   align-items: center;
   position: absolute;
-  bottom: 25px;
-  right: 25px;
-  box-shadow: var(--box-shadow);
   background-color: var(--color-item);
   color: var(--color-item-negative);
   border-radius: 50%;
   padding: 14px;
   box-shadow: var(--box-shadow);
+  bottom: 25px;
+
+  &.right {
+    right: 25px;
+  }
+
+  &.left {
+    left: 25px;
+  }
 }

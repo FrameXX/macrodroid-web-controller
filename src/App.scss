@@ -1,14 +1,13 @@
-#tab-content-filler {
+#tab-content {
+  box-sizing: border-box;
   position: relative;
   height: 100%;
   width: 100%;
-}
-
-#tab-content {
   padding: 12px;
 }
 
 #no-devices {
+  padding: 16px 0;
   text-align: center;
   font-size: 1.5rem;
   font-weight: bold;
@@ -16,4 +15,10 @@
 
 #no-devices-face {
   font-size: 3rem;
+}
+
+.tab {
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
 }

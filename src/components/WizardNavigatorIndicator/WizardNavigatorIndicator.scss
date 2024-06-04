@@ -1,0 +1,19 @@
+.wizard-navigator-indicator {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+
+  .dot {
+    border-radius: 50%;
+    background: var(--color-text);
+    width: 0.6rem;
+    height: 0.6rem;
+    opacity: 0.5;
+    margin: 4px;
+    transition: opacity var(--transition-duration-medium) linear;
+
+    &.active {
+      opacity: 1;
+    }
+  }
+}

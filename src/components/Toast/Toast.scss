@@ -12,11 +12,22 @@
   padding: 8px 12px;
   border-width: var(--border-width);
   border-style: solid;
-  border-color: var(--color-accent);
-  background: var(--color-primary);
+  background: var(--color-surface);
   color: var(--color-primary-item);
   width: fit-content;
   box-shadow: var(--box-shadow);
+
+  &.info {
+    border-color: var(--color-accent-action);
+  }
+
+  &.success {
+    border-color: var(--color-accent-constraint);
+  }
+
+  &.error {
+    border-color: var(--color-accent-trigger);
+  }
 
   .close-overlay {
     background-color: var(--color-primary);

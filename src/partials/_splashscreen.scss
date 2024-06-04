@@ -6,7 +6,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  flex-direction: row;
+  flex-direction: column;
   transition: opacity var(--transition-duration-medium) linear;
 
   &.faded {
@@ -95,4 +95,16 @@
     filter: drop-shadow(3px 3px 3px hsla(0, 0%, 0%, 30%));
     transform: scale(0.7);
   }
+}
+
+noscript {
+  background: var(--color-surface);
+  border-radius: var(--border-radius);
+  border: var(--border-width) solid var(--color-accent-trigger);
+  box-shadow: var(--box-shadow);
+  padding: 12px;
+  margin: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
