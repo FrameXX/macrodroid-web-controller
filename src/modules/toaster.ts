@@ -18,7 +18,7 @@ export class Toaster {
   private setToastReadingTimeout(setToasts: SetToasts) {
     const readToast = this.toasts[0];
     this.toastReadingTimeoutId = setTimeout(() => {
-      this.removeMostBakedToast(setToasts);
+      // this.removeMostBakedToast(setToasts);
     }, readToast.readingDurationMs);
   }
 
