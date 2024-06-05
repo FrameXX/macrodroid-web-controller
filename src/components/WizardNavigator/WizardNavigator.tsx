@@ -5,8 +5,8 @@ import "./WizardNavigator.scss";
 interface WizardNavigatorProps {
   leftButton: ReactNode;
   rightButton: ReactNode;
-  dotCount: number;
-  activeDotIndex: number;
+  pageCount: number;
+  activePageIndex: number;
 }
 
 export default function R_WizardNavigator(props: WizardNavigatorProps) {
@@ -14,8 +14,8 @@ export default function R_WizardNavigator(props: WizardNavigatorProps) {
     <div className="wizard-navigator">
       <div className="filler">{props.leftButton}</div>
       <R_WizardNavigatorIndicator
-        dotCount={props.dotCount}
-        activeDotIndex={props.activeDotIndex}
+        pageCount={props.pageCount}
+        activePageIndex={props.activePageIndex}
       />
       <div className="filler">{props.rightButton}</div>
     </div>

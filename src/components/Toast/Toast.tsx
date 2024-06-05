@@ -1,8 +1,9 @@
 import { Toast } from "../../modules/toaster";
 import R_Icon from "../Icon/Icon";
-import { motion } from "framer-motion";
+import { TargetAndTransition, motion } from "framer-motion";
 import "./Toast.scss";
 import { useState } from "react";
+import { defaultTransitionOffset } from "../../modules/const";
 
 interface ToastProps {
   toast: Toast;
@@ -11,25 +12,24 @@ interface ToastProps {
 
 export default function R_Toast(props: ToastProps) {
   const [hovering, setHovering] = useState(false);
-  const overlayTranslateY = hovering ? "none" : "-100%";
+  const overlayAnimate: TargetAndTransition = hovering
+    ? {}
+    : { opacity: 0, y: -defaultTransitionOffset };
 
   return (
     <motion.div
       onHoverStart={() => setHovering(true)}
       onHoverEnd={() => setHovering(false)}
       layout
-      initial={{ opacity: 0, translateY: "-200%", scale: 0.7 }}
-      animate={{ opacity: 1, translateY: "none", scale: 1 }}
-      exit={{ opacity: 0, translateY: "-200%", scale: 0.7 }}
+      initial={{ opacity: 0, y: -defaultTransitionOffset }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -defaultTransitionOffset }}
       className={`toast ${props.toast.severity}`}
       onClick={() => props.onClick(props.toast.id)}
     >
       {props.toast.iconId && <R_Icon side iconId={props.toast.iconId} />}
       {props.toast.message}
-      <motion.div
-        animate={{ translateY: overlayTranslateY }}
-        className="close-overlay"
-      >
+      <motion.div animate={overlayAnimate} className="close-overlay">
         <R_Icon iconId="close" side />
         DISMISS
       </motion.div>
