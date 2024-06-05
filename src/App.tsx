@@ -40,7 +40,7 @@ function R_App() {
   return (
     <>
       <div id="tab-content">
-        <div style={devicesTabStyle} className="tab">
+        <section style={devicesTabStyle} className="tab">
           <div id="no-devices">
             <div id="no-devices-face">¯\_(ツ)_/¯</div>
             Welcome fellow MacroDroid enthusiast! Pair a new device using the
@@ -55,7 +55,7 @@ function R_App() {
             onClose={() => setAddDeviceWizardOpen(false)}
             open={addDeviceWizardOpen}
           />
-        </div>
+        </section>
       </div>
       <R_Nav
         defaultNavTabId={activeNavTabId}

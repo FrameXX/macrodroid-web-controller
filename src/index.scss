@@ -65,3 +65,36 @@ h2 {
 a {
   color: var(--color-accent);
 }
+
+input {
+  font-size: 1rem;
+  padding: 4px;
+  background-color: var(--color-surface);
+  outline: none;
+  border: none;
+  border-bottom: var(--border-width) solid var(--color-accent);
+  color: inherit;
+
+  &:active {
+    outline: none;
+  }
+
+  &::placeholder {
+    color: inherit;
+    opacity: 0.5;
+  }
+
+  &:invalid {
+    border-color: var(--color-trigger);
+  }
+}
+
+.description {
+  padding: 8px;
+  opacity: 0.8;
+  font-size: 0.8rem;
+}
+
+img {
+  margin: 8px;
+}
