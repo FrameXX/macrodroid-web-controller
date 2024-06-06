@@ -60,7 +60,8 @@ export class Connection {
   public request(
     type: RequestType,
     extraData: SearchParam[],
-    onError?: (statusText: string) => any,
+    onError?: (satus: number) => any,
+    onSuccess?: () => any,
   ) {
     const requestId = Random.id(4);
     const webhookURL = this.webhookURL(type, [
@@ -69,7 +70,8 @@ export class Connection {
       ...extraData,
     ]);
     fetch(webhookURL).then((response) => {
-      if (!response.ok && onError) onError(response.statusText);
+      if (!response.ok && onError) onError(response.status);
+      if (response.ok && onSuccess) onSuccess();
     });
     return requestId;
   }

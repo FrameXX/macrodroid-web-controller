@@ -20,7 +20,6 @@ function R_App() {
   const [activeNavTabId, setActiveNavTabId] = useState<NavTabId>("connections");
   const [addConnectionWizardOpen, setAddConnectionWizardOpen] = useState(false);
   const [connections, setConnections] = useState<Connection[]>([]);
-  // @ts-ignore
   const [connectionConfirmed, setConnectionConfirmed] = useState(false);
   const [connectionAddRequestId, setConnectionAddRequestId] = useState(0);
 
@@ -30,10 +29,22 @@ function R_App() {
 
   function onConnectionAdd(connection: Connection) {
     setConnections([connection, ...connections]);
-    const id = connection.request("add", [], (statusText) => {
-      const errorText = `Failed to request connection confirmation. ${statusText}.`;
-      notifyError(errorText, bakeToast);
-    });
+    const id = connection.request(
+      "add",
+      [],
+      (statusText) => {
+        const errorText = `Failed to request connection confirmation. Error ${statusText}.`;
+        notifyError(errorText, bakeToast);
+      },
+      () => {
+        bakeToast(
+          new Toast(
+            "Connection confirmation requested. Waiting for response.",
+            "transit-connection-horizontal",
+          ),
+        );
+      },
+    );
     setConnectionAddRequestId(id);
   }
 

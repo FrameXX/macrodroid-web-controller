@@ -3,5 +3,4 @@ export interface Message {
   data: string[];
 }
 
-// @ts-ignore
 export function parseMessage(data: any) {}
