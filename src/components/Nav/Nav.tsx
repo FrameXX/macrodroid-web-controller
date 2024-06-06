@@ -11,6 +11,14 @@ interface NavProps {
   onTabSwitch?: (newNavTabId: NavTabId) => any;
 }
 
+/**
+ * Renders a navigation bar with tab items that can be switched between.
+ *
+ * @param {NavProps} props - The props for the R_Nav component.
+ * @param {NavTabId} props.navTabId - The initial active tab id.
+ * @param {(newNavTabId: NavTabId) => any} [props.onTabSwitch] - A callback function that is called when a tab is switched.
+ * @return {JSX.Element} The rendered navigation bar.
+ */
 export default function R_Nav(props: NavProps) {
   const [activeNavTabId, setActiveNavTabId] = useState<NavTabId>(
     props.navTabId,

@@ -10,6 +10,14 @@ interface ToastProps {
   onClick: (id: number) => any;
 }
 
+/**
+ * Renders a toast component with the given props.
+ *
+ * @param {ToastProps} props - The props for the toast component.
+ * @param {Toast} props.toast - The toast data.
+ * @param {Function} props.onClick - The function to be called when the toast is clicked.
+ * @return {JSX.Element} The rendered toast component.
+ */
 export default function R_Toast(props: ToastProps) {
   const [hovering, setHovering] = useState(false);
   const overlayAnimate: TargetAndTransition = hovering

@@ -13,6 +13,17 @@ interface FABProps {
 
 const defaultProps: Partial<FABProps> = { left: false, hidden: false };
 
+/**
+ * Renders a floating action button (FAB) with an icon and optional title.
+ *
+ * @param {FABProps} props - The properties for the FAB component.
+ * @param {() => void} props.onClick - The function to call when the FAB is clicked.
+ * @param {boolean} [props.left] - Whether the FAB should be positioned on the left side.
+ * @param {boolean} [props.hidden] - Whether the FAB should be hidden.
+ * @param {string} props.iconId - The ID of the icon to display in the FAB.
+ * @param {string} props.title - The title to display in the FAB.
+ * @return {JSX.Element} The rendered FAB component.
+ */
 export default function R_FAB(props: FABProps) {
   const usedProps = useDefaultProps(props, defaultProps);
   const animate: TargetAndTransition = {

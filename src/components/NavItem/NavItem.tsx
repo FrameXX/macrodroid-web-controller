@@ -10,6 +10,16 @@ interface NavItemProps {
   onClick: () => any;
 }
 
+/**
+ * Renders a navigation item with an icon and title. The item can be active or inactive, and it can be clicked to trigger an action.
+ *
+ * @param {NavItemProps} props - The props for the R_NavItem component.
+ * @param {string} props.title - The title of the navigation item.
+ * @param {string} props.iconId - The id of the icon to display.
+ * @param {boolean} props.active - Whether the navigation item is active or not.
+ * @param {() => any} props.onClick - The function to call when the navigation item is clicked.
+ * @return {JSX.Element} The rendered navigation item.
+ */
 export default function R_NavItem(props: NavItemProps) {
   const wideScreen = useWideScreen();
   const animate: TargetAndTransition = {
