@@ -30,8 +30,17 @@ export default function R_Nav(props: NavProps) {
         justifyContent: "start",
         height: "100%",
         width: 125,
+        overflowX: "hidden",
+        overflowY: "auto",
       }
-    : { right: 0, justifyContent: "space-evenly", width: "100%", height: 80 };
+    : {
+        right: 0,
+        justifyContent: "space-evenly",
+        width: "100%",
+        height: 80,
+        overflowX: "auto",
+        overflowY: "hidden",
+      };
 
   return (
     <motion.nav layout animate={animate}>

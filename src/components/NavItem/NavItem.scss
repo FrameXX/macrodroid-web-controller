@@ -7,6 +7,7 @@
   color: var(--color-primary-item-inactive);
   cursor: pointer;
   user-select: none;
+  min-height: 80px;
 
   &.active {
     color: var(--color-primary-item);

@@ -20,6 +20,7 @@ function R_App() {
   const [activeNavTabId, setActiveNavTabId] = useState<NavTabId>("connections");
   const [addConnectionWizardOpen, setAddConnectionWizardOpen] = useState(false);
   const [connections, setConnections] = useState<Connection[]>([]);
+  // @ts-ignore
   const [connectionConfirmed, setConnectionConfirmed] = useState(false);
   const [connectionAddRequestId, setConnectionAddRequestId] = useState(0);
 

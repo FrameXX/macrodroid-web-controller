@@ -20,6 +20,7 @@ interface AddConnectionWizardProps {
 export default function R_CreateConnectionWizard(
   props: AddConnectionWizardProps,
 ) {
+  // @ts-ignore
   const bakeToast = props.bakeToast;
   const [activePageIndex, setActivePageIndex] = useState(0);
   const [connectionNameValid, setConnectionNameValid] = useState(false);
