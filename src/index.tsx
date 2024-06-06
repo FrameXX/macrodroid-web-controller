@@ -4,15 +4,15 @@ import R_App from "./App.tsx";
 import { hideSplashscreen } from "./modules/elements.ts";
 import { MotionConfig } from "framer-motion";
 import {
-  defaultTransitionDurationS,
-  splashscreenTimeoutMs,
+  DEFAULT_TRANSITION_DURATION_S,
+  SPLASHSCREEN_TIMEOUT_MS,
 } from "./modules/const.ts";
 
 const prefersReducedMotion = matchMedia(
   "(prefers-reduced-motion: reduce)",
 ).matches;
 const transitions = {
-  duration: prefersReducedMotion ? 0.000001 : defaultTransitionDurationS,
+  duration: prefersReducedMotion ? 0.000001 : DEFAULT_TRANSITION_DURATION_S,
   bounce: 0.4,
   type: "spring",
 };
@@ -28,5 +28,5 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
 addEventListener("load", () => {
   setTimeout(() => {
     hideSplashscreen();
-  }, splashscreenTimeoutMs);
+  }, SPLASHSCREEN_TIMEOUT_MS);
 });

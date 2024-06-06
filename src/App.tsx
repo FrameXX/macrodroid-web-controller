@@ -9,7 +9,7 @@ import R_CreateConnectionWizard from "./components/CreateConnectionWizard/Create
 import useWideScreen from "./modules/useWideScreen";
 import { TargetAndTransition, motion } from "framer-motion";
 import { Connection } from "./modules/connection";
-import { defaultTransitionOffset } from "./modules/const";
+import { DEFAULT_TRANSITION_OFFSET } from "./modules/const";
 import { notifyError } from "./modules/notify_error";
 
 const toaster = new Toaster();
@@ -69,7 +69,7 @@ function R_App() {
   function animateTab(navTabId: NavTabId): TargetAndTransition {
     return navTabId === activeNavTabId
       ? {}
-      : { y: -defaultTransitionOffset, opacity: 0, display: "none" };
+      : { y: -DEFAULT_TRANSITION_OFFSET, opacity: 0, display: "none" };
   }
 
   const wideScreen = useWideScreen();

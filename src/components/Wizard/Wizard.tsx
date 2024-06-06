@@ -2,7 +2,7 @@ import { ReactNode } from "react";
 import "./Wizard.scss";
 import { TargetAndTransition, motion } from "framer-motion";
 import R_WizardNavigator from "../WizardNavigator/WizardNavigator";
-import { defaultTransitionOffset } from "../../modules/const";
+import { DEFAULT_TRANSITION_OFFSET } from "../../modules/const";
 
 interface WizardProps {
   open: boolean;
@@ -20,19 +20,19 @@ export default function R_Wizard(props: WizardProps) {
 
   const animate: TargetAndTransition = props.open
     ? {}
-    : { x: defaultTransitionOffset, opacity: 0, display: "none" };
+    : { x: DEFAULT_TRANSITION_OFFSET, opacity: 0, display: "none" };
 
   function animatePage(index: number): TargetAndTransition {
     if (index < props.activePageIndex) {
       return {
         display: "none",
-        x: -defaultTransitionOffset,
+        x: -DEFAULT_TRANSITION_OFFSET,
         opacity: 0,
       };
     } else if (index > props.activePageIndex) {
       return {
         display: "none",
-        x: defaultTransitionOffset,
+        x: DEFAULT_TRANSITION_OFFSET,
         opacity: 0,
       };
     } else {

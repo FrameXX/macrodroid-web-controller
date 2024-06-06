@@ -1,12 +1,12 @@
 import {
-  connectionIdParamName,
-  macrodroidWebhookDomain,
-  ntfyDomain,
-  ntfyTopicPrefix,
-  webhookRequestIdPrefix,
+  CONNECTION_ID_PARAM_NAME,
+  MACRODROID_WEBHOOK_DOMAIN,
+  NTFY_DOMAIN,
+  NTFY_TOPIC_PREFIX,
+  WEBHOOK_REQUEST_ID_PREFIX,
 } from "./const";
 import { Random } from "./random";
-import { requestIdParamName } from "./const";
+import { REQUEST_ID_PARAM_NAME } from "./const";
 
 export type RequestType = "add";
 
@@ -28,7 +28,9 @@ export class Connection {
   }
 
   private get ntfyTopicURL() {
-    return new URL(`https://${ntfyDomain}/${ntfyTopicPrefix}-${this.id}/sse`);
+    return new URL(
+      `https://${NTFY_DOMAIN}/${NTFY_TOPIC_PREFIX}-${this.id}/sse`,
+    );
   }
 
   public listen(
@@ -48,7 +50,7 @@ export class Connection {
 
   public webhookURL(requestType: RequestType, params?: SearchParam[]) {
     const webhookURL = new URL(
-      `https://${macrodroidWebhookDomain}/${this.webhookId}/${webhookRequestIdPrefix}-${requestType}`,
+      `https://${MACRODROID_WEBHOOK_DOMAIN}/${this.webhookId}/${WEBHOOK_REQUEST_ID_PREFIX}-${requestType}`,
     );
     if (!params) return webhookURL;
     for (const param of params) {
@@ -65,8 +67,8 @@ export class Connection {
   ) {
     const requestId = Random.id(4);
     const webhookURL = this.webhookURL(type, [
-      { name: connectionIdParamName, value: this.id },
-      { name: requestIdParamName, value: requestId.toString() },
+      { name: CONNECTION_ID_PARAM_NAME, value: this.id },
+      { name: REQUEST_ID_PARAM_NAME, value: requestId.toString() },
       ...extraData,
     ]);
     fetch(webhookURL).then((response) => {

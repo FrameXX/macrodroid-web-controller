@@ -5,7 +5,7 @@ import { useState } from "react";
 import R_DescribedInput from "../DescribedInput/DescribedInput";
 import screenshot1Src from "../../assets/img/screenshot_1.webp";
 import R_Wizard from "../Wizard/Wizard";
-import { macrodroidAppUrl } from "../../modules/const";
+import { MACRODROID_APP_URL } from "../../modules/const";
 import { Toast } from "../../modules/toaster";
 import { Connection } from "../../modules/connection";
 
@@ -85,7 +85,7 @@ export default function R_CreateConnectionWizard(
           <R_TitleWithIcon iconId="package-down">
             <h3>
               You have{" "}
-              <a href={macrodroidAppUrl} target="_blank">
+              <a href={MACRODROID_APP_URL} target="_blank">
                 MacroDroid
               </a>{" "}
               installed and running on your target device

@@ -3,7 +3,7 @@ import R_Icon from "../Icon/Icon";
 import { TargetAndTransition, motion } from "framer-motion";
 import "./Toast.scss";
 import { useState } from "react";
-import { defaultTransitionOffset } from "../../modules/const";
+import { DEFAULT_TRANSITION_OFFSET } from "../../modules/const";
 
 interface ToastProps {
   toast: Toast;
@@ -14,16 +14,16 @@ export default function R_Toast(props: ToastProps) {
   const [hovering, setHovering] = useState(false);
   const overlayAnimate: TargetAndTransition = hovering
     ? {}
-    : { opacity: 0, y: -defaultTransitionOffset };
+    : { opacity: 0, y: -DEFAULT_TRANSITION_OFFSET };
 
   return (
     <motion.div
       onHoverStart={() => setHovering(true)}
       onHoverEnd={() => setHovering(false)}
       layout
-      initial={{ opacity: 0, y: -defaultTransitionOffset }}
+      initial={{ opacity: 0, y: -DEFAULT_TRANSITION_OFFSET }}
       animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -defaultTransitionOffset }}
+      exit={{ opacity: 0, y: -DEFAULT_TRANSITION_OFFSET }}
       className={`toast ${props.toast.severity}`}
       onClick={() => props.onClick(props.toast.id)}
     >
