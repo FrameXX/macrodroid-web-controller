@@ -40,7 +40,7 @@ function R_App() {
         bakeToast(
           new Toast(
             "Connection confirmation requested. Waiting for response.",
-            "transit-connection-horizontal",
+            "transit-connection-variant",
           ),
         );
       },
@@ -66,10 +66,11 @@ function R_App() {
     init();
   }, []);
 
-  const animateConnectionsTab: TargetAndTransition =
-    activeNavTabId === "connections"
+  function animateTab(navTabId: NavTabId): TargetAndTransition {
+    return navTabId === activeNavTabId
       ? {}
       : { y: -defaultTransitionOffset, opacity: 0, display: "none" };
+  }
 
   const wideScreen = useWideScreen();
 
@@ -80,7 +81,7 @@ function R_App() {
   return (
     <motion.main layout animate={animate}>
       <div id="tab-content">
-        <motion.section animate={animateConnectionsTab} className="tab">
+        <motion.section animate={animateTab("connections")} className="tab">
           <div id="no-connections">
             <div id="no-connections-face">¯\_(ツ)_/¯</div>
             Welcome fellow MacroDroid enthusiast! Pair a new connection using
@@ -99,6 +100,7 @@ function R_App() {
             open={addConnectionWizardOpen}
           />
         </motion.section>
+        <motion.section animate={animateTab("log")}></motion.section>
       </div>
       <R_Nav
         navTabId={activeNavTabId}

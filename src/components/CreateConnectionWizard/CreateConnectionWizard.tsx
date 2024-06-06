@@ -80,7 +80,7 @@ export default function R_CreateConnectionWizard(
         <>
           <h2>Meet the prerequisites</h2>
           <R_TitleWithIcon iconId="wifi-check">
-            <h3>Your target connection is connected to internet</h3>
+            <h3>Your target device is connected to internet</h3>
           </R_TitleWithIcon>
           <R_TitleWithIcon iconId="package-down">
             <h3>
@@ -88,7 +88,7 @@ export default function R_CreateConnectionWizard(
               <a href={macrodroidAppUrl} target="_blank">
                 MacroDroid
               </a>{" "}
-              installed and running on your target connection
+              installed and running on your target device
             </h3>
           </R_TitleWithIcon>
           <R_TitleWithIcon iconId="import">
@@ -134,9 +134,17 @@ export default function R_CreateConnectionWizard(
         </>,
         <>
           <h2>Confirm the connection</h2>
-          <div>The request ID is:</div>
+          <p>The request ID is:</p>
           <strong>{props.connectionAddRequestId}</strong>
-          <div id="connection-id"></div>
+          <p>
+            Wait before the confirmation is successfully requested (You will be
+            informed) and confirm the request on your target device.
+          </p>
+          <p>
+            In other case there might be a problem with your webhook ID, your
+            device's internet connection or MacroDroid webhook server. You can
+            go back to edit the webhook ID.
+          </p>
         </>,
       ]}
     />

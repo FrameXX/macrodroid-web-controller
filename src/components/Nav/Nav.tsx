@@ -38,8 +38,6 @@ export default function R_Nav(props: NavProps) {
         justifyContent: "space-evenly",
         width: "100%",
         height: 80,
-        overflowX: "auto",
-        overflowY: "hidden",
       };
 
   return (
@@ -47,7 +45,7 @@ export default function R_Nav(props: NavProps) {
       <R_NavItem
         active={activeNavTabId === "connections"}
         onClick={() => swicthTab("connections")}
-        iconId="devices"
+        iconId="transit-connection-variant"
         title="Connections"
       />
       <R_NavItem
