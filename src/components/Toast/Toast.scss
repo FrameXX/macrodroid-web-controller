@@ -16,6 +16,7 @@
   color: var(--color-text);
   width: fit-content;
   box-shadow: var(--box-shadow);
+  z-index: var(--z-index-toast);
 
   &.info {
     border-color: var(--color-accent-action);

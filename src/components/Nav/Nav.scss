@@ -1,30 +1,9 @@
 nav {
-  --size: 80px;
   bottom: 0;
   left: 0;
   display: flex;
   align-items: center;
   background: var(--color-primary);
   box-shadow: var(--box-shadow);
-}
-
-// NARROW
-@media screen and (max-width: 700px) {
-  nav {
-    right: 0;
-    justify-content: space-evenly;
-    width: 100%;
-    height: var(--size);
-  }
-}
-
-// WIDE
-@media screen and (min-width: 701px) {
-  nav {
-    top: 0;
-    flex-direction: column;
-    justify-content: start;
-    height: 100%;
-    width: var(--size);
-  }
+  z-index: var(--z-index-nav);
 }

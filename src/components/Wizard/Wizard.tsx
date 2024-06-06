@@ -10,6 +10,7 @@ interface WizardProps {
   activePageIndex: number;
   leftButton: ReactNode;
   rightButton: ReactNode;
+  id?: string;
 }
 
 export default function R_Wizard(props: WizardProps) {
@@ -40,7 +41,7 @@ export default function R_Wizard(props: WizardProps) {
   }
 
   return (
-    <motion.div animate={animate} className="wizard">
+    <motion.div id={props.id} animate={animate} className="wizard">
       {props.pages.map((page, index) => (
         <motion.div key={index} className="page" animate={animatePage(index)}>
           {page}

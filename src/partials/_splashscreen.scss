@@ -8,6 +8,7 @@
   align-items: center;
   flex-direction: column;
   transition: opacity var(--transition-duration-medium) linear;
+  z-index: var(--z-index-splashscreen);
 
   &.faded {
     opacity: 0;

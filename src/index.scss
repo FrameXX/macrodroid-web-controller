@@ -4,6 +4,7 @@
 @use "./partials/shadows";
 @use "./partials/transition_durations";
 @use "./partials/constants";
+@use "./partials/z_index";
 @import url("./components/Icon/Icon.scss");
 
 [hidden] {
@@ -20,24 +21,12 @@ body {
   margin: 0;
 }
 
-#root {
+main {
   display: flex;
   position: fixed;
   width: 100%;
   height: 100%;
   background: var(--color-surface);
-}
-
-@media screen and (max-width: 700px) {
-  #root {
-    flex-direction: column;
-  }
-}
-
-@media screen and (min-width: 701px) {
-  #root {
-    flex-direction: row-reverse;
-  }
 }
 
 button,
@@ -97,4 +86,10 @@ input {
 
 img {
   margin: 8px;
+}
+
+strong {
+  font-size: 3rem;
+  padding: 16px;
+  display: block;
 }

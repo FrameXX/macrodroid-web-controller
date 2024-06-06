@@ -6,13 +6,15 @@ import R_Nav from "./components/Nav/Nav";
 import R_FAB from "./components/FAB/FAB";
 import { NavTabId } from "./components/Nav/Nav";
 import R_PairDeviceWizard from "./components/PairDeviceWizard/PairDeviceWizard";
+import useWideScreen from "./modules/useWideScreen";
+import { TargetAndTransition, motion } from "framer-motion";
 
 const toaster = new Toaster();
 let initiated = false;
 
 function R_App() {
   const [toasts, setToasts] = useState<Toast[]>([]);
-  const [activeNavTabId, setActiveNavTabId] = useState<NavTabId>("devices");
+  const [activeNavTabId, setActiveNavTabId] = useState<NavTabId>("connections");
   const [addDeviceWizardOpen, setAddDeviceWizardOpen] = useState(false);
 
   function bakeToast(toast: Toast) {
@@ -34,15 +36,21 @@ function R_App() {
   }, []);
 
   const devicesTabStyle: React.CSSProperties = {
-    display: activeNavTabId === "devices" ? "block" : "none",
+    display: activeNavTabId === "connections" ? "block" : "none",
   };
 
+  const wideScreen = useWideScreen();
+
+  const animate: TargetAndTransition = wideScreen
+    ? { flexDirection: "column" }
+    : { flexDirection: "row-reverse" };
+
   return (
-    <>
+    <motion.main layout animate={animate}>
       <div id="tab-content">
         <section style={devicesTabStyle} className="tab">
-          <div id="no-devices">
-            <div id="no-devices-face">¯\_(ツ)_/¯</div>
+          <div id="no-connections">
+            <div id="no-connections-face">¯\_(ツ)_/¯</div>
             Welcome fellow MacroDroid enthusiast! Pair a new device using the
             button with plus icon.
           </div>
@@ -52,6 +60,7 @@ function R_App() {
             iconId="plus"
           />
           <R_PairDeviceWizard
+            bakeToast={bakeToast}
             onClose={() => setAddDeviceWizardOpen(false)}
             open={addDeviceWizardOpen}
           />
@@ -64,7 +73,7 @@ function R_App() {
         }}
       />
       <R_Toaster onToastClick={removeToast} toasts={toasts} />
-    </>
+    </motion.main>
   );
 }
 

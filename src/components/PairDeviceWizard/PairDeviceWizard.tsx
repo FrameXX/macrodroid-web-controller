@@ -4,27 +4,36 @@ import R_TitleWithIcon from "../TitleWithIcon/TitleWithIcon";
 import { useState } from "react";
 import R_DescribedInput from "../DescribedInput/DescribedInput";
 import screenshot1Src from "../../assets/img/screenshot_1.webp";
-import { Random } from "../../modules/random";
 import R_Wizard from "../Wizard/Wizard";
+import { macrodroidAppUrl } from "../../modules/const";
+import { Toast } from "../../modules/toaster";
+import { Connection } from "../../modules/connection";
 
 interface AddDeviceWizardProps {
   open: boolean;
+  bakeToast: (toast: Toast) => any;
   onClose: () => any;
 }
 
 export default function R_PairDeviceWizard(props: AddDeviceWizardProps) {
+  const bakeToast = props.bakeToast;
   const [activePageIndex, setActivePageIndex] = useState(0);
   const [deviceNameValid, setDeviceNameValid] = useState(false);
   const [webhookIdValid, setWebhookIdValid] = useState(false);
-  const [deviceName, setDeviceName] = useState<string>();
-  const [webhookId, setWebhookId] = useState<string>();
-  const [connectionId, setConnectionId] = useState<string>();
+  const [connectionName, setConnectionName] = useState<string>("");
+  const [webhookId, setWebhookId] = useState<string>("");
+  const [connectionId, setConnectionId] = useState<string>("");
 
   function nextPage() {
     const previousPageIndex = activePageIndex;
     setActivePageIndex(activePageIndex + 1);
-    if (previousPageIndex !== 1) return;
-    setConnectionId(Random.readableId());
+    if (previousPageIndex === 1) pairRequest();
+  }
+
+  function pairRequest() {
+    const connection = new Connection(connectionName, webhookId);
+    setConnectionId(connection.id);
+    connection.pairRequest();
   }
 
   function previousPage() {
@@ -56,7 +65,8 @@ export default function R_PairDeviceWizard(props: AddDeviceWizardProps) {
       rightButton={
         <R_FAB
           hidden={
-            activePageIndex === 1 && (!deviceNameValid || !webhookIdValid)
+            (activePageIndex === 1 && (!deviceNameValid || !webhookIdValid)) ||
+            activePageIndex == 2
           }
           title="Next page"
           iconId="chevron-right"
@@ -72,10 +82,7 @@ export default function R_PairDeviceWizard(props: AddDeviceWizardProps) {
           <R_TitleWithIcon iconId="package-down">
             <h3>
               You have{" "}
-              <a
-                href="https://play.google.com/store/apps/details?id=com.arlosoft.macrodroid"
-                target="_blank"
-              >
+              <a href={macrodroidAppUrl} target="_blank">
                 MacroDroid
               </a>{" "}
               installed and running on your target device
@@ -90,14 +97,14 @@ export default function R_PairDeviceWizard(props: AddDeviceWizardProps) {
           <form id="pair-info">
             <R_DescribedInput
               onChange={(event) => {
-                setDeviceName(event.target.value);
+                setConnectionName(event.target.value);
                 setDeviceNameValid(event.target.validity.valid);
               }}
               required
               type="text"
               maxLength={40}
-              placeholder="Enter device name"
-              description="This is your custom name, so that you can differentiate the device from other paired devices"
+              placeholder="Enter connection name"
+              description="This is your custom name, so that you can differentiate the connection from other."
             />
             <R_DescribedInput
               onChange={(event) => {
@@ -105,7 +112,7 @@ export default function R_PairDeviceWizard(props: AddDeviceWizardProps) {
                 setWebhookIdValid(event.target.validity.valid);
               }}
               required
-              pattern="(?:[a-z]|\d|-){16,32}"
+              pattern="(?:[a-z]|\d|-){25,50}"
               type="text"
               autoCapitalize="none"
               placeholder="Enter webhook ID"
@@ -124,6 +131,9 @@ export default function R_PairDeviceWizard(props: AddDeviceWizardProps) {
         </>,
         <>
           <h2>Pair the device</h2>
+          <div>Your connection ID is</div>
+          <strong>{connectionId}</strong>
+          <div id="connection-id"></div>
         </>,
       ]}
     />

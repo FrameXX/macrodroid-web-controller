@@ -1,1 +1,9 @@
 export const defaultTransitionOffset = 40;
+export const macrodroidAppUrl =
+  "https://play.google.com/store/apps/details?id=com.arlosoft.macrodroid";
+export const macrodroidWebhookDomain = "trigger.macrodroid.com";
+export const webhookRequestIdPrefix = "mdwc";
+export const webhookPairRequestId = "pair";
+export const connectionIdParamName = "connectionId";
+export const ntfyDomain = "ntfy.sh";
+export const ntfyTopicPrefix = "macrodroid-wc";

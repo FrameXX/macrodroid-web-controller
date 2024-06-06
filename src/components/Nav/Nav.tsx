@@ -1,8 +1,10 @@
 import { useState } from "react";
 import R_NavItem from "../NavItem/NavItem";
 import "./Nav.scss";
+import { TargetAndTransition, motion } from "framer-motion";
+import useWideScreen from "../../modules/useWideScreen";
 
-export type NavTabId = "devices" | "actions" | "log" | "extras";
+export type NavTabId = "connections" | "actions" | "log" | "extras";
 
 interface NavProps {
   defaultNavTabId: NavTabId;
@@ -16,7 +18,7 @@ export interface NavTab {
 }
 
 const navTabs: NavTab[] = [
-  { id: "devices", title: "Devices", iconId: "devices" },
+  { id: "connections", title: "Connections", iconId: "devices" },
   { id: "actions", title: "Actions", iconId: "play" },
   { id: "log", title: "Log", iconId: "text-box" },
   { id: "extras", title: "Extras", iconId: "dots-horizontal" },
@@ -32,8 +34,20 @@ export default function R_Nav(props: NavProps) {
     if (props.onTabSwitch) props.onTabSwitch(newId);
   }
 
+  const wideScreen = useWideScreen();
+
+  const animate: TargetAndTransition = wideScreen
+    ? { right: 0, justifyContent: "space-evenly", width: "100%", height: 80 }
+    : {
+        top: 0,
+        flexDirection: "column",
+        justifyContent: "start",
+        height: "100%",
+        width: 125,
+      };
+
   return (
-    <nav>
+    <motion.nav layout animate={animate}>
       {navTabs.map((tab) => (
         <R_NavItem
           key={tab.id}
@@ -42,6 +56,6 @@ export default function R_Nav(props: NavProps) {
           navTab={tab}
         />
       ))}
-    </nav>
+    </motion.nav>
   );
 }
