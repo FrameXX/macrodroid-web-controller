@@ -1,4 +1,4 @@
-<div style="text-align: center;">
+<div align="center">
 
 <img width="" src="./src/assets/img/favicon.svg"  width=160 height=160>
 
