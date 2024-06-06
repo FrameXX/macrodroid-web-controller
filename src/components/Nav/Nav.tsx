@@ -7,26 +7,13 @@ import useWideScreen from "../../modules/useWideScreen";
 export type NavTabId = "connections" | "actions" | "log" | "extras";
 
 interface NavProps {
-  defaultNavTabId: NavTabId;
+  navTabId: NavTabId;
   onTabSwitch?: (newNavTabId: NavTabId) => any;
 }
 
-export interface NavTab {
-  id: NavTabId;
-  title: string;
-  iconId: string;
-}
-
-const navTabs: NavTab[] = [
-  { id: "connections", title: "Connections", iconId: "devices" },
-  { id: "actions", title: "Actions", iconId: "play" },
-  { id: "log", title: "Log", iconId: "text-box" },
-  { id: "extras", title: "Extras", iconId: "dots-horizontal" },
-];
-
 export default function R_Nav(props: NavProps) {
   const [activeNavTabId, setActiveNavTabId] = useState<NavTabId>(
-    props.defaultNavTabId,
+    props.navTabId,
   );
 
   function swicthTab(newId: NavTabId) {
@@ -48,14 +35,30 @@ export default function R_Nav(props: NavProps) {
 
   return (
     <motion.nav layout animate={animate}>
-      {navTabs.map((tab) => (
-        <R_NavItem
-          key={tab.id}
-          active={activeNavTabId === tab.id}
-          onClick={() => swicthTab(tab.id)}
-          navTab={tab}
-        />
-      ))}
+      <R_NavItem
+        active={activeNavTabId === "connections"}
+        onClick={() => swicthTab("connections")}
+        iconId="devices"
+        title="Connections"
+      />
+      <R_NavItem
+        active={activeNavTabId === "actions"}
+        onClick={() => swicthTab("actions")}
+        iconId="play"
+        title="Actions"
+      />
+      <R_NavItem
+        active={activeNavTabId === "log"}
+        onClick={() => swicthTab("log")}
+        iconId="text-box"
+        title="Log"
+      />
+      <R_NavItem
+        active={activeNavTabId === "extras"}
+        onClick={() => swicthTab("extras")}
+        iconId="dots-horizontal"
+        title="Extras"
+      />
     </motion.nav>
   );
 }

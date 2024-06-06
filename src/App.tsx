@@ -5,9 +5,12 @@ import "./App.scss";
 import R_Nav from "./components/Nav/Nav";
 import R_FAB from "./components/FAB/FAB";
 import { NavTabId } from "./components/Nav/Nav";
-import R_PairDeviceWizard from "./components/PairDeviceWizard/PairDeviceWizard";
+import R_CreateConnectionWizard from "./components/CreateConnectionWizard/CreateConnectionWizard";
 import useWideScreen from "./modules/useWideScreen";
 import { TargetAndTransition, motion } from "framer-motion";
+import { Connection } from "./modules/connection";
+import { defaultTransitionOffset } from "./modules/const";
+import { notifyError } from "./modules/notify_error";
 
 const toaster = new Toaster();
 let initiated = false;
@@ -15,7 +18,23 @@ let initiated = false;
 function R_App() {
   const [toasts, setToasts] = useState<Toast[]>([]);
   const [activeNavTabId, setActiveNavTabId] = useState<NavTabId>("connections");
-  const [addDeviceWizardOpen, setAddDeviceWizardOpen] = useState(false);
+  const [addConnectionWizardOpen, setAddConnectionWizardOpen] = useState(false);
+  const [connections, setConnections] = useState<Connection[]>([]);
+  const [connectionConfirmed, setConnectionConfirmed] = useState(false);
+  const [connectionAddRequestId, setConnectionAddRequestId] = useState(0);
+
+  function onClosePairConnectionWizard() {
+    setAddConnectionWizardOpen(false);
+  }
+
+  function onConnectionAdd(connection: Connection) {
+    setConnections([connection, ...connections]);
+    const id = connection.request("add", [], (statusText) => {
+      const errorText = `Failed to request connection confirmation. ${statusText}.`;
+      notifyError(errorText, bakeToast);
+    });
+    setConnectionAddRequestId(id);
+  }
 
   function bakeToast(toast: Toast) {
     toaster.bake(toast, setToasts);
@@ -35,9 +54,10 @@ function R_App() {
     init();
   }, []);
 
-  const devicesTabStyle: React.CSSProperties = {
-    display: activeNavTabId === "connections" ? "block" : "none",
-  };
+  const animateConnectionsTab: TargetAndTransition =
+    activeNavTabId === "connections"
+      ? {}
+      : { y: -defaultTransitionOffset, opacity: 0, display: "none" };
 
   const wideScreen = useWideScreen();
 
@@ -48,26 +68,28 @@ function R_App() {
   return (
     <motion.main layout animate={animate}>
       <div id="tab-content">
-        <section style={devicesTabStyle} className="tab">
+        <motion.section animate={animateConnectionsTab} className="tab">
           <div id="no-connections">
             <div id="no-connections-face">¯\_(ツ)_/¯</div>
-            Welcome fellow MacroDroid enthusiast! Pair a new device using the
-            button with plus icon.
+            Welcome fellow MacroDroid enthusiast! Pair a new connection using
+            the button with plus icon.
           </div>
           <R_FAB
-            title="Pair a new device"
-            onClick={() => setAddDeviceWizardOpen(true)}
+            title="Create new connection"
+            onClick={() => setAddConnectionWizardOpen(true)}
             iconId="plus"
           />
-          <R_PairDeviceWizard
+          <R_CreateConnectionWizard
+            connectionAddRequestId={connectionAddRequestId}
+            onConnectionAdd={onConnectionAdd}
             bakeToast={bakeToast}
-            onClose={() => setAddDeviceWizardOpen(false)}
-            open={addDeviceWizardOpen}
+            onClose={onClosePairConnectionWizard}
+            open={addConnectionWizardOpen}
           />
-        </section>
+        </motion.section>
       </div>
       <R_Nav
-        defaultNavTabId={activeNavTabId}
+        navTabId={activeNavTabId}
         onTabSwitch={(newNavTabId: NavTabId) => {
           setActiveNavTabId(newNavTabId);
         }}

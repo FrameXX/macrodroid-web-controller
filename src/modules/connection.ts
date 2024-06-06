@@ -1,10 +1,14 @@
 import {
   connectionIdParamName,
   macrodroidWebhookDomain,
-  webhookPairRequestId,
+  ntfyDomain,
+  ntfyTopicPrefix,
   webhookRequestIdPrefix,
 } from "./const";
 import { Random } from "./random";
+import { requestIdParamName } from "./const";
+
+export type RequestType = "add";
 
 export interface SearchParam {
   name: string;
@@ -13,6 +17,8 @@ export interface SearchParam {
 
 export class Connection {
   public readonly id: string;
+  public readonly listening = false;
+  private eventSource?: EventSource;
 
   constructor(
     public readonly name: string,
@@ -21,9 +27,28 @@ export class Connection {
     this.id = Random.readableId();
   }
 
-  public webhookURL(requestId: string, params?: SearchParam[]) {
+  private get ntfyTopicURL() {
+    return new URL(`https://${ntfyDomain}/${ntfyTopicPrefix}-${this.id}/sse`);
+  }
+
+  public listen(
+    onMessage: (event: MessageEvent) => any,
+    onError?: (event: Event) => any,
+    onOpen?: (event: Event) => any,
+  ) {
+    if (this.listening)
+      throw Error("This connection is already listening to new messages");
+    this.eventSource = new EventSource(this.ntfyTopicURL);
+    this.eventSource.addEventListener("message", (event) => onMessage(event));
+    if (onError)
+      this.eventSource.addEventListener("error", (event) => onError(event));
+    if (onOpen)
+      this.eventSource.addEventListener("open", (event) => onOpen(event));
+  }
+
+  public webhookURL(requestType: RequestType, params?: SearchParam[]) {
     const webhookURL = new URL(
-      `https://${macrodroidWebhookDomain}/${this.webhookId}/${webhookRequestIdPrefix}-${requestId}`,
+      `https://${macrodroidWebhookDomain}/${this.webhookId}/${webhookRequestIdPrefix}-${requestType}`,
     );
     if (!params) return webhookURL;
     for (const param of params) {
@@ -32,10 +57,20 @@ export class Connection {
     return webhookURL;
   }
 
-  public async pairRequest() {
-    const webhookURL = this.webhookURL(webhookPairRequestId, [
+  public request(
+    type: RequestType,
+    extraData: SearchParam[],
+    onError?: (statusText: string) => any,
+  ) {
+    const requestId = Random.id(4);
+    const webhookURL = this.webhookURL(type, [
       { name: connectionIdParamName, value: this.id },
+      { name: requestIdParamName, value: requestId.toString() },
+      ...extraData,
     ]);
-    fetch(webhookURL);
+    fetch(webhookURL).then((response) => {
+      if (!response.ok && onError) onError(response.statusText);
+    });
+    return requestId;
   }
 }

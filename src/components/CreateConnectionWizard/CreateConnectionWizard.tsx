@@ -1,5 +1,5 @@
 import R_FAB from "../FAB/FAB";
-import "./PairDeviceWizard.scss";
+import "./CreateConnectionWizard.scss";
 import R_TitleWithIcon from "../TitleWithIcon/TitleWithIcon";
 import { useState } from "react";
 import R_DescribedInput from "../DescribedInput/DescribedInput";
@@ -9,31 +9,33 @@ import { macrodroidAppUrl } from "../../modules/const";
 import { Toast } from "../../modules/toaster";
 import { Connection } from "../../modules/connection";
 
-interface AddDeviceWizardProps {
+interface AddConnectionWizardProps {
   open: boolean;
+  connectionAddRequestId: number;
   bakeToast: (toast: Toast) => any;
   onClose: () => any;
+  onConnectionAdd: (connection: Connection) => any;
 }
 
-export default function R_PairDeviceWizard(props: AddDeviceWizardProps) {
+export default function R_CreateConnectionWizard(
+  props: AddConnectionWizardProps,
+) {
   const bakeToast = props.bakeToast;
   const [activePageIndex, setActivePageIndex] = useState(0);
-  const [deviceNameValid, setDeviceNameValid] = useState(false);
+  const [connectionNameValid, setConnectionNameValid] = useState(false);
   const [webhookIdValid, setWebhookIdValid] = useState(false);
   const [connectionName, setConnectionName] = useState<string>("");
   const [webhookId, setWebhookId] = useState<string>("");
-  const [connectionId, setConnectionId] = useState<string>("");
 
   function nextPage() {
     const previousPageIndex = activePageIndex;
     setActivePageIndex(activePageIndex + 1);
-    if (previousPageIndex === 1) pairRequest();
+    if (previousPageIndex === 1) addConnection();
   }
 
-  function pairRequest() {
+  function addConnection() {
     const connection = new Connection(connectionName, webhookId);
-    setConnectionId(connection.id);
-    connection.pairRequest();
+    props.onConnectionAdd(connection);
   }
 
   function previousPage() {
@@ -49,7 +51,7 @@ export default function R_PairDeviceWizard(props: AddDeviceWizardProps) {
           <R_FAB
             hidden={activePageIndex !== 0}
             left
-            title="Cancel pairing of new device"
+            title="Cancel creation of new connection"
             onClick={props.onClose}
             iconId="close"
           />
@@ -65,7 +67,8 @@ export default function R_PairDeviceWizard(props: AddDeviceWizardProps) {
       rightButton={
         <R_FAB
           hidden={
-            (activePageIndex === 1 && (!deviceNameValid || !webhookIdValid)) ||
+            (activePageIndex === 1 &&
+              (!connectionNameValid || !webhookIdValid)) ||
             activePageIndex == 2
           }
           title="Next page"
@@ -77,7 +80,7 @@ export default function R_PairDeviceWizard(props: AddDeviceWizardProps) {
         <>
           <h2>Meet the prerequisites</h2>
           <R_TitleWithIcon iconId="wifi-check">
-            <h3>Your target device is connected to internet</h3>
+            <h3>Your target connection is connected to internet</h3>
           </R_TitleWithIcon>
           <R_TitleWithIcon iconId="package-down">
             <h3>
@@ -85,7 +88,7 @@ export default function R_PairDeviceWizard(props: AddDeviceWizardProps) {
               <a href={macrodroidAppUrl} target="_blank">
                 MacroDroid
               </a>{" "}
-              installed and running on your target device
+              installed and running on your target connection
             </h3>
           </R_TitleWithIcon>
           <R_TitleWithIcon iconId="import">
@@ -94,11 +97,11 @@ export default function R_PairDeviceWizard(props: AddDeviceWizardProps) {
         </>,
         <>
           <h2>Enter info</h2>
-          <form id="pair-info">
+          <form id="connection-info">
             <R_DescribedInput
               onChange={(event) => {
                 setConnectionName(event.target.value);
-                setDeviceNameValid(event.target.validity.valid);
+                setConnectionNameValid(event.target.validity.valid);
               }}
               required
               type="text"
@@ -119,7 +122,7 @@ export default function R_PairDeviceWizard(props: AddDeviceWizardProps) {
               description={
                 <>
                   <div>
-                    You can find webhook URL of your device by going to New
+                    You can find webhook URL of your connection by going to New
                     macro &gt; Add trigger &gt; Connectivity &gt; Webhook (Url).
                     Enter just the ID (between last 2 forward slashes).
                   </div>
@@ -130,9 +133,9 @@ export default function R_PairDeviceWizard(props: AddDeviceWizardProps) {
           </form>
         </>,
         <>
-          <h2>Pair the device</h2>
-          <div>Your connection ID is</div>
-          <strong>{connectionId}</strong>
+          <h2>Confirm the connection</h2>
+          <div>The request ID is:</div>
+          <strong>{props.connectionAddRequestId}</strong>
           <div id="connection-id"></div>
         </>,
       ]}

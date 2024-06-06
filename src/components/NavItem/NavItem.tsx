@@ -1,11 +1,11 @@
 import R_Icon from "../Icon/Icon";
-import { NavTab } from "../Nav/Nav";
 import "./NavItem.scss";
 import { motion } from "framer-motion";
 
 interface NavItemProps {
+  title: string;
+  iconId: string;
   active: boolean;
-  navTab: NavTab;
   onClick: () => any;
 }
 
@@ -16,12 +16,12 @@ export default function R_NavItem(props: NavItemProps) {
       animate={{ scale }}
       role="button"
       tabIndex={0}
-      title={props.navTab.title}
+      title={props.title}
       className={`nav-item ${props.active ? "active" : ""}`}
       onClick={props.onClick}
     >
-      <R_Icon iconId={props.navTab.iconId} />
-      {props.navTab.title}
+      <R_Icon iconId={props.iconId} />
+      {props.title}
     </motion.div>
   );
 }
