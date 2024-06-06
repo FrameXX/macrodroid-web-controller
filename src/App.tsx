@@ -62,8 +62,8 @@ function R_App() {
   const wideScreen = useWideScreen();
 
   const animate: TargetAndTransition = wideScreen
-    ? { flexDirection: "column" }
-    : { flexDirection: "row-reverse" };
+    ? { flexDirection: "row-reverse" }
+    : { flexDirection: "column" };
 
   return (
     <motion.main layout animate={animate}>

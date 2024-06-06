@@ -24,14 +24,14 @@ export default function R_Nav(props: NavProps) {
   const wideScreen = useWideScreen();
 
   const animate: TargetAndTransition = wideScreen
-    ? { right: 0, justifyContent: "space-evenly", width: "100%", height: 80 }
-    : {
+    ? {
         top: 0,
         flexDirection: "column",
         justifyContent: "start",
         height: "100%",
         width: 125,
-      };
+      }
+    : { right: 0, justifyContent: "space-evenly", width: "100%", height: 80 };
 
   return (
     <motion.nav layout animate={animate}>
