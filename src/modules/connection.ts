@@ -78,3 +78,7 @@ export class Connection {
     return requestId;
   }
 }
+
+export class ConnectionEvent {
+  constructor(public readonly connectionName: string) {}
+}

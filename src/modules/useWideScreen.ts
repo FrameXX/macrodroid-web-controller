@@ -1,14 +1,19 @@
 import { useState, useEffect } from "react";
 
-const useWideScreen = () => {
+const useWideScreen = (
+  isWide: (width: number, height: number) => boolean = (
+    width: number,
+    height: number,
+  ) => width > height,
+) => {
   const [isWideScreen, setIsWideScreen] = useState(
     window.innerWidth > window.innerHeight,
   );
 
   useEffect(() => {
     const handleResize = () => {
-      const isWide = window.innerWidth > window.innerHeight;
-      setIsWideScreen(isWide);
+      const wideScreen = isWide(innerWidth, innerHeight);
+      setIsWideScreen(wideScreen);
     };
 
     window.addEventListener("resize", handleResize);

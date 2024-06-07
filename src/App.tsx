@@ -11,6 +11,7 @@ import { TargetAndTransition, motion } from "framer-motion";
 import { Connection } from "./modules/connection";
 import { DEFAULT_TRANSITION_OFFSET } from "./modules/const";
 import { notifyError } from "./modules/notify_error";
+import R_LogEvent from "./components/LogEvent/LogEvent";
 
 const toaster = new Toaster();
 let initiated = false;
@@ -100,7 +101,19 @@ function R_App() {
             open={addConnectionWizardOpen}
           />
         </motion.section>
-        <motion.section animate={animateTab("log")}></motion.section>
+        <motion.section
+          id="log-tab"
+          className="tab"
+          animate={animateTab("log")}
+        >
+          <div>
+            <div id="log-filter">
+              <select />
+              <input type="text" placeholder="Filter log..." />
+            </div>
+            <R_LogEvent />
+          </div>
+        </motion.section>
       </div>
       <R_Nav
         navTabId={activeNavTabId}
