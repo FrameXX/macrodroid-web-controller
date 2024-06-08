@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-const useWideScreen = (
+const useInnerSize = (
   isWide: (width: number, height: number) => boolean = (
     width: number,
     height: number,
@@ -27,4 +27,4 @@ const useWideScreen = (
   return isWideScreen;
 };
 
-export default useWideScreen;
+export default useInnerSize;

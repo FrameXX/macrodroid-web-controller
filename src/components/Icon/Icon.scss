@@ -1,9 +1,10 @@
 .icon {
+  --icon-size: 1.8rem;
   user-select: none;
   flex-shrink: 0;
   margin: 4px;
-  width: 1.8rem;
-  height: 1.8rem;
+  width: var(--icon-size);
+  height: var(--icon-size);
   fill: currentColor;
 
   &.side {

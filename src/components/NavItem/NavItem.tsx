@@ -1,4 +1,4 @@
-import useWideScreen from "../../modules/useWideScreen";
+import useInnerSize from "../../modules/useInnerSize";
 import R_Icon from "../Icon/Icon";
 import "./NavItem.scss";
 import { TargetAndTransition, motion } from "framer-motion";
@@ -21,7 +21,7 @@ interface NavItemProps {
  * @return {JSX.Element} The rendered navigation item.
  */
 export default function R_NavItem(props: NavItemProps) {
-  const wideScreen = useWideScreen();
+  const wideScreen = useInnerSize();
   const animate: TargetAndTransition = {
     color: props.active
       ? "var(--color-primary-item)"

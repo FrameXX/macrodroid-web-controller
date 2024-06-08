@@ -11,12 +11,12 @@ export default function R_LogEvent(props: LogEventProps) {
         2024-06-24 12:25:43
       </div>
       <div>
-        <R_Icon side iconId={"play"} />
-        Confirm connection
-      </div>
-      <div>
         <R_Icon side iconId={"arrow-right-thick"} />
         Mi Box
+      </div>
+      <div>
+        <R_Icon side iconId={"play"} />
+        Confirm connection
       </div>
       <div>
         <R_Icon side iconId={"identifier"} />

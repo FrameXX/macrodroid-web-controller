@@ -37,7 +37,9 @@ select {
 }
 
 button,
-[role="button"] {
+[role="button"],
+select,
+label {
   cursor: pointer;
 }
 
@@ -92,4 +94,35 @@ strong {
   font-size: 3rem;
   padding: 16px;
   display: block;
+}
+
+select {
+  font-size: medium;
+  background-color: var(--color-surface);
+  padding: 4px;
+  outline: none;
+  border: none;
+  font-weight: bold;
+  color: inherit;
+  padding: 8px 40px 8px 8px;
+  appearance: none;
+  background-repeat: no-repeat;
+  background-position: right;
+  background-size: 15%;
+
+  &:active {
+    outline: none;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  select {
+    background-image: url("./assets/img/dropdown-dark.svg");
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  select {
+    background-image: url("./assets/img/dropdown-light.svg");
+  }
 }

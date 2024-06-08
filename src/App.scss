@@ -29,4 +29,13 @@
 }
 
 #log-filter {
+  display: flex;
+  align-items: center;
+  padding-bottom: 12px;
+  max-width: 600px;
+  margin: auto;
+
+  input {
+    width: 100%;
+  }
 }

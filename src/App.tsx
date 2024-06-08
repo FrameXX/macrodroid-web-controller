@@ -6,12 +6,13 @@ import R_Nav from "./components/Nav/Nav";
 import R_FAB from "./components/FAB/FAB";
 import { NavTabId } from "./components/Nav/Nav";
 import R_CreateConnectionWizard from "./components/CreateConnectionWizard/CreateConnectionWizard";
-import useWideScreen from "./modules/useWideScreen";
+import useInnerSize from "./modules/useInnerSize";
 import { TargetAndTransition, motion } from "framer-motion";
 import { Connection } from "./modules/connection";
 import { DEFAULT_TRANSITION_OFFSET } from "./modules/const";
 import { notifyError } from "./modules/notify_error";
 import R_LogEvent from "./components/LogEvent/LogEvent";
+import R_Icon from "./components/Icon/Icon";
 
 const toaster = new Toaster();
 let initiated = false;
@@ -73,11 +74,15 @@ function R_App() {
       : { y: -DEFAULT_TRANSITION_OFFSET, opacity: 0, display: "none" };
   }
 
-  const wideScreen = useWideScreen();
+  const wideScreen = useInnerSize();
 
   const animate: TargetAndTransition = wideScreen
     ? { flexDirection: "row-reverse" }
     : { flexDirection: "column" };
+
+  const wideEnoughScreenForFilterIcon = useInnerSize((width) => {
+    return width > 500;
+  })
 
   return (
     <motion.main layout animate={animate}>
@@ -108,8 +113,16 @@ function R_App() {
         >
           <div>
             <div id="log-filter">
-              <select />
-              <input type="text" placeholder="Filter log..." />
+              <R_Icon hidden={!wideEnoughScreenForFilterIcon} iconId="filter" />
+              <input type="search" id="input-log-filter" placeholder="Filter log using..." />
+              <select onChange={() => { }} title="Log filter">
+                <option value="all">All</option>
+                <option value="timestamp">Timestamp</option>
+                <option value="connection name">Connection name</option>
+                <option value="request type">Request type</option>
+                <option value="request id">Request ID</option>
+                <option value="error">Error</option>
+              </select>
             </div>
             <R_LogEvent />
           </div>
