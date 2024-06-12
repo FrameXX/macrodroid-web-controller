@@ -1,45 +1,143 @@
 import R_FAB from "../FAB/FAB";
-import "./CreateConnectionWizard.scss";
 import R_TitleWithIcon from "../TitleWithIcon/TitleWithIcon";
 import { useState } from "react";
 import R_DescribedInput from "../DescribedInput/DescribedInput";
 import screenshot1Src from "../../assets/img/screenshot_1.webp";
 import R_Wizard from "../Wizard/Wizard";
 import { MACRODROID_APP_URL } from "../../modules/const";
-import { Toast } from "../../modules/toaster";
+import { Toast, ToastSeverity } from "../../modules/toaster";
 import { Connection } from "../../modules/connection";
+import { IncomingRequest } from "../../modules/incoming_request";
+import { LogRecordInitializer } from "../LogRecord/LogRecord";
 
 interface AddConnectionWizardProps {
   open: boolean;
-  connectionAddRequestId: number;
   bakeToast: (toast: Toast) => any;
   onClose: () => any;
   onConnectionAdd: (connection: Connection) => any;
+  log: (record: LogRecordInitializer) => any;
 }
 
-export default function R_CreateConnectionWizard(
-  props: AddConnectionWizardProps,
-) {
-  const bakeToast = props.bakeToast;
+export default function R_CreateConnectionWizard({
+  bakeToast,
+  log,
+  ...props
+}: AddConnectionWizardProps) {
   const [activePageIndex, setActivePageIndex] = useState(0);
   const [connectionNameValid, setConnectionNameValid] = useState(false);
   const [webhookIdValid, setWebhookIdValid] = useState(false);
+  const [connectionAddRequestId, setConnectionAddRequestId] = useState("");
   const [connectionName, setConnectionName] = useState<string>("");
   const [webhookId, setWebhookId] = useState<string>("");
+  const [lastConnection, setLastConnection] = useState<Connection>();
 
   function nextPage() {
-    const previousPageIndex = activePageIndex;
+    if (activePageIndex === 1) initNewConnection();
     setActivePageIndex(activePageIndex + 1);
-    if (previousPageIndex === 1) addConnection();
-  }
-
-  function addConnection() {
-    const connection = new Connection(connectionName, webhookId);
-    props.onConnectionAdd(connection);
   }
 
   function previousPage() {
+    if (activePageIndex === 2) cancelNewConnection();
     setActivePageIndex(activePageIndex - 1);
+  }
+
+  function resetInputs() {
+    setConnectionName("");
+    setWebhookId("");
+  }
+
+  function addConnection(connection: Connection) {
+    props.onConnectionAdd(connection);
+    bakeToast(
+      new Toast(
+        "Connection was confirmed and added successfully.",
+        "transit-connection-variant",
+      ),
+    );
+    resetInputs();
+  }
+
+  function cancelNewConnection() {
+    if (!lastConnection) return;
+    if (lastConnection?.listening) lastConnection.stopListeningRequests();
+    bakeToast(new Toast("Connection initialization canceled.", "cancel"));
+  }
+
+  async function initNewConnection() {
+    const connection = new Connection(connectionName, webhookId);
+    setLastConnection(connection);
+    const request = await connection.requestAddConnection((id) => {
+      setConnectionAddRequestId(id);
+    });
+
+    const requestLog: LogRecordInitializer = {
+      connectionName: connection.name,
+      response: false,
+      detail: request.detail,
+      id: request.id,
+      incoming: false,
+    };
+    if (!request.successful) {
+      bakeToast(
+        new Toast(
+          `Failed to requst connection confirmation. ${request.errorMessage}`,
+          "alert",
+          ToastSeverity.ERROR,
+        ),
+      );
+      log({
+        ...requestLog,
+        errorMessage: request.errorMessage,
+      });
+      return;
+    }
+
+    bakeToast(
+      new Toast(
+        "Connection confirmation requested. Waiting for response.",
+        "transit-connection-variant",
+      ),
+    );
+    log(requestLog);
+
+    connection.listenRequests(
+      (request) => handleIncomingRequest(request, connection),
+      (errorMessage) => {
+        handleIncomingFailedRequest(errorMessage, connection);
+      },
+    );
+  }
+
+  function handleIncomingFailedRequest(
+    errorMessage: string,
+    connection: Connection,
+  ) {
+    log({
+      connectionName: connection.name,
+      errorMessage,
+      response: true,
+      incoming: true,
+    });
+  }
+
+  function handleIncomingRequest(
+    request: IncomingRequest,
+    connection: Connection,
+  ) {
+    if (request.id !== connectionAddRequestId) {
+      const errorMessage =
+        "The connection was confirmed but with a different request ID.";
+      bakeToast(new Toast(errorMessage, "alert", ToastSeverity.ERROR));
+      log({
+        connectionName: connection.name,
+        id: request.id,
+        response: false,
+        incoming: true,
+        errorMessage,
+      });
+      return;
+    }
+    addConnection(connection);
   }
 
   return (
@@ -135,7 +233,7 @@ export default function R_CreateConnectionWizard(
         <>
           <h2>Confirm the connection</h2>
           <p>The request ID is:</p>
-          <strong>{props.connectionAddRequestId}</strong>
+          <strong>{connectionAddRequestId}</strong>
           <p>
             Wait before the confirmation is successfully requested (You will be
             informed) and confirm the request on your target device.

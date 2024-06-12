@@ -1,0 +1,63 @@
+.log-record {
+  padding: 8px;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  border-width: var(--border-width);
+  border-style: solid;
+  border-color: var(--color-text);
+  margin: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  > div {
+    width: 100%;
+    display: flex;
+    align-items: center;
+  }
+
+  &.failed {
+    border-color: var(--color-accent-trigger);
+  }
+
+  .timestamp {
+    opacity: 0.8;
+  }
+
+  .timestamp,
+  .id {
+    font-size: 0.8rem;
+  }
+
+  .connection {
+    font-weight: bold;
+  }
+
+  .detail {
+    font-family: "Jetbrains Mono";
+    font-size: 0.9rem;
+
+    &.side {
+      margin: auto;
+      padding-left: 8px;
+    }
+  }
+}
+
+.response,
+.error-message {
+  display: flex;
+  align-items: center;
+  font-size: 0.8rem;
+  padding: 0 8px;
+}
+
+.error-message {
+  color: var(--color-accent-trigger);
+}
+
+.log-record-container {
+  padding: 8px 0;
+  max-width: 600px;
+  margin: auto;
+}

@@ -7,17 +7,17 @@ import {
 } from "./const";
 import { Random } from "./random";
 import { REQUEST_ID_PARAM_NAME } from "./const";
-
-export type RequestType = "add";
-
-export interface SearchParam {
-  name: string;
-  value: string;
-}
+import {
+  OutGoingRequestStatus,
+  OutgoingRequest,
+  OutgoingRequestType,
+  SearchParam,
+} from "./outgoing_request";
+import { IncomingRequest } from "./incoming_request";
 
 export class Connection {
   public readonly id: string;
-  public readonly listening = false;
+  public listening = false;
   private eventSource?: EventSource;
 
   constructor(
@@ -33,22 +33,10 @@ export class Connection {
     );
   }
 
-  public listen(
-    onMessage: (event: MessageEvent) => any,
-    onError?: (event: Event) => any,
-    onOpen?: (event: Event) => any,
+  public generateRequestURL(
+    requestType: OutgoingRequestType,
+    params?: SearchParam[],
   ) {
-    if (this.listening)
-      throw Error("This connection is already listening to new messages");
-    this.eventSource = new EventSource(this.ntfyTopicURL);
-    this.eventSource.addEventListener("message", (event) => onMessage(event));
-    if (onError)
-      this.eventSource.addEventListener("error", (event) => onError(event));
-    if (onOpen)
-      this.eventSource.addEventListener("open", (event) => onOpen(event));
-  }
-
-  public webhookURL(requestType: RequestType, params?: SearchParam[]) {
     const webhookURL = new URL(
       `https://${MACRODROID_WEBHOOK_DOMAIN}/${this.webhookId}/${WEBHOOK_REQUEST_ID_PREFIX}-${requestType}`,
     );
@@ -59,26 +47,56 @@ export class Connection {
     return webhookURL;
   }
 
-  public request(
-    type: RequestType,
-    extraData: SearchParam[],
-    onError?: (satus: number) => any,
-    onSuccess?: () => any,
+  public listenRequests(
+    onRequest: (request: IncomingRequest) => any,
+    onFailedRequest?: (errorMessage: string) => any,
   ) {
-    const requestId = Random.id(4);
-    const webhookURL = this.webhookURL(type, [
-      { name: CONNECTION_ID_PARAM_NAME, value: this.id },
-      { name: REQUEST_ID_PARAM_NAME, value: requestId.toString() },
-      ...extraData,
-    ]);
-    fetch(webhookURL).then((response) => {
-      if (!response.ok && onError) onError(response.status);
-      if (response.ok && onSuccess) onSuccess();
+    if (this.listening)
+      throw Error("This connection is already listening to new messages.");
+    this.eventSource = new EventSource(this.ntfyTopicURL);
+    this.eventSource.addEventListener("message", (event) => {
+      try {
+        const request = IncomingRequest.fromString(event.data);
+        onRequest(request);
+      } catch (error) {
+        if (onFailedRequest)
+          error instanceof Error
+            ? onFailedRequest(error.message)
+            : onFailedRequest("Unknown error.");
+      }
     });
-    return requestId;
   }
-}
 
-export class ConnectionEvent {
-  constructor(public readonly connectionName: string) {}
+  public stopListeningRequests() {
+    if (!this.listening)
+      throw Error("This connection is not listening to new messages.");
+    this.eventSource?.close();
+    this.listening = false;
+  }
+
+  public async requestAddConnection(onIdAssigned: (id: string) => any) {
+    const request = new OutgoingRequest(
+      OutgoingRequestType.Add,
+      [],
+      "Reuqest connection confirmation for the connection to be added.",
+    );
+    onIdAssigned(request.id);
+    const response = await this.makeRequest(request);
+    response.ok
+      ? request.success()
+      : request.fail(`HTTP request failed. Error ${response.status}`);
+    return request;
+  }
+
+  public async makeRequest(request: OutgoingRequest) {
+    if (request.status !== OutGoingRequestStatus.NotSend)
+      throw new Error("Resending requests is not allowed.");
+    const URLParams = [
+      { name: CONNECTION_ID_PARAM_NAME, value: this.id },
+      { name: REQUEST_ID_PARAM_NAME, value: request.id.toString() },
+      ...request.data,
+    ];
+    const URL = this.generateRequestURL(request.type, URLParams);
+    return await fetch(URL);
+  }
 }

@@ -52,15 +52,15 @@ export class Random {
       "z",
     ];
     const vowels = ["a", "e", "i", "o", "u", "y"];
-    let useConsonant = Boolean(Random.number(0, 1));
+    let firstConsonant = Boolean(Random.number(0, 1));
     let id = "";
     for (let i = 0; i < chars; i++) {
-      if (useConsonant) {
+      if (firstConsonant) {
         id = id + consonants[Random.number(0, consonants.length - 1)];
       } else {
         id = id + vowels[Random.number(0, vowels.length - 1)];
       }
-      useConsonant = !useConsonant;
+      firstConsonant = !firstConsonant;
     }
     return id;
   }

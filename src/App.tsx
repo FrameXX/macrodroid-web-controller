@@ -10,9 +10,11 @@ import useInnerSize from "./modules/useInnerSize";
 import { TargetAndTransition, motion } from "framer-motion";
 import { Connection } from "./modules/connection";
 import { DEFAULT_TRANSITION_OFFSET } from "./modules/const";
-import { notifyError } from "./modules/notify_error";
-import R_LogEvent from "./components/LogEvent/LogEvent";
-import R_Icon from "./components/Icon/Icon";
+import {
+  LogRecord,
+  LogRecordInitializer,
+} from "./components/LogRecord/LogRecord";
+import R_Log from "./components/Log/Log";
 
 const toaster = new Toaster();
 let initiated = false;
@@ -22,32 +24,14 @@ function R_App() {
   const [activeNavTabId, setActiveNavTabId] = useState<NavTabId>("connections");
   const [addConnectionWizardOpen, setAddConnectionWizardOpen] = useState(false);
   const [connections, setConnections] = useState<Connection[]>([]);
-  const [connectionConfirmed, setConnectionConfirmed] = useState(false);
-  const [connectionAddRequestId, setConnectionAddRequestId] = useState(0);
+  const [logRecords, setLogRecords] = useState<LogRecord[]>([]);
 
   function onClosePairConnectionWizard() {
     setAddConnectionWizardOpen(false);
   }
 
-  function onConnectionAdd(connection: Connection) {
-    setConnections([connection, ...connections]);
-    const id = connection.request(
-      "add",
-      [],
-      (statusText) => {
-        const errorText = `Failed to request connection confirmation. Error ${statusText}.`;
-        notifyError(errorText, bakeToast);
-      },
-      () => {
-        bakeToast(
-          new Toast(
-            "Connection confirmation requested. Waiting for response.",
-            "transit-connection-variant",
-          ),
-        );
-      },
-    );
-    setConnectionAddRequestId(id);
+  function log(record: LogRecordInitializer) {
+    setLogRecords([{ ...record, timestamp: Date.now() }, ...logRecords]);
   }
 
   function bakeToast(toast: Toast) {
@@ -60,6 +44,13 @@ function R_App() {
 
   function init() {
     bakeToast(new Toast("Hi there!", "plus"));
+    log({
+      connectionName: "Mi Box",
+      detail: "Some comment regarding this log.",
+      response: true,
+      id: "doti",
+      incoming: true,
+    });
   }
 
   useEffect(() => {
@@ -80,18 +71,14 @@ function R_App() {
     ? { flexDirection: "row-reverse" }
     : { flexDirection: "column" };
 
-  const wideEnoughScreenForFilterIcon = useInnerSize((width) => {
-    return width > 500;
-  })
-
   return (
     <motion.main layout animate={animate}>
       <div id="tab-content">
         <motion.section animate={animateTab("connections")} className="tab">
           <div id="no-connections">
             <div id="no-connections-face">¯\_(ツ)_/¯</div>
-            Welcome fellow MacroDroid enthusiast! Pair a new connection using
-            the button with plus icon.
+            Welcome fellow MacroDroid enthusiast! Add a new connection using the
+            button with plus icon.
           </div>
           <R_FAB
             title="Create new connection"
@@ -99,8 +86,8 @@ function R_App() {
             iconId="plus"
           />
           <R_CreateConnectionWizard
-            connectionAddRequestId={connectionAddRequestId}
-            onConnectionAdd={onConnectionAdd}
+            log={log}
+            onConnectionAdd={() => {}}
             bakeToast={bakeToast}
             onClose={onClosePairConnectionWizard}
             open={addConnectionWizardOpen}
@@ -111,21 +98,7 @@ function R_App() {
           className="tab"
           animate={animateTab("log")}
         >
-          <div>
-            <div id="log-filter">
-              <R_Icon hidden={!wideEnoughScreenForFilterIcon} iconId="filter" />
-              <input type="search" id="input-log-filter" placeholder="Filter log using..." />
-              <select onChange={() => { }} title="Log filter">
-                <option value="all">All</option>
-                <option value="timestamp">Timestamp</option>
-                <option value="connection name">Connection name</option>
-                <option value="request type">Request type</option>
-                <option value="request id">Request ID</option>
-                <option value="error">Error</option>
-              </select>
-            </div>
-            <R_LogEvent />
-          </div>
+          <R_Log logRecords={logRecords} />
         </motion.section>
       </div>
       <R_Nav

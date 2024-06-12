@@ -57,6 +57,10 @@ a {
   color: var(--color-accent);
 }
 
+a[role="button"]:not([href]) {
+  cursor: pointer;
+}
+
 input {
   font-size: 1rem;
   padding: 4px;
@@ -97,7 +101,6 @@ strong {
 }
 
 select {
-  font-size: medium;
   background-color: var(--color-surface);
   padding: 4px;
   outline: none;
