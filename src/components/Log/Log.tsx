@@ -25,9 +25,9 @@ export default function R_Log(props: LogProps) {
         <select onChange={() => {}} title="Log filter">
           <option value="all">All</option>
           <option value="timestamp">Timestamp</option>
-          <option value="connection_name">Connection name</option>
-          <option value="request_type">Request type</option>
+          <option value="connection_name">Conn. name</option>
           <option value="request_id">Request ID</option>
+          <option value="detail">Detail</option>
           <option value="error_message">Error message</option>
         </select>
       </div>

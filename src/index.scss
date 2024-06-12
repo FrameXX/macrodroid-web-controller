@@ -102,7 +102,6 @@ strong {
 
 select {
   background-color: var(--color-surface);
-  padding: 4px;
   outline: none;
   border: none;
   font-weight: bold;
@@ -112,6 +111,7 @@ select {
   background-repeat: no-repeat;
   background-position: right;
   background-size: 15%;
+  margin-right: 4px;
 
   &:active {
     outline: none;

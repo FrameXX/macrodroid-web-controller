@@ -1,9 +1,21 @@
 #log-filter {
   display: flex;
   align-items: center;
-  padding-bottom: 12px;
-  max-width: 600px;
+  padding: 8px;
   margin: auto;
+  position: sticky;
+  width: 100%;
+  max-width: 600px;
+  height: 60px;
+  background-color: var(--color-surface);
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: var(--z-index-nav);
+  justify-content: center;
+  box-shadow: var(--box-shadow);
+  box-sizing: border-box;
+  border-radius: var(--border-radius);
 
   input {
     width: 100%;
@@ -12,5 +24,4 @@
 
 #logs {
   height: 100%;
-  overflow-y: auto;
 }

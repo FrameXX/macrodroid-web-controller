@@ -43,7 +43,6 @@ function R_App() {
   }
 
   function init() {
-    bakeToast(new Toast("Hi there!", "plus"));
     log({
       connectionName: "Mi Box",
       detail: "Some comment regarding this log.",

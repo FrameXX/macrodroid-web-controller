@@ -27,4 +27,5 @@
 #log-tab {
   display: flex;
   flex-direction: column;
+  overflow-y: auto;
 }

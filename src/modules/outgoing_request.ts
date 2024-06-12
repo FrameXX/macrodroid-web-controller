@@ -26,7 +26,7 @@ export class OutgoingRequest {
     public readonly type: OutgoingRequestType,
     public readonly data: SearchParam[],
     public readonly detail?: string,
-    idLenght?: number,
+    idLenght: number = 5,
   ) {
     this.id = Random.readableId(idLenght);
   }
