@@ -6,7 +6,7 @@ import R_Nav from "./components/Nav/Nav";
 import R_FAB from "./components/FAB/FAB";
 import { NavTabId } from "./components/Nav/Nav";
 import R_CreateConnectionWizard from "./components/CreateConnectionWizard/CreateConnectionWizard";
-import useInnerSize from "./modules/useInnerSize";
+import useInnerSize from "./modules/use_inner_size";
 import { TargetAndTransition, motion } from "framer-motion";
 import { Connection } from "./modules/connection";
 import { DEFAULT_TRANSITION_OFFSET } from "./modules/const";
@@ -23,6 +23,7 @@ function R_App() {
   const [toasts, setToasts] = useState<Toast[]>([]);
   const [activeNavTabId, setActiveNavTabId] = useState<NavTabId>("connections");
   const [addConnectionWizardOpen, setAddConnectionWizardOpen] = useState(false);
+  // @ts-ignore;
   const [connections, setConnections] = useState<Connection[]>([]);
   const [logRecords, setLogRecords] = useState<LogRecord[]>([]);
 

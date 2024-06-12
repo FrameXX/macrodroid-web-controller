@@ -1,7 +1,7 @@
 import { AnimatePresence } from "framer-motion";
 import R_Icon from "../Icon/Icon";
 import R_LogRecord, { LogRecord } from "../LogRecord/LogRecord";
-import useInnerSize from "../../modules/useInnerSize";
+import useInnerSize from "../../modules/use_inner_size";
 import "./Log.scss";
 
 interface LogProps {

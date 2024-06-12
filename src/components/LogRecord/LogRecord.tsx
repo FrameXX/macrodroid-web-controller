@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import R_Icon from "../Icon/Icon";
 import "./LogRecord.scss";
 import { readableTimestamp } from "../../modules/readable_timestamp";
-import useInnerSize from "../../modules/useInnerSize";
+import useInnerSize from "../../modules/use_inner_size";
 
 interface LogRecordProps {
   record: LogRecord;

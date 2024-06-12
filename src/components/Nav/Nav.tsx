@@ -2,7 +2,7 @@ import { useState } from "react";
 import R_NavItem from "../NavItem/NavItem";
 import "./Nav.scss";
 import { TargetAndTransition, motion } from "framer-motion";
-import useInnerSize from "../../modules/useInnerSize";
+import useInnerSize from "../../modules/use_inner_size";
 
 export type NavTabId = "connections" | "actions" | "log" | "extras";
 
@@ -33,20 +33,20 @@ export default function R_Nav(props: NavProps) {
 
   const animate: TargetAndTransition = wideScreen
     ? {
-      top: 0,
-      flexDirection: "column",
-      justifyContent: "start",
-      height: "100%",
-      width: 125,
-      overflowX: "hidden",
-      overflowY: "auto",
-    }
+        top: 0,
+        flexDirection: "column",
+        justifyContent: "start",
+        height: "100%",
+        width: 125,
+        overflowX: "hidden",
+        overflowY: "auto",
+      }
     : {
-      right: 0,
-      justifyContent: "space-evenly",
-      width: "100%",
-      height: 80,
-    };
+        right: 0,
+        justifyContent: "space-evenly",
+        width: "100%",
+        height: 80,
+      };
 
   return (
     <motion.nav layout animate={animate}>

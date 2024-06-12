@@ -1,4 +1,4 @@
-import useInnerSize from "../../modules/useInnerSize";
+import useInnerSize from "../../modules/use_inner_size";
 import R_Icon from "../Icon/Icon";
 import "./NavItem.scss";
 import { TargetAndTransition, motion } from "framer-motion";
