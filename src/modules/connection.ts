@@ -84,7 +84,7 @@ export class Connection {
     const response = await this.makeRequest(request);
     response.ok
       ? request.success()
-      : request.fail(`HTTP request failed. Error ${response.status}`);
+      : request.fail(`HTTP request failed. Error ${response.status}.`);
     return request;
   }
 

@@ -74,7 +74,7 @@ export default function R_CreateConnectionWizard({
       connectionName: connection.name,
       response: false,
       detail: request.detail,
-      id: request.id,
+      requestId: request.id,
       incoming: false,
     };
     if (!request.successful) {
@@ -130,7 +130,7 @@ export default function R_CreateConnectionWizard({
       bakeToast(new Toast(errorMessage, "alert", ToastSeverity.ERROR));
       log({
         connectionName: connection.name,
-        id: request.id,
+        requestId: request.id,
         response: false,
         incoming: true,
         errorMessage,

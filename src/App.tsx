@@ -15,6 +15,7 @@ import {
   LogRecordInitializer,
 } from "./components/LogRecord/LogRecord";
 import R_Log from "./components/Log/Log";
+import { generateReadableTimestamp } from "./modules/readable_timestamp";
 
 const toaster = new Toaster();
 let initiated = false;
@@ -31,8 +32,30 @@ function R_App() {
     setAddConnectionWizardOpen(false);
   }
 
+  function logRecordFilterString(
+    logRecordInitializer: LogRecordInitializer,
+    readableTimestamp: string,
+  ) {
+    return (
+      readableTimestamp +
+      logRecordInitializer.connectionName.toLowerCase() +
+      logRecordInitializer.requestId?.toLowerCase() +
+      logRecordInitializer.detail?.toLowerCase() +
+      logRecordInitializer.errorMessage?.toLowerCase()
+    );
+  }
+
   function log(record: LogRecordInitializer) {
-    setLogRecords([{ ...record, timestamp: Date.now() }, ...logRecords]);
+    const timestamp = Date.now();
+    const readableTimestamp = generateReadableTimestamp(timestamp);
+    const filterString = logRecordFilterString(record, readableTimestamp);
+    const logRecord: LogRecord = {
+      ...record,
+      timestamp,
+      readableTimestamp,
+      filterString,
+    };
+    setLogRecords([...logRecords, logRecord]);
   }
 
   function bakeToast(toast: Toast) {
@@ -48,7 +71,7 @@ function R_App() {
       connectionName: "Mi Box",
       detail: "Some comment regarding this log.",
       response: true,
-      id: "doti",
+      requestId: "doti",
       incoming: true,
     });
   }
