@@ -3,8 +3,9 @@ import R_Icon from "../Icon/Icon";
 import R_LogRecord, { LogRecord } from "../LogRecord/LogRecord";
 import useInnerSize from "../../modules/use_inner_size";
 import "./Log.scss";
-import { useRef, useState } from "react";
+import { useMemo, useRef } from "react";
 import { generateReadableTimestamp } from "../../modules/readable_timestamp";
+import { Reactive } from "../../modules/reactive";
 
 interface LogProps {
   logRecords: LogRecord[];
@@ -20,9 +21,9 @@ enum FilterType {
 }
 
 export default function R_Log(props: LogProps) {
-  const [filterString, setFilterString] = useState("");
-  const [filterType, setFilterType] = useState<FilterType>(FilterType.All);
-  const [filterTimeout, setFilterTimeout] = useState(0);
+  const filterString = new Reactive("");
+  const filterType = new Reactive(FilterType.All);
+  const filterTimeout = new Reactive(0);
 
   const filterInput = useRef<HTMLInputElement>(null);
   const filterTypeSelect = useRef<HTMLSelectElement>(null);
@@ -32,41 +33,43 @@ export default function R_Log(props: LogProps) {
   });
 
   function onFilterChange(value: string) {
-    clearTimeout(filterTimeout);
-    setFilterTimeout(
-      setTimeout(() => {
-        setFilterString(value);
-      }, 200),
-    );
+    clearTimeout(filterTimeout.value);
+    filterTimeout.value = setTimeout(() => {
+      filterString.value = value;
+    }, 200);
   }
 
   function filterLogRecords(logRecords: LogRecord[]) {
-    switch (filterType) {
+    switch (filterType.value) {
       case FilterType.Timestamp:
         return logRecords.filter((record) => {
           return generateReadableTimestamp(record.timestamp).includes(
-            filterString,
+            filterString.value,
           );
         });
       case FilterType.ConnectionName:
         return logRecords.filter((record) => {
-          return record.connectionName.toLowerCase().includes(filterString);
+          return record.connectionName
+            .toLowerCase()
+            .includes(filterString.value);
         });
       case FilterType.RequestId:
         return logRecords.filter((record) => {
-          return record.requestId?.toLowerCase().includes(filterString);
+          return record.requestId?.toLowerCase().includes(filterString.value);
         });
       case FilterType.Detail:
         return logRecords.filter((record) => {
-          return record.detail?.toLowerCase().includes(filterString);
+          return record.detail?.toLowerCase().includes(filterString.value);
         });
       case FilterType.ErrorMessage:
         return logRecords.filter((record) => {
-          return record.errorMessage?.toLowerCase().includes(filterString);
+          return record.errorMessage
+            ?.toLowerCase()
+            .includes(filterString.value);
         });
       case FilterType.All:
         return logRecords.filter((record) => {
-          return record.filterString.includes(filterString);
+          return record.filterString.includes(filterString.value);
         });
       default:
         return logRecords;
@@ -83,7 +86,9 @@ export default function R_Log(props: LogProps) {
     filterTypeSelect.current.value = type;
   }
 
-  console.log(filterLogRecords(props.logRecords));
+  const filteredLogRecords = useMemo(() => {
+    return filterLogRecords(props.logRecords);
+  }, [filterString, filterType, props.logRecords]);
 
   return (
     <>
@@ -98,7 +103,9 @@ export default function R_Log(props: LogProps) {
         />
         <select
           ref={filterTypeSelect}
-          onChange={(event) => setFilterType(event.target.value as FilterType)}
+          onChange={(event) =>
+            (filterType.value = event.target.value as FilterType)
+          }
           title="Log filter"
         >
           <option value="all">All</option>
@@ -111,7 +118,7 @@ export default function R_Log(props: LogProps) {
       </div>
       <div id="logs">
         <AnimatePresence initial={false}>
-          {filterLogRecords(props.logRecords).map((record) => {
+          {filteredLogRecords.map((record) => {
             return (
               <R_LogRecord
                 onConnectionNameClick={() => {

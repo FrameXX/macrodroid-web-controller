@@ -1,13 +1,13 @@
 :root {
   --color-primary-item: #ffffff;
   --color-primary-item-inactive: #9ba7b5;
+  --color-primary: #3e526d;
 }
 
 @media (prefers-color-scheme: light) {
   :root {
     --color-text: #000000;
     --color-text-secondary: #262626;
-    --color-primary: #3e526d;
     --color-item: #3e526d;
     --color-item-negative: #ffffff;
     --color-action: #0288d1;
@@ -25,7 +25,6 @@
   :root {
     --color-text: #ffffff;
     --color-text-secondary: #d9d9d9;
-    --color-primary: #3e526d;
     --color-item: #ffffff;
     --color-item-negative: #3e526d;
     --color-action: #1665b0;

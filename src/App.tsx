@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef } from "react";
 import { Toast, Toaster } from "./modules/toaster";
 import R_Toaster from "./components/Toaster/Toaster";
 import "./App.scss";
@@ -16,20 +16,23 @@ import {
 } from "./components/LogRecord/LogRecord";
 import R_Log from "./components/Log/Log";
 import { generateReadableTimestamp } from "./modules/readable_timestamp";
+import { Reactive } from "./modules/reactive";
 
-const toaster = new Toaster();
 let initiated = false;
 
 function R_App() {
-  const [toasts, setToasts] = useState<Toast[]>([]);
-  const [activeNavTabId, setActiveNavTabId] = useState<NavTabId>("connections");
-  const [addConnectionWizardOpen, setAddConnectionWizardOpen] = useState(false);
-  // @ts-ignore;
-  const [connections, setConnections] = useState<Connection[]>([]);
-  const [logRecords, setLogRecords] = useState<LogRecord[]>([]);
+  const toasts = new Reactive<Toast[]>([]);
+  const activeNavTabId = new Reactive<NavTabId>(NavTabId.CONNECTIONS);
+  const addConnectionWizardOpen = new Reactive<boolean>(false);
+  const connections = new Reactive<Connection[]>([]);
+  const logRecords = new Reactive<LogRecord[]>([]);
+
+  function addConnection(connection: Connection, restored = false) {
+    if (!restored) addConnectionWizardOpen.value = false;
+  }
 
   function onClosePairConnectionWizard() {
-    setAddConnectionWizardOpen(false);
+    addConnectionWizardOpen.value = false;
   }
 
   function logRecordFilterString(
@@ -55,26 +58,20 @@ function R_App() {
       readableTimestamp,
       filterString,
     };
-    setLogRecords([...logRecords, logRecord]);
+    logRecords.value.push(logRecord);
   }
 
+  const toaster = useRef(new Toaster(toasts));
+
   function bakeToast(toast: Toast) {
-    toaster.bake(toast, setToasts);
+    toaster.current.bake(toast);
   }
 
   function removeToast(id: number) {
-    toaster.removeToastById(id, setToasts);
+    toaster.current.removeToastById(id);
   }
 
-  function init() {
-    log({
-      connectionName: "Mi Box",
-      detail: "Some comment regarding this log.",
-      response: true,
-      requestId: "doti",
-      incoming: true,
-    });
-  }
+  function init() {}
 
   useEffect(() => {
     if (initiated) return;
@@ -83,7 +80,7 @@ function R_App() {
   }, []);
 
   function animateTab(navTabId: NavTabId): TargetAndTransition {
-    return navTabId === activeNavTabId
+    return navTabId === activeNavTabId.value
       ? {}
       : { y: -DEFAULT_TRANSITION_OFFSET, opacity: 0, display: "none" };
   }
@@ -97,7 +94,10 @@ function R_App() {
   return (
     <motion.main layout animate={animate}>
       <div id="tab-content">
-        <motion.section animate={animateTab("connections")} className="tab">
+        <motion.section
+          animate={animateTab(NavTabId.CONNECTIONS)}
+          className="tab"
+        >
           <div id="no-connections">
             <div id="no-connections-face">¯\_(ツ)_/¯</div>
             Welcome fellow MacroDroid enthusiast! Add a new connection using the
@@ -105,32 +105,32 @@ function R_App() {
           </div>
           <R_FAB
             title="Create new connection"
-            onClick={() => setAddConnectionWizardOpen(true)}
+            onClick={() => (addConnectionWizardOpen.value = true)}
             iconId="plus"
           />
           <R_CreateConnectionWizard
             log={log}
-            onConnectionAdd={() => {}}
+            onConnectionAdd={addConnection}
             bakeToast={bakeToast}
             onClose={onClosePairConnectionWizard}
-            open={addConnectionWizardOpen}
+            open={addConnectionWizardOpen.value}
           />
         </motion.section>
         <motion.section
           id="log-tab"
           className="tab"
-          animate={animateTab("log")}
+          animate={animateTab(NavTabId.LOG)}
         >
-          <R_Log logRecords={logRecords} />
+          <R_Log logRecords={logRecords.value} />
         </motion.section>
       </div>
       <R_Nav
-        navTabId={activeNavTabId}
+        activeNavTabId={activeNavTabId.value}
         onTabSwitch={(newNavTabId: NavTabId) => {
-          setActiveNavTabId(newNavTabId);
+          activeNavTabId.value = newNavTabId;
         }}
       />
-      <R_Toaster onToastClick={removeToast} toasts={toasts} />
+      <R_Toaster onToastClick={removeToast} toasts={toasts.value} />
     </motion.main>
   );
 }

@@ -2,8 +2,8 @@ import { Toast } from "../../modules/toaster";
 import R_Icon from "../Icon/Icon";
 import { TargetAndTransition, motion } from "framer-motion";
 import "./Toast.scss";
-import { useState } from "react";
 import { DEFAULT_TRANSITION_OFFSET } from "../../modules/const";
+import { Reactive } from "../../modules/reactive";
 
 interface ToastProps {
   toast: Toast;
@@ -19,15 +19,15 @@ interface ToastProps {
  * @return {JSX.Element} The rendered toast component.
  */
 export default function R_Toast(props: ToastProps) {
-  const [hovering, setHovering] = useState(false);
-  const overlayAnimate: TargetAndTransition = hovering
+  const hovering = new Reactive(false);
+  const overlayAnimate: TargetAndTransition = hovering.value
     ? {}
     : { opacity: 0, y: -DEFAULT_TRANSITION_OFFSET };
 
   return (
     <motion.div
-      onHoverStart={() => setHovering(true)}
-      onHoverEnd={() => setHovering(false)}
+      onHoverStart={() => (hovering.value = true)}
+      onHoverEnd={() => (hovering.value = false)}
       layout
       initial={{ opacity: 0, y: -DEFAULT_TRANSITION_OFFSET }}
       animate={{ opacity: 1, y: 0 }}

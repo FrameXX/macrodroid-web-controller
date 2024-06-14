@@ -1,14 +1,18 @@
-import { useState } from "react";
 import R_NavItem from "../NavItem/NavItem";
 import "./Nav.scss";
 import { TargetAndTransition, motion } from "framer-motion";
 import useInnerSize from "../../modules/use_inner_size";
 
-export type NavTabId = "connections" | "actions" | "log" | "extras";
+export enum NavTabId {
+  CONNECTIONS,
+  ACTIONS,
+  LOG,
+  EXTRAS,
+}
 
 interface NavProps {
-  navTabId: NavTabId;
-  onTabSwitch?: (newNavTabId: NavTabId) => any;
+  activeNavTabId: NavTabId;
+  onTabSwitch: (newNavTabId: NavTabId) => any;
 }
 
 /**
@@ -20,13 +24,8 @@ interface NavProps {
  * @return {JSX.Element} The rendered navigation bar.
  */
 export default function R_Nav(props: NavProps) {
-  const [activeNavTabId, setActiveNavTabId] = useState<NavTabId>(
-    props.navTabId,
-  );
-
   function swicthTab(newId: NavTabId) {
-    setActiveNavTabId(newId);
-    if (props.onTabSwitch) props.onTabSwitch(newId);
+    props.onTabSwitch(newId);
   }
 
   const wideScreen = useInnerSize();
@@ -51,26 +50,26 @@ export default function R_Nav(props: NavProps) {
   return (
     <motion.nav layout animate={animate}>
       <R_NavItem
-        active={activeNavTabId === "connections"}
-        onClick={() => swicthTab("connections")}
+        active={props.activeNavTabId === NavTabId.CONNECTIONS}
+        onClick={() => swicthTab(NavTabId.CONNECTIONS)}
         iconId="transit-connection-variant"
         title="Connections"
       />
       <R_NavItem
-        active={activeNavTabId === "actions"}
-        onClick={() => swicthTab("actions")}
+        active={props.activeNavTabId === NavTabId.ACTIONS}
+        onClick={() => swicthTab(NavTabId.ACTIONS)}
         iconId="play"
         title="Actions"
       />
       <R_NavItem
-        active={activeNavTabId === "log"}
-        onClick={() => swicthTab("log")}
+        active={props.activeNavTabId === NavTabId.LOG}
+        onClick={() => swicthTab(NavTabId.LOG)}
         iconId="text-box"
         title="Log"
       />
       <R_NavItem
-        active={activeNavTabId === "extras"}
-        onClick={() => swicthTab("extras")}
+        active={props.activeNavTabId === NavTabId.EXTRAS}
+        onClick={() => swicthTab(NavTabId.EXTRAS)}
         iconId="dots-horizontal"
         title="Extras"
       />

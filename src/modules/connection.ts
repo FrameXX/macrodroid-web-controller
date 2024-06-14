@@ -18,6 +18,7 @@ import { IncomingRequest } from "./incoming_request";
 export class Connection {
   public readonly id: string;
   public listening = false;
+  public lastActivityTimestamp = Date.now();
   private eventSource?: EventSource;
 
   constructor(
@@ -47,29 +48,39 @@ export class Connection {
     return webhookURL;
   }
 
+  private wasActive() {
+    this.lastActivityTimestamp = Date.now();
+  }
+
   public listenRequests(
     onRequest: (request: IncomingRequest) => any,
     onFailedRequest?: (errorMessage: string) => any,
+    onListenFailed?: () => any,
   ) {
     if (this.listening)
       throw Error("This connection is already listening to new messages.");
     this.eventSource = new EventSource(this.ntfyTopicURL);
     this.eventSource.addEventListener("message", (event) => {
+      this.wasActive();
+      let request: IncomingRequest | null = null;
       try {
-        const request = IncomingRequest.fromString(event.data);
-        onRequest(request);
+        request = IncomingRequest.fromNtfyRequest(event.data);
       } catch (error) {
         if (onFailedRequest)
           error instanceof Error
             ? onFailedRequest(error.message)
             : onFailedRequest("Unknown error.");
       }
+      if (request) onRequest(request);
     });
+    if (onListenFailed)
+      this.eventSource.addEventListener("error", onListenFailed);
+    this.listening = true;
   }
 
   public stopListeningRequests() {
     if (!this.listening)
-      throw Error("This connection is not listening to new messages.");
+      throw Error("This connection is not listening to messages.");
     this.eventSource?.close();
     this.listening = false;
   }

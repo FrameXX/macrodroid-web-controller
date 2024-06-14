@@ -1,4 +1,5 @@
 import { Random } from "./random";
+import { Reactive } from "./reactive";
 
 export enum ToastSeverity {
   SUCCESS = "success",
@@ -6,69 +7,61 @@ export enum ToastSeverity {
   ERROR = "error",
 }
 
-type SetToasts = (newValue: Toast[]) => any;
-
 export class Toaster {
   private readonly maxToasts = 3;
-  private toasts: Toast[] = [];
   private toastReadingTimeoutId = 0;
 
-  constructor() {}
+  constructor(private toasts: Reactive<Toast[]>) {}
 
   private clearToastReadingTimeout() {
     clearTimeout(this.toastReadingTimeoutId);
   }
 
-  private setToastReadingTimeout(setToasts: SetToasts) {
-    const readToast = this.toasts[0];
+  private setToastReadingTimeout() {
+    const readToast = this.toasts.value[0];
     this.toastReadingTimeoutId = setTimeout(() => {
-      this.removeMostBakedToast(setToasts);
+      this.removeMostBakedToast();
     }, readToast.readingDurationMs);
   }
 
-  private removeMostBakedToast(setToasts: SetToasts) {
-    this.toasts.shift();
-    this.updateToastState(setToasts);
+  private removeMostBakedToast() {
+    this.toasts.value.shift();
     if (this.isEmpty) return;
-    this.setToastReadingTimeout(setToasts);
+    this.setToastReadingTimeout();
   }
 
-  private updateToastState(setToasts: SetToasts) {
-    setToasts([...this.toasts]);
-  }
-
-  private addToast(toast: Toast, setToasts: SetToasts) {
-    this.toasts.push(toast);
-    this.updateToastState(setToasts);
+  private addToast(toast: Toast) {
+    this.toasts.value.push(toast);
   }
 
   private get isEmpty() {
-    return this.toasts.length === 0;
+    return this.toasts.value.length === 0;
   }
 
   private get isFull() {
-    return this.toasts.length >= this.maxToasts;
+    return this.toasts.value.length >= this.maxToasts;
   }
 
-  public removeToastById(toastId: number, setToasts: SetToasts) {
+  public removeToastById(toastId: number) {
     if (this.isEmpty) return;
-    const readToast = this.toasts[0];
+    const readToast = this.toasts.value[0];
     if (readToast.id === toastId) {
-      this.removeMostBakedToast(setToasts);
+      this.removeMostBakedToast();
       return;
     }
-    this.toasts = this.toasts.filter((toast) => toast.id !== toastId);
-    this.updateToastState(setToasts);
+    this.toasts.value = this.toasts.value.filter(
+      (toast) => toast.id !== toastId,
+    );
   }
 
-  public bake(toast: Toast, setToasts: SetToasts) {
+  public bake(toast: Toast) {
     if (this.isFull) {
       this.clearToastReadingTimeout();
-      this.removeMostBakedToast(setToasts);
+      this.removeMostBakedToast();
     }
     const empty = this.isEmpty;
-    this.addToast(toast, setToasts);
-    if (empty) this.setToastReadingTimeout(setToasts);
+    this.addToast(toast);
+    if (empty) this.setToastReadingTimeout();
   }
 }
 
