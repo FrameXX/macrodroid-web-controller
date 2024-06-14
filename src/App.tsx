@@ -32,8 +32,6 @@ function R_App() {
     if (!restored) addConnectionWizardOpen.value = false;
   }
 
-  console.log("update");
-
   function onClosePairConnectionWizard() {
     addConnectionWizardOpen.value = false;
   }

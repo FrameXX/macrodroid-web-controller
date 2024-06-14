@@ -1,17 +1,19 @@
 import { useState, useEffect } from "react";
 
 const useInnerSize = (
-  isWide: (width: number, height: number) => boolean = (width, height) =>
-    width > 600 && height > 400,
+  checkMeetsConditions: (width: number, height: number) => boolean = (
+    width,
+    height,
+  ) => width > 600 && height > 400,
 ) => {
-  const [isWideScreen, setIsWideScreen] = useState(
+  const [meetsConditions, setMeetsConditions] = useState(
     window.innerWidth > window.innerHeight,
   );
 
   useEffect(() => {
     const handleResize = () => {
-      const wideScreen = isWide(innerWidth, innerHeight);
-      setIsWideScreen(wideScreen);
+      const wideScreen = checkMeetsConditions(innerWidth, innerHeight);
+      setMeetsConditions(wideScreen);
     };
 
     window.addEventListener("resize", handleResize);
@@ -21,7 +23,7 @@ const useInnerSize = (
     };
   }, []);
 
-  return isWideScreen;
+  return meetsConditions;
 };
 
 export default useInnerSize;
