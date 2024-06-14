@@ -16,20 +16,23 @@ import {
 } from "./components/LogRecord/LogRecord";
 import R_Log from "./components/Log/Log";
 import { generateReadableTimestamp } from "./modules/readable_timestamp";
-import { Reactive } from "./modules/reactive";
+import { useReactive } from "./modules/reactive";
 
 let initiated = false;
 
 function R_App() {
-  const toasts = new Reactive<Toast[]>([]);
-  const activeNavTabId = new Reactive<NavTabId>(NavTabId.CONNECTIONS);
-  const addConnectionWizardOpen = new Reactive<boolean>(false);
-  const connections = new Reactive<Connection[]>([]);
-  const logRecords = new Reactive<LogRecord[]>([]);
-
+  const toasts = useReactive<Toast[]>([]);
+  const activeNavTabId = useReactive<NavTabId>(NavTabId.CONNECTIONS);
+  const addConnectionWizardOpen = useReactive<boolean>(false);
+  // @ts-ignore
+  const connections = useReactive<Connection[]>([]);
+  const logRecords = useReactive<LogRecord[]>([]);
+  // @ts-ignore
   function addConnection(connection: Connection, restored = false) {
     if (!restored) addConnectionWizardOpen.value = false;
   }
+
+  console.log("update");
 
   function onClosePairConnectionWizard() {
     addConnectionWizardOpen.value = false;

@@ -5,7 +5,7 @@ import useInnerSize from "../../modules/use_inner_size";
 import "./Log.scss";
 import { useMemo, useRef } from "react";
 import { generateReadableTimestamp } from "../../modules/readable_timestamp";
-import { Reactive } from "../../modules/reactive";
+import { useReactive } from "../../modules/reactive";
 
 interface LogProps {
   logRecords: LogRecord[];
@@ -21,9 +21,9 @@ enum FilterType {
 }
 
 export default function R_Log(props: LogProps) {
-  const filterString = new Reactive("");
-  const filterType = new Reactive(FilterType.All);
-  const filterTimeout = new Reactive(0);
+  const filterString = useReactive("");
+  const filterType = useReactive(FilterType.All);
+  const filterTimeout = useReactive(0);
 
   const filterInput = useRef<HTMLInputElement>(null);
   const filterTypeSelect = useRef<HTMLSelectElement>(null);

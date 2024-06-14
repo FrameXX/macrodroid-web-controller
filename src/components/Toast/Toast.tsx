@@ -3,7 +3,7 @@ import R_Icon from "../Icon/Icon";
 import { TargetAndTransition, motion } from "framer-motion";
 import "./Toast.scss";
 import { DEFAULT_TRANSITION_OFFSET } from "../../modules/const";
-import { Reactive } from "../../modules/reactive";
+import { useReactive } from "../../modules/reactive";
 
 interface ToastProps {
   toast: Toast;
@@ -19,7 +19,7 @@ interface ToastProps {
  * @return {JSX.Element} The rendered toast component.
  */
 export default function R_Toast(props: ToastProps) {
-  const hovering = new Reactive(false);
+  const hovering = useReactive(false);
   const overlayAnimate: TargetAndTransition = hovering.value
     ? {}
     : { opacity: 0, y: -DEFAULT_TRANSITION_OFFSET };

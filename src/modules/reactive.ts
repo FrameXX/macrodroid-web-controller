@@ -1,5 +1,9 @@
 import { Dispatch, SetStateAction, useRef, useState } from "react";
 
+export function useReactive<T>(defaultValue: T, autoUpdate = true) {
+  return new Reactive<T>(defaultValue, autoUpdate);
+}
+
 export class Reactive<T> {
   private _setState: Dispatch<SetStateAction<number>>;
   private _value: React.MutableRefObject<T>;

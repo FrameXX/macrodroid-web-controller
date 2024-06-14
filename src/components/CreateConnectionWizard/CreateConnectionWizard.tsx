@@ -8,7 +8,7 @@ import { Toast, ToastSeverity } from "../../modules/toaster";
 import { Connection } from "../../modules/connection";
 import { IncomingRequest } from "../../modules/incoming_request";
 import { LogRecordInitializer } from "../LogRecord/LogRecord";
-import { Reactive } from "../../modules/reactive";
+import { useReactive } from "../../modules/reactive";
 
 interface AddConnectionWizardProps {
   open: boolean;
@@ -23,13 +23,13 @@ export default function R_CreateConnectionWizard({
   log,
   ...props
 }: AddConnectionWizardProps) {
-  const activePageIndex = new Reactive(0);
-  const connectionNameValid = new Reactive(false);
-  const webhookIdValid = new Reactive(false);
-  const connectionAddRequestId = new Reactive("");
-  const connectionName = new Reactive("");
-  const webhookId = new Reactive("");
-  const lastConnection = new Reactive<Connection | null>(null);
+  const activePageIndex = useReactive(0);
+  const connectionNameValid = useReactive(false);
+  const webhookIdValid = useReactive(false);
+  const connectionAddRequestId = useReactive("");
+  const connectionName = useReactive("");
+  const webhookId = useReactive("");
+  const lastConnection = useReactive<Connection | null>(null);
 
   function nextPage() {
     if (activePageIndex.value === 1) initNewConnection();
