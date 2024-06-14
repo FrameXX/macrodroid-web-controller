@@ -24,12 +24,11 @@ function R_App() {
   const toasts = useReactive<Toast[]>([]);
   const activeNavTabId = useReactive<NavTabId>(NavTabId.CONNECTIONS);
   const addConnectionWizardOpen = useReactive<boolean>(false);
-  // @ts-ignore
   const connections = useReactive<Connection[]>([]);
   const logRecords = useReactive<LogRecord[]>([]);
-  // @ts-ignore
   function addConnection(connection: Connection, restored = false) {
     if (!restored) addConnectionWizardOpen.value = false;
+    connections.value.push(connection);
   }
 
   function onClosePairConnectionWizard() {

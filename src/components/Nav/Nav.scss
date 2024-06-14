@@ -6,4 +6,5 @@ nav {
   background: var(--color-primary);
   box-shadow: var(--box-shadow);
   z-index: var(--z-index-nav);
+  flex-shrink: 0;
 }

@@ -41,9 +41,10 @@ export default function R_CreateConnectionWizard({
     activePageIndex.value--;
   }
 
-  function resetInputs() {
+  function reset() {
     connectionName.value = "";
     webhookId.value = "";
+    activePageIndex.value = 0;
   }
 
   function addConnection(connection: Connection) {
@@ -55,7 +56,7 @@ export default function R_CreateConnectionWizard({
         "transit-connection-variant",
       ),
     );
-    resetInputs();
+    reset();
   }
 
   function cancelNewConnection() {
