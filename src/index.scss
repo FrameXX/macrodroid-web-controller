@@ -61,9 +61,15 @@ a[role="button"]:not([href]) {
   cursor: pointer;
 }
 
+hr {
+  height: 0.1rem;
+  border: none;
+  background: var(--color-text);
+}
+
 input {
   font-size: 1rem;
-  padding: 4px;
+  padding: 6px;
   background-color: var(--color-surface);
   outline: none;
   border: none;
@@ -101,7 +107,7 @@ strong {
 }
 
 select {
-  background-color: var(--color-surface);
+  background-color: transparent;
   outline: none;
   border: none;
   font-weight: bold;

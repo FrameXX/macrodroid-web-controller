@@ -17,7 +17,8 @@ enum FilterType {
   Timestamp = "timestamp",
   ConnectionName = "connection_name",
   RequestId = "request_id",
-  Detail = "detail",
+  Comment = "comment",
+  Details = "details",
   ErrorMessage = "error_message",
 }
 
@@ -69,9 +70,16 @@ export default function R_Log(props: LogProps) {
         return logRecords.filter((record) => {
           return record.requestId?.toLowerCase().includes(filterString.value);
         });
-      case FilterType.Detail:
+      case FilterType.Comment:
         return logRecords.filter((record) => {
-          return record.detail?.toLowerCase().includes(filterString.value);
+          return record.comment?.toLowerCase().includes(filterString.value);
+        });
+      case FilterType.Details:
+        return logRecords.filter((record) => {
+          return record.details
+            ?.join("")
+            .toLowerCase()
+            .includes(filterString.value);
         });
       case FilterType.ErrorMessage:
         return logRecords.filter((record) => {
@@ -110,7 +118,8 @@ export default function R_Log(props: LogProps) {
           <option value="timestamp">Timestamp</option>
           <option value="connection_name">Conn. name</option>
           <option value="request_id">Request ID</option>
-          <option value="detail">Detail</option>
+          <option value="comment">Comment</option>
+          <option value="details">Details</option>
           <option value="error_message">Error message</option>
         </select>
       </div>
@@ -127,6 +136,9 @@ export default function R_Log(props: LogProps) {
                 }}
                 onRequestIdClick={() => {
                   setFilter(record.requestId ?? "", FilterType.RequestId);
+                }}
+                onCommentClick={() => {
+                  setFilter(record.comment ?? "", FilterType.Comment);
                 }}
                 key={record.timestamp}
                 record={record}

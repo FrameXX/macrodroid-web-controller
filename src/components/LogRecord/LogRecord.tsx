@@ -1,11 +1,11 @@
-import { TargetAndTransition, motion } from "framer-motion";
+import { motion } from "framer-motion";
 import R_Icon from "../Icon/Icon";
 import "./LogRecord.scss";
 import { generateReadableTimestamp } from "../../modules/readable_timestamp";
-import useInnerSize from "../../modules/use_inner_size";
 import { DEFAULT_TRANSITION_OFFSET } from "../../modules/const";
 import R_Button from "../Button/Button";
 import { useReactive } from "../../modules/reactive";
+import R_Accordeon from "../Accordeon/Accordeon";
 
 export enum LogRecordType {
   OutgoingRequest,
@@ -17,6 +17,7 @@ interface LogRecordProps {
   record: LogRecord;
   onConnectionNameClick: () => void;
   onRequestIdClick?: () => void;
+  onCommentClick?: () => void;
 }
 
 export interface LogRecord extends LogRecordInitializer {
@@ -31,7 +32,7 @@ export interface LogRecordInitializer {
   type: LogRecordType;
   requestId?: string;
   comment?: string;
-  detail?: string;
+  details?: string[];
   errorMessage?: string;
 }
 
@@ -42,12 +43,11 @@ export default function R_LogRecord(props: LogRecordProps) {
     [LogRecordType.Other]: "cog",
   } as const;
   const iconId = iconIdMap[props.record.type];
-  const expanded = useReactive(false);
-  const animate: TargetAndTransition = expanded.value ? {} : { opacity: 0 };
+  const isTooLong = props.record.filterString.length > 340;
+  const expanded = useReactive(!isTooLong);
 
   return (
     <motion.div
-      data-timestamp={props.record.timestamp}
       layout
       initial={{ opacity: 0, x: DEFAULT_TRANSITION_OFFSET }}
       animate={{ opacity: 1, x: 0 }}
@@ -65,10 +65,12 @@ export default function R_LogRecord(props: LogRecordProps) {
         <R_Icon side iconId="alert" />
         {props.record.errorMessage}
       </div>
-      <div
+      <R_Accordeon
+        open={expanded.value}
+        closedHeight={150}
         className={`log-record ${props.record.errorMessage ? "failed" : ""}`}
       >
-        <R_Icon side iconId={iconId} />
+        <R_Icon iconId={iconId} />
         <div>
           <div className="timestamp">
             {generateReadableTimestamp(props.record.timestamp)}
@@ -83,15 +85,30 @@ export default function R_LogRecord(props: LogRecordProps) {
               {props.record.requestId}
             </a>
           </div>
-          <div className="comment">{props.record.comment}</div>
-          <div className="detail">{props.record.detail}</div>
+          <div className="comment">
+            <a role="button" onClick={props.onCommentClick}>
+              {props.record.comment}
+            </a>
+          </div>
+          <div className="details">
+            {props.record.details?.map((detail) => {
+              return (
+                <>
+                  <hr />
+                  {detail}
+                </>
+              );
+            })}
+          </div>
         </div>
         <R_Button
+          hidden={!isTooLong}
           onClick={() => (expanded.value = !expanded.value)}
           title="expand"
           iconId="chevron-down"
+          iconUpsideDown={expanded.value}
         />
-      </div>
+      </R_Accordeon>
     </motion.div>
   );
 }

@@ -91,7 +91,8 @@ function R_App() {
       readableTimestamp +
       logRecordInitializer.connectionName.toLowerCase() +
       logRecordInitializer.requestId?.toLowerCase() +
-      logRecordInitializer.detail?.toLowerCase() +
+      logRecordInitializer.comment?.toLowerCase() +
+      logRecordInitializer.details?.join("").toLowerCase() +
       logRecordInitializer.errorMessage?.toLowerCase()
     );
   }
@@ -106,7 +107,7 @@ function R_App() {
       readableTimestamp,
       filterString,
     };
-    logRecords.value.push(logRecord);
+    logRecords.value.unshift(logRecord);
   }
 
   const toaster = useRef(new Toaster(toasts));
@@ -120,15 +121,24 @@ function R_App() {
   }
 
   function init() {
-    addConnection(new Connection("Test Connection", "test-connection"));
+    // addConnection(new Connection("Test Connection", "test-connection"));
     log({
       connectionName: "Test Connection",
       response: false,
       type: LogRecordType.Other,
       comment: "Create connection",
-      errorMessage: "Something went worong",
-      detail:
-        "Connection was created. The detail could get really long and the user should be able to see it properly at all screen sizes.",
+      details: [
+        "Connection was created. The detail could get really long and the user should be able to see it properly at all screen sizes. Connection was created. The detail could get really long and the user should be able to see it properly at all screen sizes. Connection was created. The detail could get really long and the user should be able to see it properly at all screen sizes.",
+        "And another much shorter string.",
+      ],
+      requestId: "ropaf",
+    });
+    log({
+      errorMessage: "Error message",
+      type: LogRecordType.Other,
+      comment: "Error comment",
+      connectionName: "Test Connection",
+      response: false,
       requestId: "ropaf",
     });
   }

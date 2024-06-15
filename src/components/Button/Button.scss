@@ -1,8 +1,18 @@
 button {
   background: var(--color-primary);
   color: var(--color-text);
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .icon {
+    color: var(--color-text);
+  }
 
   &.no-background {
     background: transparent;
+    box-shadow: none;
   }
 }

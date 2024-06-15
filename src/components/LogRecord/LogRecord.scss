@@ -5,9 +5,10 @@
   box-shadow: var(--box-shadow);
   margin: auto;
   display: flex;
-  align-items: center;
   justify-content: center;
   background: var(--color-surface-top);
+  gap: 8px;
+  overflow-y: hidden;
 
   > div {
     width: 100%;
@@ -36,8 +37,7 @@
     font-weight: bold;
   }
 
-  .detail {
-    padding-top: 4px;
+  .details {
     font-family: "Jetbrains Mono";
     font-size: 0.8rem;
 

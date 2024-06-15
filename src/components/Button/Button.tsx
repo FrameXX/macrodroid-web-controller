@@ -1,34 +1,42 @@
-import { PropsWithChildren } from "react";
 import R_Icon from "../Icon/Icon";
 import useDefaultProps from "../../modules/use_default_props";
 import "./Button.scss";
+import { TargetAndTransition, motion } from "framer-motion";
 
-interface ButtonProps extends PropsWithChildren {
+interface ButtonProps {
   onClick: () => void;
   iconId: string;
   title: string;
-  childrenHidden?: boolean;
+  text?: string;
   noBackground?: boolean;
-  upsideDown?: boolean;
+  iconUpsideDown?: boolean;
+  hidden?: boolean;
 }
 
 const defaultProps: Partial<ButtonProps> = {
-  childrenHidden: false,
   noBackground: false,
-  upsideDown: false,
+  iconUpsideDown: false,
 };
 
 export default function R_Button(props: ButtonProps) {
   const usedProps = useDefaultProps(props, defaultProps);
+
+  const animate: TargetAndTransition = {
+    gap: usedProps.text ? "8px" : "0px",
+    aspectRatio: usedProps.text ? "" : "1",
+  };
+
   return (
-    <button
+    <motion.button
+      hidden={usedProps.hidden}
+      animate={animate}
       type="button"
       title={usedProps.title}
       className={`button ${usedProps.noBackground ? "no-background" : ""}`}
       onClick={usedProps.onClick}
     >
-      <R_Icon iconId={usedProps.iconId} />
-      <div>{usedProps.children}</div>
-    </button>
+      <R_Icon upsideDown={usedProps.iconUpsideDown} iconId={usedProps.iconId} />
+      <div>{usedProps.text}</div>
+    </motion.button>
   );
 }
