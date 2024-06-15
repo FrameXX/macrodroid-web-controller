@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 const useInnerSize = (
   checkMeetsConditions: (width: number, height: number) => boolean = (
