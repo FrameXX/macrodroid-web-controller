@@ -14,6 +14,7 @@
   box-shadow: var(--box-shadow);
   box-sizing: border-box;
   border-radius: var(--border-radius);
+  z-index: var(--z-index-nav);
 
   input {
     width: 100%;

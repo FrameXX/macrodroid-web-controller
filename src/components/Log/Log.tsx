@@ -6,6 +6,7 @@ import "./Log.scss";
 import { useMemo, useRef } from "react";
 import { generateReadableTimestamp } from "../../modules/readable_timestamp";
 import { useReactive } from "../../modules/reactive";
+import R_BigNotice from "../BigNotice/BigNotice";
 
 interface LogProps {
   logRecords: LogRecord[];
@@ -133,6 +134,9 @@ export default function R_Log(props: LogProps) {
             );
           })}
         </AnimatePresence>
+        <R_BigNotice hidden={filteredLogRecords.length > 0}>
+          No logs recorded
+        </R_BigNotice>
       </div>
     </>
   );

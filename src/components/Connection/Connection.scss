@@ -1,0 +1,17 @@
+.connection {
+  background: var(--color-surface-top);
+  padding: 8px;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  margin: 16px 0;
+  box-sizing: border-box;
+
+  .name {
+    font-weight: bold;
+  }
+
+  .last-activity-difference,
+  .last-activity {
+    font-size: 0.8rem;
+  }
+}

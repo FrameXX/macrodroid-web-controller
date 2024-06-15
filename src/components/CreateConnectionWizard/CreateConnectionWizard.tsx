@@ -7,7 +7,7 @@ import { MACRODROID_APP_URL } from "../../modules/const";
 import { Toast, ToastSeverity } from "../../modules/toaster";
 import { Connection } from "../../modules/connection";
 import { IncomingRequest } from "../../modules/incoming_request";
-import { LogRecordInitializer } from "../LogRecord/LogRecord";
+import { LogRecordInitializer, LogRecordType } from "../LogRecord/LogRecord";
 import { useReactive } from "../../modules/reactive";
 
 interface AddConnectionWizardProps {
@@ -76,16 +76,16 @@ export default function R_CreateConnectionWizard({
     const requestLog: LogRecordInitializer = {
       connectionName: connection.name,
       response: false,
-      detail: request.detail,
+      comment: request.comment,
       requestId: request.id,
-      incoming: false,
+      type: LogRecordType.OutgoingRequest,
     };
     if (!request.successful) {
       bakeToast(
         new Toast(
           `Failed to requst connection confirmation. ${request.errorMessage}`,
           "alert",
-          ToastSeverity.ERROR,
+          ToastSeverity.Error,
         ),
       );
       log({
@@ -99,7 +99,7 @@ export default function R_CreateConnectionWizard({
       new Toast(
         "Connection confirmation requested. Waiting for response.",
         "transit-connection-variant",
-        ToastSeverity.SUCCESS,
+        ToastSeverity.Success,
       ),
     );
     log(requestLog);
@@ -115,7 +115,7 @@ export default function R_CreateConnectionWizard({
 
   function handleIncomingListenFailed() {
     const errorMessage = "Failed to listen for incoming requests.";
-    bakeToast(new Toast(errorMessage, "alert", ToastSeverity.ERROR));
+    bakeToast(new Toast(errorMessage, "alert", ToastSeverity.Error));
   }
 
   function handleIncomingFailedRequest(
@@ -125,7 +125,7 @@ export default function R_CreateConnectionWizard({
     log({
       connectionName: connection.name,
       response: false,
-      incoming: true,
+      type: LogRecordType.IncomingRequest,
       errorMessage,
     });
   }
@@ -137,12 +137,12 @@ export default function R_CreateConnectionWizard({
     if (request.id !== connectionAddRequestId.value) {
       const errorMessage =
         "The connection was confirmed but with a different request ID.";
-      bakeToast(new Toast(errorMessage, "alert", ToastSeverity.ERROR));
+      bakeToast(new Toast(errorMessage, "alert", ToastSeverity.Error));
       log({
         connectionName: connection.name,
         requestId: request.id,
         response: false,
-        incoming: true,
+        type: LogRecordType.IncomingRequest,
         errorMessage,
       });
       return;
@@ -151,7 +151,7 @@ export default function R_CreateConnectionWizard({
       connectionName: connection.name,
       requestId: request.id,
       response: true,
-      incoming: true,
+      type: LogRecordType.IncomingRequest,
     });
     addConnection(connection);
   }

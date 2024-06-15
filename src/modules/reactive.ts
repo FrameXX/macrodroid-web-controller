@@ -29,7 +29,7 @@ export function useReactive<T>(defaultValue: T, autoUpdate = true) {
   }
 }
 
-class Reactive<T> {
+export class Reactive<T> {
   constructor(
     private readonly ref: React.MutableRefObject<T>,
     public updateState: () => void,

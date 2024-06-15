@@ -2,9 +2,9 @@ import { Random } from "./random";
 import { Reactive } from "./reactive";
 
 export enum ToastSeverity {
-  SUCCESS = "success",
-  INFO = "info",
-  ERROR = "error",
+  Success = "success",
+  Info = "info",
+  Error = "error",
 }
 
 export class Toaster {
@@ -74,7 +74,7 @@ export class Toast {
   constructor(
     public readonly message: string,
     public readonly iconId: string,
-    public readonly severity: ToastSeverity = ToastSeverity.INFO,
+    public readonly severity: ToastSeverity = ToastSeverity.Info,
     readingDurationMs?: number,
   ) {
     if (!readingDurationMs) {

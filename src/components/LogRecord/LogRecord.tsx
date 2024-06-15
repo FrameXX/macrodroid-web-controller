@@ -1,9 +1,17 @@
-import { motion } from "framer-motion";
+import { TargetAndTransition, motion } from "framer-motion";
 import R_Icon from "../Icon/Icon";
 import "./LogRecord.scss";
 import { generateReadableTimestamp } from "../../modules/readable_timestamp";
 import useInnerSize from "../../modules/use_inner_size";
 import { DEFAULT_TRANSITION_OFFSET } from "../../modules/const";
+import R_Button from "../Button/Button";
+import { useReactive } from "../../modules/reactive";
+
+export enum LogRecordType {
+  OutgoingRequest,
+  IncomingRequest,
+  Other,
+}
 
 interface LogRecordProps {
   record: LogRecord;
@@ -20,17 +28,22 @@ export interface LogRecord extends LogRecordInitializer {
 export interface LogRecordInitializer {
   connectionName: string;
   response: boolean;
-  incoming: boolean;
+  type: LogRecordType;
   requestId?: string;
+  comment?: string;
   detail?: string;
   errorMessage?: string;
 }
 
 export default function R_LogRecord(props: LogRecordProps) {
-  const arrowIconId = props.record.incoming
-    ? "arrow-left-thick"
-    : "arrow-right-thick";
-  const secondColumn = useInnerSize((width) => width > 500);
+  const iconIdMap = {
+    [LogRecordType.OutgoingRequest]: "arrow-right-thick",
+    [LogRecordType.IncomingRequest]: "arrow-left-thick",
+    [LogRecordType.Other]: "cog",
+  } as const;
+  const iconId = iconIdMap[props.record.type];
+  const expanded = useReactive(false);
+  const animate: TargetAndTransition = expanded.value ? {} : { opacity: 0 };
 
   return (
     <motion.div
@@ -55,30 +68,29 @@ export default function R_LogRecord(props: LogRecordProps) {
       <div
         className={`log-record ${props.record.errorMessage ? "failed" : ""}`}
       >
-        <R_Icon side iconId={arrowIconId} />
+        <R_Icon side iconId={iconId} />
         <div>
-          <div>
-            <div className="timestamp">
-              {generateReadableTimestamp(props.record.timestamp)}
-            </div>
-            <div className="connection">
-              <a role="button" onClick={props.onConnectionNameClick}>
-                {props.record.connectionName}
-              </a>
-            </div>
-            <div className="id">
-              <a role="button" onClick={props.onRequestIdClick}>
-                {props.record.requestId}
-              </a>
-            </div>
-            <div hidden={secondColumn} className="detail">
-              {props.record.detail}
-            </div>
+          <div className="timestamp">
+            {generateReadableTimestamp(props.record.timestamp)}
           </div>
-          <div hidden={!secondColumn} className="side detail">
-            {props.record.detail}
+          <div className="connection-name">
+            <a role="button" onClick={props.onConnectionNameClick}>
+              {props.record.connectionName}
+            </a>
           </div>
+          <div className="id">
+            <a role="button" onClick={props.onRequestIdClick}>
+              {props.record.requestId}
+            </a>
+          </div>
+          <div className="comment">{props.record.comment}</div>
+          <div className="detail">{props.record.detail}</div>
         </div>
+        <R_Button
+          onClick={() => (expanded.value = !expanded.value)}
+          title="expand"
+          iconId="chevron-down"
+        />
       </div>
     </motion.div>
   );

@@ -25,6 +25,7 @@ export class OutgoingRequest {
   constructor(
     public readonly type: OutgoingRequestType,
     public readonly data: SearchParam[],
+    public readonly comment?: string,
     public readonly detail?: string,
     idLenght: number = 5,
   ) {

@@ -1,0 +1,13 @@
+.nothing-notice {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  height: 100%;
+  color: var(--color-text);
+  --icon-size: 5rem;
+  font-size: 1.5rem;
+  font-weight: bold;
+  gap: 8px;
+}

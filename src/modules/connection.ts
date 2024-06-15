@@ -89,7 +89,7 @@ export class Connection {
     const request = new OutgoingRequest(
       OutgoingRequestType.Add,
       [],
-      "Reuqest connection confirmation for the connection to be added.",
+      "Connection creation confirmation.",
     );
     onIdAssigned(request.id);
     const response = await this.makeRequest(request);

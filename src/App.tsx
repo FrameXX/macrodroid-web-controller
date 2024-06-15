@@ -13,22 +13,70 @@ import { DEFAULT_TRANSITION_OFFSET } from "./modules/const";
 import {
   LogRecord,
   LogRecordInitializer,
+  LogRecordType,
 } from "./components/LogRecord/LogRecord";
 import R_Log from "./components/Log/Log";
 import { generateReadableTimestamp } from "./modules/readable_timestamp";
 import { useReactive } from "./modules/reactive";
+import R_BigNotice from "./components/BigNotice/BigNotice";
+import R_Connection from "./components/Connection/Connection";
+import { IncomingRequest } from "./modules/incoming_request";
 
 let initiated = false;
 
 function R_App() {
   const toasts = useReactive<Toast[]>([]);
-  const activeNavTabId = useReactive<NavTabId>(NavTabId.CONNECTIONS);
+  const activeNavTabId = useReactive<NavTabId>(NavTabId.Connections);
   const addConnectionWizardOpen = useReactive<boolean>(false);
   const connections = useReactive<Connection[]>([]);
   const logRecords = useReactive<LogRecord[]>([]);
+
   function addConnection(connection: Connection, restored = false) {
     if (!restored) addConnectionWizardOpen.value = false;
     connections.value.push(connection);
+    connection.listenRequests(
+      (request) => {
+        handleIncomingRequest(request, connection);
+      },
+      (errorMessage) => {
+        handleIncomingFailedRequest(errorMessage, connection);
+      },
+      () => {
+        handleListenFailed(connection);
+      },
+    );
+  }
+
+  function handleIncomingRequest(
+    request: IncomingRequest,
+    connection: Connection,
+  ) {
+    log({
+      connectionName: connection.name,
+      requestId: request.id,
+      response: true,
+      type: LogRecordType.IncomingRequest,
+    });
+  }
+
+  function handleIncomingFailedRequest(
+    errorMessage: string,
+    connection: Connection,
+  ) {
+    log({
+      connectionName: connection.name,
+      response: false,
+      type: LogRecordType.IncomingRequest,
+      errorMessage,
+    });
+  }
+
+  function handleListenFailed(connection: Connection) {
+    log({
+      connectionName: connection.name,
+      response: false,
+      type: LogRecordType.IncomingRequest,
+    });
   }
 
   function onClosePairConnectionWizard() {
@@ -71,7 +119,19 @@ function R_App() {
     toaster.current.removeToastById(id);
   }
 
-  function init() {}
+  function init() {
+    addConnection(new Connection("Test Connection", "test-connection"));
+    log({
+      connectionName: "Test Connection",
+      response: false,
+      type: LogRecordType.Other,
+      comment: "Create connection",
+      errorMessage: "Something went worong",
+      detail:
+        "Connection was created. The detail could get really long and the user should be able to see it properly at all screen sizes.",
+      requestId: "ropaf",
+    });
+  }
 
   useEffect(() => {
     if (initiated) return;
@@ -95,13 +155,16 @@ function R_App() {
     <motion.main layout animate={animate}>
       <div id="tab-content">
         <motion.section
-          animate={animateTab(NavTabId.CONNECTIONS)}
+          animate={animateTab(NavTabId.Connections)}
           className="tab"
         >
-          <div id="no-connections">
-            <div id="no-connections-face">¯\_(ツ)_/¯</div>
-            Welcome fellow MacroDroid enthusiast! Add a new connection using the
-            button with plus icon.
+          <div>
+            {connections.value.map((connection) => (
+              <R_Connection connection={connection} key={connection.id} />
+            ))}
+            <R_BigNotice hidden={connections.value.length > 0}>
+              No connections configured
+            </R_BigNotice>
           </div>
           <R_FAB
             title="Create new connection"
@@ -119,7 +182,7 @@ function R_App() {
         <motion.section
           id="log-tab"
           className="tab"
-          animate={animateTab(NavTabId.LOG)}
+          animate={animateTab(NavTabId.Log)}
         >
           <R_Log logRecords={logRecords.value} />
         </motion.section>

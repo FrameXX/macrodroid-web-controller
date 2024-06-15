@@ -10,12 +10,14 @@ interface IconProps extends PropsWithChildren {
   sourceFilePath?: string;
   onClick?: () => void;
   hidden?: boolean;
+  upsideDown?: boolean;
 }
 
 const defaultProps: Partial<IconProps> = {
   sourceFilePath: defaultSourceFilePath,
   side: false,
   hidden: false,
+  upsideDown: false,
 };
 
 /**
@@ -30,9 +32,10 @@ const defaultProps: Partial<IconProps> = {
 export default function R_Icon(props: IconProps) {
   const usedProps = useDefaultProps(props, defaultProps);
   const href = `${usedProps.sourceFilePath}#${usedProps.iconId}`;
-  const animate: TargetAndTransition = usedProps.hidden
-    ? { width: 0 }
-    : { width: "var(--icon-size)" };
+  const animate: TargetAndTransition = {
+    width: props.hidden ? 0 : "var(--icon-size)",
+    transform: `rotate(${usedProps.upsideDown ? 180 : 0}deg)`,
+  };
   return (
     <motion.svg
       animate={animate}
