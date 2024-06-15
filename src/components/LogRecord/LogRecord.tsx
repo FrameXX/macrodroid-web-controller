@@ -7,8 +7,8 @@ import { DEFAULT_TRANSITION_OFFSET } from "../../modules/const";
 
 interface LogRecordProps {
   record: LogRecord;
-  onConnectionNameClick: () => any;
-  onRequestIdClick?: () => any;
+  onConnectionNameClick: () => void;
+  onRequestIdClick?: () => void;
 }
 
 export interface LogRecord extends LogRecordInitializer {

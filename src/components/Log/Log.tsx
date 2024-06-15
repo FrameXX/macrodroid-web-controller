@@ -39,7 +39,18 @@ export default function R_Log(props: LogProps) {
     }, 200);
   }
 
-  function filterLogRecords(logRecords: LogRecord[]) {
+  function setFilter(value: string, type: FilterType) {
+    if (!filterInput.current || !filterTypeSelect.current) {
+      console.error("Filter input or select not found.");
+      return;
+    }
+
+    filterInput.current.value = value;
+    filterTypeSelect.current.value = type;
+  }
+
+  const filteredLogRecords = useMemo(() => {
+    const logRecords = props.logRecords;
     switch (filterType.value) {
       case FilterType.Timestamp:
         return logRecords.filter((record) => {
@@ -74,20 +85,6 @@ export default function R_Log(props: LogProps) {
       default:
         return logRecords;
     }
-  }
-
-  function setFilter(value: string, type: FilterType) {
-    if (!filterInput.current || !filterTypeSelect.current) {
-      console.error("Filter input or select not found.");
-      return;
-    }
-
-    filterInput.current.value = value;
-    filterTypeSelect.current.value = type;
-  }
-
-  const filteredLogRecords = useMemo(() => {
-    return filterLogRecords(props.logRecords);
   }, [filterString, filterType, props.logRecords]);
 
   return (

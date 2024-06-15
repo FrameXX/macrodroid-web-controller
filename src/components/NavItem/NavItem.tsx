@@ -7,7 +7,7 @@ interface NavItemProps {
   title: string;
   iconId: string;
   active: boolean;
-  onClick: () => any;
+  onClick: () => void;
 }
 
 /**

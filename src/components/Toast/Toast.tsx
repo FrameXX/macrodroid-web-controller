@@ -7,7 +7,7 @@ import { useReactive } from "../../modules/reactive";
 
 interface ToastProps {
   toast: Toast;
-  onClick: (id: number) => any;
+  onClick: (id: number) => void;
 }
 
 /**
