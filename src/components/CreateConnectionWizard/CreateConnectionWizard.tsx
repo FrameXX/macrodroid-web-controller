@@ -12,10 +12,10 @@ import { useReactive } from "../../modules/reactive";
 
 interface AddConnectionWizardProps {
   open: boolean;
-  bakeToast: (toast: Toast) => any;
-  onClose: () => any;
-  onConnectionAdd: (connection: Connection) => any;
-  log: (record: LogRecordInitializer) => any;
+  bakeToast: (toast: Toast) => void;
+  onClose: () => void;
+  onConnectionAdd: (connection: Connection) => void;
+  log: (record: LogRecordInitializer) => void;
 }
 
 export default function R_CreateConnectionWizard({

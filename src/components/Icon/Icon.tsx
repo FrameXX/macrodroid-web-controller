@@ -4,18 +4,18 @@ import useDefaultProps from "../../modules/use_default_props";
 import "./Icon.scss";
 import { TargetAndTransition, motion } from "framer-motion";
 
-interface IconProps extends PropsWithChildren<any> {
+interface IconProps extends PropsWithChildren {
   iconId: string;
   side?: boolean;
   sourceFilePath?: string;
-  onClick?: () => any;
+  onClick?: () => void;
   hidden?: boolean;
 }
 
 const defaultProps: Partial<IconProps> = {
   sourceFilePath: defaultSourceFilePath,
   side: false,
-  hidden: false
+  hidden: false,
 };
 
 /**
@@ -30,9 +30,16 @@ const defaultProps: Partial<IconProps> = {
 export default function R_Icon(props: IconProps) {
   const usedProps = useDefaultProps(props, defaultProps);
   const href = `${usedProps.sourceFilePath}#${usedProps.iconId}`;
-  const animate: TargetAndTransition = usedProps.hidden ? { width: 0 } : { width: "var(--icon-size)" };
+  const animate: TargetAndTransition = usedProps.hidden
+    ? { width: 0 }
+    : { width: "var(--icon-size)" };
   return (
-    <motion.svg animate={animate} onClick={usedProps.onClick} role="img" className={`icon ${usedProps.side ? "side" : ""}`}>
+    <motion.svg
+      animate={animate}
+      onClick={usedProps.onClick}
+      role="img"
+      className={`icon ${usedProps.side ? "side" : ""}`}
+    >
       <use aria-hidden href={href} />
     </motion.svg>
   );

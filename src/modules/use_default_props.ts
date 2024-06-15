@@ -1,8 +1,8 @@
 export default function useDefaultProps<
   Props extends object,
-  Defaults extends object
+  Defaults extends object,
 >(props: Props, defaults: Defaults): Required<Props> {
-  let newProps: Required<Props> = { ...props } as Required<Props>;
+  const newProps: Required<Props> = { ...props } as Required<Props>;
   const defaultKeys = Object.keys(defaults) as string[];
   defaultKeys.forEach((key) => {
     const propKey = key as keyof Props;

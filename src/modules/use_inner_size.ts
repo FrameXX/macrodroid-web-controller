@@ -7,21 +7,15 @@ const useInnerSize = (
   ) => width > 600 && height > 400,
 ) => {
   const [meetsConditions, setMeetsConditions] = useState(
-    window.innerWidth > window.innerHeight,
+    innerWidth > innerHeight,
   );
 
-  useEffect(() => {
-    const handleResize = () => {
-      const wideScreen = checkMeetsConditions(innerWidth, innerHeight);
-      setMeetsConditions(wideScreen);
-    };
+  function handleResize() {
+    const wideScreen = checkMeetsConditions(innerWidth, innerHeight);
+    setMeetsConditions(wideScreen);
+  }
 
-    window.addEventListener("resize", handleResize);
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
+  addEventListener("resize", handleResize);
 
   return meetsConditions;
 };

@@ -53,9 +53,9 @@ export class Connection {
   }
 
   public listenRequests(
-    onRequest: (request: IncomingRequest) => any,
-    onFailedRequest?: (errorMessage: string) => any,
-    onListenFailed?: () => any,
+    onRequest: (request: IncomingRequest) => void,
+    onFailedRequest?: (errorMessage: string) => void,
+    onListenFailed?: () => void,
   ) {
     if (this.listening)
       throw Error("This connection is already listening to new messages.");
@@ -85,7 +85,7 @@ export class Connection {
     this.listening = false;
   }
 
-  public async requestAddConnection(onIdAssigned: (id: string) => any) {
+  public async requestAddConnection(onIdAssigned: (id: string) => void) {
     const request = new OutgoingRequest(
       OutgoingRequestType.Add,
       [],

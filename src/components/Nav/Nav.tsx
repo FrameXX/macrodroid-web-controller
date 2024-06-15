@@ -12,7 +12,7 @@ export enum NavTabId {
 
 interface NavProps {
   activeNavTabId: NavTabId;
-  onTabSwitch: (newNavTabId: NavTabId) => any;
+  onTabSwitch: (newNavTabId: NavTabId) => void;
 }
 
 /**

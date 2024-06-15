@@ -13,7 +13,7 @@ export default function R_WizardNavigatorIndicator(
   if (props.activePageIndex < 0 || props.activePageIndex >= props.pageCount)
     throw new RangeError("Active page index does not match page count.");
 
-  let dots: ReactNode[] = [];
+  const dots: ReactNode[] = [];
   for (let i = 0; i < props.pageCount; i++) {
     const active = i === props.activePageIndex;
     const animate: TargetAndTransition = active

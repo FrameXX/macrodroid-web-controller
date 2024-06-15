@@ -4,7 +4,7 @@ import R_Icon from "../Icon/Icon";
 import "./FAB.scss";
 
 interface FABProps {
-  onClick: () => any;
+  onClick: () => void;
   left?: boolean;
   hidden?: boolean;
   iconId: string;
