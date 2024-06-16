@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 import "./Wizard.scss";
-import { TargetAndTransition, motion } from "framer-motion";
+import { Target, motion } from "framer-motion";
 import R_WizardNavigator from "../WizardNavigator/WizardNavigator";
 import { DEFAULT_TRANSITION_OFFSET } from "../../modules/const";
 
@@ -18,11 +18,11 @@ export default function R_Wizard(props: WizardProps) {
   if (props.activePageIndex < 0 || props.activePageIndex >= pageCount)
     throw new RangeError("Active page index does not match page count.");
 
-  const animate: TargetAndTransition = props.open
+  const animate: Target = props.open
     ? {}
     : { x: DEFAULT_TRANSITION_OFFSET, opacity: 0, display: "none" };
 
-  function animatePage(index: number): TargetAndTransition {
+  function animatePage(index: number): Target {
     if (index < props.activePageIndex) {
       return {
         display: "none",

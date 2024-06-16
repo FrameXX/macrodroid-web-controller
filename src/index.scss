@@ -62,9 +62,9 @@ a[role="button"]:not([href]) {
 }
 
 hr {
-  height: 0.1rem;
+  height: 0;
   border: none;
-  background: var(--color-text);
+  border: 1px solid var(--color-text);
 }
 
 input {
@@ -116,8 +116,11 @@ select {
   appearance: none;
   background-repeat: no-repeat;
   background-position: right;
+  border-right: 8px solid transparent;
   background-size: 15%;
-  margin-right: 4px;
+  background-color: var(--color-primary);
+  box-shadow: var(--box-shadow);
+  border-radius: var(--border-radius);
 
   &:active {
     outline: none;

@@ -1,6 +1,6 @@
 import R_NavItem from "../NavItem/NavItem";
 import "./Nav.scss";
-import { TargetAndTransition, motion } from "framer-motion";
+import { Target, motion } from "framer-motion";
 import useInnerSize from "../../modules/use_inner_size";
 
 export enum NavTabId {
@@ -22,7 +22,7 @@ export default function R_Nav(props: NavProps) {
 
   const wideScreen = useInnerSize();
 
-  const animate: TargetAndTransition = wideScreen
+  const animate: Target = wideScreen
     ? {
         top: 0,
         flexDirection: "column",
@@ -37,6 +37,7 @@ export default function R_Nav(props: NavProps) {
         justifyContent: "space-evenly",
         width: "100%",
         height: 80,
+        overflowY: "hidden",
       };
 
   return (

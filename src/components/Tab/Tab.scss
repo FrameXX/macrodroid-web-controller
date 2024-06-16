@@ -1,0 +1,14 @@
+.tab {
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  position: absolute;
+}
+
+.scrollable-container {
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 12px;
+  box-sizing: border-box;
+}

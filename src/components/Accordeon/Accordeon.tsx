@@ -1,11 +1,11 @@
-import { TargetAndTransition, motion } from "framer-motion";
+import { Target, motion } from "framer-motion";
 import { PropsWithChildren } from "react";
 import useDefaultProps from "../../modules/use_default_props";
 
 interface AccordeonProps extends PropsWithChildren {
   open: boolean;
   className: string;
-  closedHeight?: number;
+  closedHeight?: number | string;
 }
 
 const defaultProps: Partial<AccordeonProps> = {
@@ -14,7 +14,7 @@ const defaultProps: Partial<AccordeonProps> = {
 
 export default function R_Accordeon(props: AccordeonProps) {
   const usedProps = useDefaultProps(props, defaultProps);
-  const animate: TargetAndTransition = {
+  const animate: Target = {
     height: usedProps.open ? "auto" : usedProps.closedHeight,
   };
 

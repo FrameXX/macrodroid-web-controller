@@ -1,21 +1,21 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const useInnerSize = (
-  checkMeetsConditions: (width: number, height: number) => boolean = (
-    width,
-    height,
-  ) => width > 600 && height > 400,
+  checkMeetsConditions: () => boolean = () => innerWidth > innerHeight,
 ) => {
-  const [meetsConditions, setMeetsConditions] = useState(
-    innerWidth > innerHeight,
-  );
+  const [meetsConditions, setMeetsConditions] =
+    useState<boolean>(checkMeetsConditions);
 
   function handleResize() {
-    const wideScreen = checkMeetsConditions(innerWidth, innerHeight);
-    setMeetsConditions(wideScreen);
+    setMeetsConditions(checkMeetsConditions());
   }
 
-  addEventListener("resize", handleResize);
+  useEffect(() => {
+    addEventListener("resize", handleResize);
+    return () => {
+      removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   return meetsConditions;
 };

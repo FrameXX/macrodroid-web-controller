@@ -1,7 +1,7 @@
 import useInnerSize from "../../modules/use_inner_size";
 import R_Icon from "../Icon/Icon";
 import "./NavItem.scss";
-import { TargetAndTransition, motion } from "framer-motion";
+import { Target, motion } from "framer-motion";
 
 interface NavItemProps {
   title: string;
@@ -22,7 +22,7 @@ interface NavItemProps {
  */
 export default function R_NavItem(props: NavItemProps) {
   const wideScreen = useInnerSize();
-  const animate: TargetAndTransition = {
+  const animate: Target = {
     color: props.active
       ? "var(--color-primary-item)"
       : "var(--color-primary-item-inactive)",

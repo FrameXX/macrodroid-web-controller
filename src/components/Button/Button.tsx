@@ -1,7 +1,7 @@
 import R_Icon from "../Icon/Icon";
 import useDefaultProps from "../../modules/use_default_props";
 import "./Button.scss";
-import { TargetAndTransition, motion } from "framer-motion";
+import { Target, motion } from "framer-motion";
 
 interface ButtonProps {
   onClick: () => void;
@@ -21,8 +21,9 @@ const defaultProps: Partial<ButtonProps> = {
 export default function R_Button(props: ButtonProps) {
   const usedProps = useDefaultProps(props, defaultProps);
 
-  const animate: TargetAndTransition = {
-    gap: usedProps.text ? "8px" : "0px",
+  const animate: Target = {
+    gap: usedProps.text ? "4px" : "",
+    paddingRight: usedProps.text ? "12px" : "",
     aspectRatio: usedProps.text ? "" : "1",
   };
 

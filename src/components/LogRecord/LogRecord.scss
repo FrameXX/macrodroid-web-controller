@@ -37,20 +37,34 @@
     font-weight: bold;
   }
 
+  .comment {
+    font-weight: bold;
+    font-size: 1.1rem;
+  }
+
   .details {
     font-family: "Jetbrains Mono";
     font-size: 0.8rem;
-
-    &.side {
-      margin: auto;
-      padding-left: 8px;
-    }
   }
 
   button {
     position: absolute;
     top: 8px;
     right: 8px;
+  }
+
+  .bottom-shade {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
+    background: linear-gradient(
+      to top,
+      var(--color-surface-top) 20%,
+      transparent 100%
+    );
+    pointer-events: none;
   }
 }
 

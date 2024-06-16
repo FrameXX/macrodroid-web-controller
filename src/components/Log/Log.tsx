@@ -5,11 +5,14 @@ import useInnerSize from "../../modules/use_inner_size";
 import "./Log.scss";
 import { useMemo, useRef } from "react";
 import { generateReadableTimestamp } from "../../modules/readable_timestamp";
-import { useReactive } from "../../modules/reactive";
 import R_BigNotice from "../BigNotice/BigNotice";
+import R_FAB from "../FAB/FAB";
+import { useImmer } from "use-immer";
 
 interface LogProps {
   logRecords: LogRecord[];
+  containerScrollPx: number;
+  onScrollUp: () => void;
 }
 
 enum FilterType {
@@ -23,21 +26,21 @@ enum FilterType {
 }
 
 export default function R_Log(props: LogProps) {
-  const filterString = useReactive("");
-  const filterType = useReactive(FilterType.All);
-  const filterTimeout = useReactive(0);
+  const [filterString, setFilterString] = useImmer("");
+  const [filterType, setFilterType] = useImmer(FilterType.All);
 
   const filterInput = useRef<HTMLInputElement>(null);
   const filterTypeSelect = useRef<HTMLSelectElement>(null);
+  const filterTimeout = useRef(0);
 
-  const wideEnoughScreenForFilterIcon = useInnerSize((width) => {
-    return width > 500;
+  const wideEnoughScreenForFilterIcon = useInnerSize(() => {
+    return innerWidth > 500;
   });
 
   function onFilterChange(value: string) {
-    clearTimeout(filterTimeout.value);
-    filterTimeout.value = setTimeout(() => {
-      filterString.value = value;
+    clearTimeout(filterTimeout.current);
+    filterTimeout.current = setTimeout(() => {
+      setFilterString(value.toLowerCase());
     }, 200);
   }
 
@@ -49,47 +52,43 @@ export default function R_Log(props: LogProps) {
 
     filterInput.current.value = value;
     filterTypeSelect.current.value = type;
+    onFilterChange(value);
   }
+
+  const scrolledDown = props.containerScrollPx > innerHeight * 0.5;
 
   const filteredLogRecords = useMemo(() => {
     const logRecords = props.logRecords;
-    switch (filterType.value) {
+    switch (filterType) {
       case FilterType.Timestamp:
         return logRecords.filter((record) => {
           return generateReadableTimestamp(record.timestamp).includes(
-            filterString.value,
+            filterString,
           );
         });
       case FilterType.ConnectionName:
         return logRecords.filter((record) => {
-          return record.connectionName
-            .toLowerCase()
-            .includes(filterString.value);
+          return record.connectionName.toLowerCase().includes(filterString);
         });
       case FilterType.RequestId:
         return logRecords.filter((record) => {
-          return record.requestId?.toLowerCase().includes(filterString.value);
+          return record.requestId?.toLowerCase().includes(filterString);
         });
       case FilterType.Comment:
         return logRecords.filter((record) => {
-          return record.comment?.toLowerCase().includes(filterString.value);
+          return record.comment?.toLowerCase().includes(filterString);
         });
       case FilterType.Details:
         return logRecords.filter((record) => {
-          return record.details
-            ?.join("")
-            .toLowerCase()
-            .includes(filterString.value);
+          return record.details?.join("").toLowerCase().includes(filterString);
         });
       case FilterType.ErrorMessage:
         return logRecords.filter((record) => {
-          return record.errorMessage
-            ?.toLowerCase()
-            .includes(filterString.value);
+          return record.errorMessage?.toLowerCase().includes(filterString);
         });
       case FilterType.All:
         return logRecords.filter((record) => {
-          return record.filterString.includes(filterString.value);
+          return record.filterString.includes(filterString);
         });
       default:
         return logRecords;
@@ -102,16 +101,14 @@ export default function R_Log(props: LogProps) {
         <R_Icon hidden={!wideEnoughScreenForFilterIcon} iconId="filter" />
         <input
           ref={filterInput}
-          onChange={(event) => onFilterChange(event.target.value.toLowerCase())}
+          onChange={(event) => onFilterChange(event.target.value)}
           type="search"
           id="input-log-filter"
           placeholder="Filter log using..."
         />
         <select
           ref={filterTypeSelect}
-          onChange={(event) =>
-            (filterType.value = event.target.value as FilterType)
-          }
+          onChange={(event) => setFilterType(event.target.value as FilterType)}
           title="Log filter"
         >
           <option value="all">All</option>
@@ -123,6 +120,15 @@ export default function R_Log(props: LogProps) {
           <option value="error_message">Error message</option>
         </select>
       </div>
+      <R_BigNotice hidden={props.logRecords.length > 0}>
+        No logs recorded
+      </R_BigNotice>
+      <R_BigNotice
+        iconId="filter-remove"
+        hidden={props.logRecords.length === 0 || filteredLogRecords.length > 0}
+      >
+        All logs have been filtered out.
+      </R_BigNotice>
       <div id="logs">
         <AnimatePresence initial={false}>
           {filteredLogRecords.map((record) => {
@@ -140,16 +146,20 @@ export default function R_Log(props: LogProps) {
                 onCommentClick={() => {
                   setFilter(record.comment ?? "", FilterType.Comment);
                 }}
-                key={record.timestamp}
+                key={record.id}
                 record={record}
               />
             );
           })}
         </AnimatePresence>
-        <R_BigNotice hidden={filteredLogRecords.length > 0}>
-          No logs recorded
-        </R_BigNotice>
+        <div className="fab-placeholder" />
       </div>
+      <R_FAB
+        hidden={!scrolledDown}
+        title="Scroll up"
+        onClick={props.onScrollUp}
+        iconId="arrow-up"
+      />
     </>
   );
 }

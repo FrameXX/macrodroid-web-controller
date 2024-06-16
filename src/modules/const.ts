@@ -10,6 +10,7 @@ export const NTFY_TOPIC_PREFIX = "macrodroid-wc";
 // UI
 export const SPLASHSCREEN_TIMEOUT_MS = 400;
 export const DEFAULT_TRANSITION_OFFSET = 40;
+export const DEFAULT_TRANSITION_UNMOUNTED_SCALE = 0.8;
 export const DEFAULT_TRANSITION_DURATION_S = 0.4;
 
 // OTHER

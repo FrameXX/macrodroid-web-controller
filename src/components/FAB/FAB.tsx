@@ -1,4 +1,4 @@
-import { TargetAndTransition, motion } from "framer-motion";
+import { Target, motion } from "framer-motion";
 import useDefaultProps from "../../modules/use_default_props";
 import R_Icon from "../Icon/Icon";
 import "./FAB.scss";
@@ -26,7 +26,7 @@ const defaultProps: Partial<FABProps> = { left: false, hidden: false };
  */
 export default function R_FAB(props: FABProps) {
   const usedProps = useDefaultProps(props, defaultProps);
-  const animate: TargetAndTransition = {
+  const animate: Target = {
     scale: usedProps.hidden ? 0 : 1,
     opacity: usedProps.hidden ? 0 : 1,
     pointerEvents: usedProps.hidden ? "none" : "all",

@@ -1,5 +1,5 @@
+import { Updater } from "use-immer";
 import { Random } from "./random";
-import { Reactive } from "./reactive";
 
 export enum ToastSeverity {
   Success = "success",
@@ -10,48 +10,54 @@ export enum ToastSeverity {
 export class Toaster {
   private readonly maxToasts = 3;
   private toastReadingTimeoutId = 0;
+  private toasts: Toast[] = [];
 
-  constructor(private toasts: Reactive<Toast[]>) {}
+  constructor(private readonly setToasts: Updater<Toast[]>) {}
+
+  private updateToasts() {
+    this.setToasts([...this.toasts]);
+  }
 
   private clearToastReadingTimeout() {
     clearTimeout(this.toastReadingTimeoutId);
   }
 
   private setToastReadingTimeout() {
-    const readToast = this.toasts.value[0];
+    const readToast = this.toasts[0];
     this.toastReadingTimeoutId = setTimeout(() => {
       this.removeMostBakedToast();
     }, readToast.readingDurationMs);
   }
 
   private removeMostBakedToast() {
-    this.toasts.value.shift();
+    this.toasts.shift();
+    this.updateToasts();
     if (this.isEmpty) return;
     this.setToastReadingTimeout();
   }
 
   private addToast(toast: Toast) {
-    this.toasts.value.push(toast);
+    this.toasts.push(toast);
+    this.updateToasts();
   }
 
   private get isEmpty() {
-    return this.toasts.value.length === 0;
+    return this.toasts.length === 0;
   }
 
   private get isFull() {
-    return this.toasts.value.length >= this.maxToasts;
+    return this.toasts.length >= this.maxToasts;
   }
 
   public removeToastById(toastId: number) {
     if (this.isEmpty) return;
-    const readToast = this.toasts.value[0];
+    const readToast = this.toasts[0];
     if (readToast.id === toastId) {
       this.removeMostBakedToast();
       return;
     }
-    this.toasts.value = this.toasts.value.filter(
-      (toast) => toast.id !== toastId,
-    );
+    this.toasts = this.toasts.filter((toast) => toast.id !== toastId);
+    this.updateToasts();
   }
 
   public bake(toast: Toast) {

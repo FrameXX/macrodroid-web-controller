@@ -16,17 +16,14 @@
   font-size: 3rem;
 }
 
-.tab {
-  width: 100%;
-  height: 100%;
-  box-sizing: border-box;
-  position: absolute;
-  padding: 12px;
-  overflow-x: hidden;
-}
-
 #log-tab {
   display: flex;
   flex-direction: column;
   overflow-y: auto;
+}
+
+#connections {
+  text-align: center;
+  column-width: 350px;
+  column-gap: 12px;
 }

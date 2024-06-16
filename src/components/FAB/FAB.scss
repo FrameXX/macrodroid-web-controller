@@ -10,6 +10,10 @@
   box-shadow: var(--box-shadow);
   bottom: 25px;
 
+  .icon {
+    color: var(--color-item-negative);
+  }
+
   &.right {
     right: 25px;
   }

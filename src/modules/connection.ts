@@ -14,6 +14,10 @@ import {
   SearchParam,
 } from "./outgoing_request";
 import { IncomingRequest } from "./incoming_request";
+import {
+  LogRecordInitializer,
+  LogRecordType,
+} from "../components/LogRecord/LogRecord";
 
 export class Connection {
   public readonly id: string;
@@ -85,18 +89,16 @@ export class Connection {
     this.listening = false;
   }
 
-  public async requestAddConnection(onIdAssigned: (id: string) => void) {
-    const request = new OutgoingRequest(
+  public static newAddConnectionRequest() {
+    return new OutgoingRequest(
       OutgoingRequestType.Add,
       [],
-      "Connection creation confirmation.",
+      "Connection creation confirmation requested",
     );
-    onIdAssigned(request.id);
-    const response = await this.makeRequest(request);
-    response.ok
-      ? request.success()
-      : request.fail(`HTTP request failed. Error ${response.status}.`);
-    return request;
+  }
+
+  public static newPokeRequest() {
+    return new OutgoingRequest(OutgoingRequestType.Poke, [], "Poke");
   }
 
   public async makeRequest(request: OutgoingRequest) {
@@ -108,6 +110,16 @@ export class Connection {
       ...request.data,
     ];
     const URL = this.generateRequestURL(request.type, URLParams);
-    return await fetch(URL);
+    const response = await fetch(URL);
+    const requestLog: LogRecordInitializer = {
+      connectionName: this.name,
+      response: false,
+      comment: request.comment,
+      requestId: request.id,
+      type: LogRecordType.OutgoingRequest,
+    };
+    if (!response.ok)
+      requestLog.errorMessage = `HTTP request failed. Error ${response.status}.`;
+    return requestLog;
   }
 }

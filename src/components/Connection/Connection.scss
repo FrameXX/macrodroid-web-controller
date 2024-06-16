@@ -1,10 +1,28 @@
 .connection {
+  text-align: left;
   background: var(--color-surface-top);
   padding: 8px;
   border-radius: var(--border-radius);
   box-shadow: var(--box-shadow);
-  margin: 16px 0;
+  margin: 12px 0;
   box-sizing: border-box;
+  display: flex;
+  align-items: start;
+  break-inside: avoid;
+
+  &:first-child {
+    margin-top: 0;
+  }
+
+  .info {
+    width: 100%;
+  }
+
+  .actions {
+    display: flex;
+    padding-left: 8px;
+    gap: 8px;
+  }
 
   .name {
     font-weight: bold;

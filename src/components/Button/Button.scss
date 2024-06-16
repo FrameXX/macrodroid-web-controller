@@ -1,4 +1,4 @@
-button {
+.button {
   background: var(--color-primary);
   color: var(--color-text);
   border-radius: var(--border-radius);
@@ -6,6 +6,9 @@ button {
   display: flex;
   justify-content: center;
   align-items: center;
+  text-transform: uppercase;
+  font-weight: bold;
+  flex-shrink: 0;
 
   .icon {
     color: var(--color-text);

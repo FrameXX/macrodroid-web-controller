@@ -1,9 +1,9 @@
 import { Toast } from "../../modules/toaster";
 import R_Icon from "../Icon/Icon";
-import { TargetAndTransition, motion } from "framer-motion";
+import { Target, motion } from "framer-motion";
 import "./Toast.scss";
 import { DEFAULT_TRANSITION_OFFSET } from "../../modules/const";
-import { useReactive } from "../../modules/reactive";
+import { useImmer } from "use-immer";
 
 interface ToastProps {
   toast: Toast;
@@ -19,19 +19,28 @@ interface ToastProps {
  * @return {JSX.Element} The rendered toast component.
  */
 export default function R_Toast(props: ToastProps) {
-  const hovering = useReactive(false);
-  const overlayAnimate: TargetAndTransition = hovering.value
+  const [hovering, setHovering] = useImmer(false);
+  const overlayAnimate: Target = hovering
     ? {}
     : { opacity: 0, y: -DEFAULT_TRANSITION_OFFSET };
 
+  const animateUnmounted: Target = {
+    opacity: 0,
+    y: -DEFAULT_TRANSITION_OFFSET,
+  };
+  const animateMounted: Target = {
+    opacity: 1,
+    y: 0,
+  };
+
   return (
     <motion.div
-      onHoverStart={() => (hovering.value = true)}
-      onHoverEnd={() => (hovering.value = false)}
+      onHoverStart={() => setHovering(true)}
+      onHoverEnd={() => setHovering(false)}
       layout
-      initial={{ opacity: 0, y: -DEFAULT_TRANSITION_OFFSET }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -DEFAULT_TRANSITION_OFFSET }}
+      initial={animateUnmounted}
+      animate={animateMounted}
+      exit={animateUnmounted}
       className={`toast ${props.toast.severity}`}
       onClick={() => props.onClick(props.toast.id)}
     >

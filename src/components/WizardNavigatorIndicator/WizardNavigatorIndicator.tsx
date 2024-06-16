@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 import "./WizardNavigatorIndicator.scss";
-import { TargetAndTransition, motion } from "framer-motion";
+import { Target, motion } from "framer-motion";
 
 interface WizardNavigatorIndicatorProps {
   pageCount: number;
@@ -16,7 +16,7 @@ export default function R_WizardNavigatorIndicator(
   const dots: ReactNode[] = [];
   for (let i = 0; i < props.pageCount; i++) {
     const active = i === props.activePageIndex;
-    const animate: TargetAndTransition = active
+    const animate: Target = active
       ? { scale: 1.2, opacity: 1 }
       : { opacity: 0.3 };
     dots.push(<motion.div animate={animate} key={i} className="dot" />);

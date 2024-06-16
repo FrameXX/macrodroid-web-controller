@@ -4,13 +4,13 @@ import "./LogRecord.scss";
 import { generateReadableTimestamp } from "../../modules/readable_timestamp";
 import { DEFAULT_TRANSITION_OFFSET } from "../../modules/const";
 import R_Button from "../Button/Button";
-import { useReactive } from "../../modules/reactive";
 import R_Accordeon from "../Accordeon/Accordeon";
+import { useImmer } from "use-immer";
 
 export enum LogRecordType {
   OutgoingRequest,
   IncomingRequest,
-  Other,
+  Technicality,
 }
 
 interface LogRecordProps {
@@ -24,6 +24,7 @@ export interface LogRecord extends LogRecordInitializer {
   filterString: string;
   timestamp: number;
   readableTimestamp: string;
+  id: number;
 }
 
 export interface LogRecordInitializer {
@@ -40,11 +41,12 @@ export default function R_LogRecord(props: LogRecordProps) {
   const iconIdMap = {
     [LogRecordType.OutgoingRequest]: "arrow-right-thick",
     [LogRecordType.IncomingRequest]: "arrow-left-thick",
-    [LogRecordType.Other]: "cog",
+    [LogRecordType.Technicality]: "cog",
   } as const;
   const iconId = iconIdMap[props.record.type];
   const isTooLong = props.record.filterString.length > 340;
-  const expanded = useReactive(!isTooLong);
+  const closedHeight = isTooLong ? 150 : "auto";
+  const [expanded, setExpanded] = useImmer(false);
 
   return (
     <motion.div
@@ -66,12 +68,17 @@ export default function R_LogRecord(props: LogRecordProps) {
         {props.record.errorMessage}
       </div>
       <R_Accordeon
-        open={expanded.value}
-        closedHeight={150}
+        open={expanded}
+        closedHeight={closedHeight}
         className={`log-record ${props.record.errorMessage ? "failed" : ""}`}
       >
         <R_Icon iconId={iconId} />
         <div>
+          <div className="comment">
+            <a role="button" onClick={props.onCommentClick}>
+              {props.record.comment}
+            </a>
+          </div>
           <div className="timestamp">
             {generateReadableTimestamp(props.record.timestamp)}
           </div>
@@ -85,29 +92,25 @@ export default function R_LogRecord(props: LogRecordProps) {
               {props.record.requestId}
             </a>
           </div>
-          <div className="comment">
-            <a role="button" onClick={props.onCommentClick}>
-              {props.record.comment}
-            </a>
-          </div>
           <div className="details">
-            {props.record.details?.map((detail) => {
+            {props.record.details?.map((detail, index) => {
               return (
-                <>
+                <div key={index}>
                   <hr />
                   {detail}
-                </>
+                </div>
               );
             })}
           </div>
         </div>
         <R_Button
           hidden={!isTooLong}
-          onClick={() => (expanded.value = !expanded.value)}
-          title="expand"
+          onClick={() => setExpanded((prevExpaneded) => !prevExpaneded)}
+          title="Expand"
           iconId="chevron-down"
-          iconUpsideDown={expanded.value}
+          iconUpsideDown={expanded}
         />
+        <div hidden={expanded || !isTooLong} className="bottom-shade" />
       </R_Accordeon>
     </motion.div>
   );
