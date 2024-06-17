@@ -24,8 +24,10 @@ export default function R_Icon(props: IconProps) {
   const usedProps = useDefaultProps(props, defaultProps);
   const href = `${usedProps.sourceFilePath}#${usedProps.iconId}`;
   const animate: Target = {
-    width: props.hidden ? 0 : "var(--icon-size)",
+    width: usedProps.hidden ? 0 : "var(--icon-size)",
     transform: `scaleY(${usedProps.upsideDown ? -1 : 1})`,
+    margin: usedProps.hidden ? 0 : "",
+    display: usedProps.hidden ? "none" : "block",
   };
   return (
     <motion.svg

@@ -19,8 +19,6 @@ export interface SearchParam {
 
 export class OutgoingRequest {
   public readonly id: string;
-  private _errorMessage?: string;
-  private _status: OutGoingRequestStatus = OutGoingRequestStatus.NotSend;
 
   constructor(
     public readonly type: OutgoingRequestType,
@@ -32,26 +30,15 @@ export class OutgoingRequest {
     this.id = Random.readableId(idLenght);
   }
 
-  success() {
-    this._status = OutGoingRequestStatus.Success;
+  public static addConnection() {
+    return new OutgoingRequest(
+      OutgoingRequestType.Add,
+      [],
+      "Connection creation confirmation requested",
+    );
   }
 
-  fail(message: string) {
-    this._status = OutGoingRequestStatus.Failed;
-    this._errorMessage = message;
-  }
-
-  get status() {
-    return this._status;
-  }
-
-  get successful() {
-    return this._status === OutGoingRequestStatus.Success;
-  }
-
-  get errorMessage() {
-    if (!this._errorMessage)
-      throw new Error("Cannot get error message on Request that did not fail.");
-    return this._errorMessage;
+  public static poke() {
+    return new OutgoingRequest(OutgoingRequestType.Poke, [], "Poke");
   }
 }

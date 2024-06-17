@@ -7,8 +7,9 @@ import { MACRODROID_APP_URL } from "../../modules/const";
 import { Toast, ToastSeverity } from "../../modules/toaster";
 import { Connection } from "../../modules/connection";
 import { IncomingRequest } from "../../modules/incoming_request";
-import { LogRecordInitializer, LogRecordType } from "../LogRecord/LogRecord";
 import { useImmer } from "use-immer";
+import { OutgoingRequest } from "../../modules/outgoing_request";
+import { LogRecordInitializer, LogRecordType } from "../../modules/logger";
 
 interface AddConnectionWizardProps {
   open: boolean;
@@ -67,15 +68,16 @@ export default function R_CreateConnectionWizard(
     const connection = new Connection(connectionName, webhookId);
     setLastConnection(connection);
 
-    const request = Connection.newAddConnectionRequest();
+    const request = OutgoingRequest.addConnection();
     setConnectionAddRequestId(request.id);
     const requestLog = await connection.makeRequest(request);
     props.log(requestLog);
 
+    console.log(requestLog.errorMessage);
     if (requestLog.errorMessage) {
       props.bakeToast(
         new Toast(
-          `Failed to request connection confirmation. ${request.errorMessage}`,
+          `Failed to request connection confirmation. ${requestLog.errorMessage}`,
           "alert",
           ToastSeverity.Error,
         ),

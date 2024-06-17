@@ -1,5 +1,5 @@
 import { Target, motion } from "framer-motion";
-import { PropsWithChildren, Ref, forwardRef, useRef } from "react";
+import { PropsWithChildren, Ref, forwardRef } from "react";
 import { DEFAULT_TRANSITION_OFFSET } from "../../modules/const";
 import "./Tab.scss";
 

@@ -8,21 +8,17 @@ import {
 import { Random } from "./random";
 import { REQUEST_ID_PARAM_NAME } from "./const";
 import {
-  OutGoingRequestStatus,
   OutgoingRequest,
   OutgoingRequestType,
   SearchParam,
 } from "./outgoing_request";
 import { IncomingRequest } from "./incoming_request";
-import {
-  LogRecordInitializer,
-  LogRecordType,
-} from "../components/LogRecord/LogRecord";
+import { LogRecordInitializer, LogRecordType } from "./logger";
 
 export class Connection {
   public readonly id: string;
   public listening = false;
-  public lastActivityTimestamp = Date.now();
+  public lastActivityTimestamp = 0;
   private eventSource?: EventSource;
 
   constructor(
@@ -89,21 +85,7 @@ export class Connection {
     this.listening = false;
   }
 
-  public static newAddConnectionRequest() {
-    return new OutgoingRequest(
-      OutgoingRequestType.Add,
-      [],
-      "Connection creation confirmation requested",
-    );
-  }
-
-  public static newPokeRequest() {
-    return new OutgoingRequest(OutgoingRequestType.Poke, [], "Poke");
-  }
-
   public async makeRequest(request: OutgoingRequest) {
-    if (request.status !== OutGoingRequestStatus.NotSend)
-      throw new Error("Resending requests is not allowed.");
     const URLParams = [
       { name: CONNECTION_ID_PARAM_NAME, value: this.id },
       { name: REQUEST_ID_PARAM_NAME, value: request.id.toString() },

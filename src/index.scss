@@ -31,7 +31,9 @@ main {
 
 button,
 input,
-select {
+select,
+dialog {
+  color: inherit;
   font-family: inherit;
   font-weight: inherit;
 }

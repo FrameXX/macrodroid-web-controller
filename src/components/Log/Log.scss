@@ -1,6 +1,5 @@
 #log-filter {
   display: flex;
-  gap: 8px;
   align-items: center;
   padding: 8px;
   margin: auto;
@@ -19,6 +18,11 @@
 
   input {
     width: 100%;
+    margin-right: 8px;
+  }
+
+  .icon {
+    margin-right: 8px;
   }
 }
 

@@ -6,35 +6,13 @@ import { DEFAULT_TRANSITION_OFFSET } from "../../modules/const";
 import R_Button from "../Button/Button";
 import R_Accordeon from "../Accordeon/Accordeon";
 import { useImmer } from "use-immer";
-
-export enum LogRecordType {
-  OutgoingRequest,
-  IncomingRequest,
-  Technicality,
-}
+import { LogRecord, LogRecordType } from "../../modules/logger";
 
 interface LogRecordProps {
   record: LogRecord;
   onConnectionNameClick: () => void;
   onRequestIdClick?: () => void;
   onCommentClick?: () => void;
-}
-
-export interface LogRecord extends LogRecordInitializer {
-  filterString: string;
-  timestamp: number;
-  readableTimestamp: string;
-  id: number;
-}
-
-export interface LogRecordInitializer {
-  connectionName: string;
-  response: boolean;
-  type: LogRecordType;
-  requestId?: string;
-  comment?: string;
-  details?: string[];
-  errorMessage?: string;
 }
 
 export default function R_LogRecord(props: LogRecordProps) {
