@@ -1,5 +1,5 @@
 import { Connection } from "../../modules/connection";
-import "./Connection.scss";
+import "./ConnectionCard.scss";
 import { generateReadableTimestamp } from "../../modules/readable_timestamp";
 import { generateReadableTimeDifference } from "../../modules/readable_time_difference";
 import { useInterval } from "../../modules/use_interval";

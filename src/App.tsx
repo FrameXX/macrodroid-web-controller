@@ -1,21 +1,16 @@
 import { useEffect, useRef } from "react";
-import { Toast, ToastSeverity, Toaster } from "./modules/toaster";
+import { Toast, Toaster } from "./modules/toaster";
 import R_Toaster from "./components/Toaster/Toaster";
 import "./App.scss";
 import R_Nav from "./components/Nav/Nav";
-import R_FAB from "./components/FAB/FAB";
 import { NavTabId } from "./components/Nav/Nav";
-import R_CreateConnectionWizard from "./components/CreateConnectionWizard/CreateConnectionWizard";
 import useInnerSize from "./modules/use_inner_size";
-import { AnimatePresence, Target, motion } from "framer-motion";
+import { Target, motion } from "framer-motion";
 import { Connection } from "./modules/connection";
 import R_Log from "./components/Log/Log";
-import R_BigNotice from "./components/BigNotice/BigNotice";
-import R_Connection from "./components/Connection/Connection";
 import { IncomingRequest } from "./modules/incoming_request";
 import R_Tab from "./components/Tab/Tab";
 import { useImmer } from "use-immer";
-import { OutgoingRequest } from "./modules/outgoing_request";
 import R_ConfirmDialog from "./components/ConfirmDialog/ConfirmDialog";
 import {
   LogRecord,
@@ -24,6 +19,7 @@ import {
   Logger,
 } from "./modules/logger";
 import { ConfirmDialog } from "./modules/confirmDialog";
+import R_Connections from "./components/Connections/Connections";
 
 let initiated = false;
 
@@ -32,7 +28,6 @@ function R_App() {
   const [activeNavTabId, setActiveNavTabId] = useImmer<NavTabId>(
     NavTabId.Connections,
   );
-  const [addConnectionWizardOpen, setAddConnectionWizardOpen] = useImmer(false);
   const [connections, setConnections] = useImmer<Connection[]>([]);
   const [logRecords, setLogRecords] = useImmer<LogRecord[]>([]);
   const [logTabScrollPx, setLogTabScrollPx] = useImmer(0);
@@ -75,8 +70,7 @@ function R_App() {
     });
   }
 
-  function addConnection(connection: Connection, restored = false) {
-    if (!restored) setAddConnectionWizardOpen(false);
+  function addConnection(connection: Connection) {
     setConnections((prevConnections) => {
       prevConnections.push(connection);
       return prevConnections;
@@ -141,31 +135,6 @@ function R_App() {
     });
   }
 
-  async function pokeConnection(connection: Connection) {
-    const request = OutgoingRequest.poke();
-    const requestLog = await connection.makeRequest(request);
-    log(requestLog);
-
-    if (requestLog.errorMessage) {
-      bakeToast(
-        new Toast(
-          `Failed to poke connection. ${requestLog.errorMessage}`,
-          "alert",
-          ToastSeverity.Error,
-        ),
-      );
-      return;
-    } else {
-      bakeToast(
-        new Toast(
-          "Activity evidence requested.",
-          "transit-connection-variant",
-          ToastSeverity.Success,
-        ),
-      );
-    }
-  }
-
   function bakeToast(toast: Toast) {
     toaster.current.bake(toast);
   }
@@ -199,36 +168,12 @@ function R_App() {
       <motion.main layout animate={animate}>
         <div id="tab-content">
           <R_Tab active={activeNavTabId === NavTabId.Connections}>
-            <R_BigNotice hidden={connections.length > 0}>
-              No connections configured
-            </R_BigNotice>
-            <div id="connections">
-              <AnimatePresence>
-                {connections.map((connection) => (
-                  <R_Connection
-                    onPoke={() => {
-                      pokeConnection(connection);
-                    }}
-                    onDelete={() => {
-                      deleteConnection(connection);
-                    }}
-                    connection={connection}
-                    key={connection.id}
-                  />
-                ))}
-              </AnimatePresence>
-            </div>
-            <R_FAB
-              title="Create new connection"
-              onClick={() => setAddConnectionWizardOpen(true)}
-              iconId="plus"
-            />
-            <R_CreateConnectionWizard
-              log={log}
+            <R_Connections
+              connections={connections}
               onConnectionAdd={addConnection}
+              onConnectionDelete={deleteConnection}
               bakeToast={bakeToast}
-              onClose={() => setAddConnectionWizardOpen(false)}
-              open={addConnectionWizardOpen}
+              log={log}
             />
           </R_Tab>
           <R_Tab
