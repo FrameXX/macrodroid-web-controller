@@ -1,14 +1,16 @@
-.connection {
+.connection-card {
   text-align: left;
   background: var(--color-surface-top);
   padding: 8px;
   border-radius: var(--border-radius);
   box-shadow: var(--box-shadow);
-  margin: 12px 0;
   box-sizing: border-box;
   display: flex;
   align-items: start;
   break-inside: avoid;
+  max-width: 500px;
+  margin: auto;
+  margin-bottom: 12px;
 
   &:first-child {
     margin-top: 0;
@@ -26,6 +28,7 @@
 
   .name {
     font-weight: bold;
+    word-break: break-word;
   }
 
   .last-activity-difference,

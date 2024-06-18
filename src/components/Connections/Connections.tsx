@@ -1,4 +1,4 @@
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, Target, motion } from "framer-motion";
 import R_IconNotice from "../IconNotice/IconNotice";
 import R_Connection from "../ConnectionCard/ConnectionCard";
 import R_FAB from "../FAB/FAB";
@@ -8,6 +8,7 @@ import { Toast, ToastSeverity } from "../../modules/toaster";
 import { LogRecordInitializer } from "../../modules/logger";
 import { OutgoingRequest } from "../../modules/outgoing_request";
 import { useImmer } from "use-immer";
+import useInnerSize from "../../modules/use_inner_size";
 
 interface ConnectionsProps {
   connections: Connection[];
@@ -22,6 +23,7 @@ export default function R_Connections(props: ConnectionsProps) {
 
   async function pokeConnection(connection: Connection) {
     const request = OutgoingRequest.poke();
+    props.bakeToast(new Toast("Making poke request.", "message-arrow-right"));
     const requestLog = await connection.makeRequest(request);
     props.log(requestLog);
 
@@ -45,12 +47,27 @@ export default function R_Connections(props: ConnectionsProps) {
     }
   }
 
+  const secondColumn = useInnerSize(() => innerWidth > 700);
+  const thirdColumn = useInnerSize(() => innerWidth > 1100);
+  const fourthColumn = useInnerSize(() => innerWidth > 1500);
+
+  let animateConnections: Target;
+  if (fourthColumn && props.connections.length > 3) {
+    animateConnections = { columns: 4 };
+  } else if (thirdColumn && props.connections.length > 2) {
+    animateConnections = { columns: 3 };
+  } else if (secondColumn && props.connections.length > 1) {
+    animateConnections = { columns: 2 };
+  } else {
+    animateConnections = { columns: 1 };
+  }
+
   return (
     <>
       <R_IconNotice hidden={props.connections.length > 0}>
         No connections configured
       </R_IconNotice>
-      <motion.div id="connections">
+      <motion.div animate={animateConnections} id="connections">
         <AnimatePresence>
           {props.connections.map((connection) => (
             <R_Connection

@@ -148,6 +148,14 @@ function R_App() {
   }
 
   function init() {
+    addConnection(
+      new Connection(
+        "Extremely loooooooooooooooooooooooooooooooooong name",
+        "test-webhook-id",
+      ),
+    );
+    addConnection(new Connection("Test connection", "test-webhook-id"));
+    addConnection(new Connection("Test connection", "test-webhook-id"));
     addConnection(new Connection("Test connection", "test-webhook-id"));
   }
 

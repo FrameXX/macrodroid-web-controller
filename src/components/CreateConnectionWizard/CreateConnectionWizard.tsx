@@ -70,6 +70,12 @@ export default function R_CreateConnectionWizard(
 
     const request = OutgoingRequest.addConnection();
     setConnectionAddRequestId(request.id);
+    props.bakeToast(
+      new Toast(
+        "Making connection confirmation request.",
+        "message-arrow-right",
+      ),
+    );
     const requestLog = await connection.makeRequest(request);
     props.log(requestLog);
 

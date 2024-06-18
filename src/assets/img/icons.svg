@@ -4,6 +4,10 @@ https://pictogrammers.com/docs/general/license/ -->
 <!-- https://github.com/Templarian/MaterialDesign/tree/master -->
 <svg width="0" height="0" class="hidden">
   <defs>
+    <symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" id="message-arrow-right">
+      <path
+        d="M20 2H4C2.9 2 2 2.9 2 4V22L6 18H20C21.1 18 22 17.1 22 16V4C22 2.9 21.1 2 20 2M12 14L10.8 12.8L12.6 11H8V9H12.5L10.7 7.2L12 6L16 10L12 14Z" />
+    </symbol>
     <symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" id="check">
       <path d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z" />
     </symbol>

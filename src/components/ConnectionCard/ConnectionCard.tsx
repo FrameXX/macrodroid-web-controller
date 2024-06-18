@@ -30,7 +30,7 @@ export default function R_Connection(props: ConnectionProps) {
       initial={animateUnmounted}
       animate={animateMounted}
       exit={animateUnmounted}
-      className="connection"
+      className="connection-card"
     >
       <div className="info">
         <div className="name">{props.connection.name}</div>
