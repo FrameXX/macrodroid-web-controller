@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from "framer-motion";
-import R_BigNotice from "../BigNotice/BigNotice";
+import R_IconNotice from "../IconNotice/IconNotice";
 import R_Connection from "../ConnectionCard/ConnectionCard";
 import R_FAB from "../FAB/FAB";
 import R_CreateConnectionWizard from "../CreateConnectionWizard/CreateConnectionWizard";
@@ -47,9 +47,9 @@ export default function R_Connections(props: ConnectionsProps) {
 
   return (
     <>
-      <R_BigNotice hidden={props.connections.length > 0}>
+      <R_IconNotice hidden={props.connections.length > 0}>
         No connections configured
-      </R_BigNotice>
+      </R_IconNotice>
       <motion.div id="connections">
         <AnimatePresence>
           {props.connections.map((connection) => (

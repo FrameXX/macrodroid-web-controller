@@ -5,7 +5,7 @@ import useInnerSize from "../../modules/use_inner_size";
 import "./Log.scss";
 import { useMemo, useRef } from "react";
 import { generateReadableTimestamp } from "../../modules/readable_timestamp";
-import R_BigNotice from "../BigNotice/BigNotice";
+import R_IconNotice from "../IconNotice/IconNotice";
 import R_FAB from "../FAB/FAB";
 import { useImmer } from "use-immer";
 
@@ -120,15 +120,15 @@ export default function R_Log(props: LogProps) {
           <option value="error_message">Error message</option>
         </select>
       </div>
-      <R_BigNotice hidden={props.logRecords.length > 0}>
+      <R_IconNotice hidden={props.logRecords.length > 0}>
         No logs recorded
-      </R_BigNotice>
-      <R_BigNotice
+      </R_IconNotice>
+      <R_IconNotice
         iconId="filter-remove"
         hidden={props.logRecords.length === 0 || filteredLogRecords.length > 0}
       >
         All logs have been filtered out.
-      </R_BigNotice>
+      </R_IconNotice>
       <div id="logs">
         <AnimatePresence initial={false}>
           {filteredLogRecords.map((record) => {
