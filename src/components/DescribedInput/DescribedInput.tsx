@@ -1,4 +1,4 @@
-import { ReactNode, Ref, forwardRef } from "react";
+import { ReactNode, forwardRef } from "react";
 import { Random } from "../../modules/random";
 import "./DescribedInput.scss";
 
