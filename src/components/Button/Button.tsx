@@ -22,9 +22,9 @@ export default function R_Button(props: ButtonProps) {
   const usedProps = useDefaultProps(props, defaultProps);
 
   const animate: Target = {
-    gap: usedProps.text ? "4px" : "",
-    paddingRight: usedProps.text ? "12px" : "",
-    aspectRatio: usedProps.text ? "" : "1",
+    gap: usedProps.text ? "4px" : undefined,
+    paddingRight: usedProps.text ? "12px" : undefined,
+    aspectRatio: usedProps.text ? undefined : "1",
   };
 
   return (

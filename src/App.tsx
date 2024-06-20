@@ -1,12 +1,12 @@
 import { useEffect, useRef } from "react";
-import { Toast, Toaster } from "./modules/toaster";
+import { Toast, ToastSeverity, Toaster } from "./modules/toaster";
 import R_Toaster from "./components/Toaster/Toaster";
 import "./App.scss";
 import R_Nav from "./components/Nav/Nav";
 import { NavTabId } from "./components/Nav/Nav";
 import useInnerSize from "./modules/use_inner_size";
 import { Target, motion } from "framer-motion";
-import { Connection } from "./modules/connection";
+import { Connection, ConnectionStruct } from "./modules/connection";
 import R_Log from "./components/Log/Log";
 import { IncomingRequest } from "./modules/incoming_request";
 import R_Tab from "./components/Tab/Tab";
@@ -15,11 +15,13 @@ import R_ConfirmDialog from "./components/ConfirmDialog/ConfirmDialog";
 import {
   LogRecord,
   LogRecordInitializer,
+  LogRecordsStruct,
   LogRecordType,
   Logger,
 } from "./modules/logger";
 import { ConfirmDialog } from "./modules/confirmDialog";
 import R_Connections from "./components/Connections/Connections";
+import { useLocalStorage } from "./modules/use_local_storage";
 
 let initiated = false;
 
@@ -33,6 +35,39 @@ function R_App() {
   const [logTabScrollPx, setLogTabScrollPx] = useImmer(0);
   const [confirmDialogOpen, setConfirmDialogOpen] = useImmer(false);
   const [confirmDialogText, setConfirmDialogText] = useImmer("");
+
+  useLocalStorage(logRecords, setLogRecords, {
+    storageKey: "logRecords",
+    struct: LogRecordsStruct,
+    stringify: JSON.stringify,
+    parse: JSON.parse,
+    onRecoverError: (errorMessage) => {
+      onRecoverError(errorMessage, "log records");
+    },
+  });
+  useLocalStorage(
+    connections,
+    (connections) => connections.forEach(addConnection),
+    {
+      storageKey: "connections",
+      struct: ConnectionStruct,
+      stringify: (connections) =>
+        JSON.stringify(connections.map((c) => c.rawObject)),
+      parse: JSON.parse,
+      onRecoverError: (errorMessage) => {
+        onRecoverError(errorMessage, "connections");
+      },
+      finalize: (connections) =>
+        connections.map(
+          (connection) =>
+            new Connection(
+              connection.name,
+              connection.webhookId,
+              connection.id,
+            ),
+        ),
+    },
+  );
 
   const toaster = useRef(new Toaster(setToasts));
   const logger = useRef(new Logger(setLogRecords));
@@ -68,6 +103,12 @@ function R_App() {
       behavior: "smooth",
       block: "end",
     });
+  }
+
+  function onRecoverError(errorMessage: string, name: string) {
+    const text = `Failed to recover ${name}. ${errorMessage}`;
+    bakeToast(new Toast(text, "alert", ToastSeverity.Error));
+    console.error(text);
   }
 
   function addConnection(connection: Connection) {
@@ -116,7 +157,8 @@ function R_App() {
     log({
       connectionName: connection.name,
       response: false,
-      type: LogRecordType.IncomingRequest,
+      type: LogRecordType.Technicality,
+      errorMessage: "Failed to listen for incoming requests.",
     });
   }
 
@@ -147,17 +189,7 @@ function R_App() {
     return await confirmDialog.current.confirm(text);
   }
 
-  function init() {
-    addConnection(
-      new Connection(
-        "Extremely loooooooooooooooooooooooooooooooooong name",
-        "test-webhook-id",
-      ),
-    );
-    addConnection(new Connection("Test connection", "test-webhook-id"));
-    addConnection(new Connection("Test connection", "test-webhook-id"));
-    addConnection(new Connection("Test connection", "test-webhook-id"));
-  }
+  function init() {}
 
   useEffect(() => {
     if (initiated) return;

@@ -10,6 +10,7 @@ import { IncomingRequest } from "../../modules/incoming_request";
 import { useImmer } from "use-immer";
 import { OutgoingRequest } from "../../modules/outgoing_request";
 import { LogRecordInitializer, LogRecordType } from "../../modules/logger";
+import "./CreateConnectionWizard.scss";
 
 interface AddConnectionWizardProps {
   open: boolean;
@@ -53,6 +54,7 @@ export default function R_CreateConnectionWizard(
       new Toast(
         "Connection was confirmed and added successfully.",
         "transit-connection-variant",
+        ToastSeverity.Success,
       ),
     );
     reset();
@@ -62,6 +64,13 @@ export default function R_CreateConnectionWizard(
     if (!lastConnection) return;
     if (lastConnection?.listening) lastConnection.stopListeningRequests();
     props.bakeToast(new Toast("Connection initialization canceled.", "cancel"));
+  }
+
+  function cantNextPage() {
+    return (
+      (activePageIndex === 1 && (!connectionNameValid || !webhookIdValid)) ||
+      activePageIndex === 2
+    );
   }
 
   async function initNewConnection() {
@@ -79,7 +88,6 @@ export default function R_CreateConnectionWizard(
     const requestLog = await connection.makeRequest(request);
     props.log(requestLog);
 
-    console.log(requestLog.errorMessage);
     if (requestLog.errorMessage) {
       props.bakeToast(
         new Toast(
@@ -103,11 +111,11 @@ export default function R_CreateConnectionWizard(
       (errorMessage) => {
         handleIncomingFailedRequest(errorMessage, connection);
       },
-      () => handleIncomingListenFailed(connection),
+      () => handleListenFailed(connection),
     );
   }
 
-  function handleIncomingListenFailed(connection: Connection) {
+  function handleListenFailed(connection: Connection) {
     const errorMessage = "Failed to listen for incoming requests.";
     props.bakeToast(new Toast(errorMessage, "alert", ToastSeverity.Error));
     props.log({
@@ -181,11 +189,7 @@ export default function R_CreateConnectionWizard(
       }
       rightButton={
         <R_FAB
-          hidden={
-            (activePageIndex === 1 &&
-              (!connectionNameValid || !webhookIdValid)) ||
-            activePageIndex == 2
-          }
+          hidden={cantNextPage()}
           title="Next page"
           iconId="chevron-right"
           onClick={nextPage}
@@ -218,6 +222,7 @@ export default function R_CreateConnectionWizard(
                 setConnectionName(event.target.value);
                 setConnectionNameValid(event.target.validity.valid);
               }}
+              value={connectionName}
               required
               type="text"
               maxLength={40}
@@ -229,6 +234,10 @@ export default function R_CreateConnectionWizard(
                 setWebhookId(event.target.value);
                 setWebhookIdValid(event.target.validity.valid);
               }}
+              onKeyUp={(event) => {
+                if (event.key === "Enter" && !cantNextPage()) nextPage();
+              }}
+              value={webhookId}
               required
               pattern="(?:[a-z]|\d|-){25,50}"
               type="text"
@@ -250,7 +259,9 @@ export default function R_CreateConnectionWizard(
         <>
           <h2>Confirm the connection</h2>
           <p>The request ID is:</p>
-          <strong>{connectionAddRequestId}</strong>
+          <strong id="connection-add-request-id">
+            {connectionAddRequestId}
+          </strong>
           <p>
             Wait before the confirmation is successfully requested (You will be
             informed) and confirm the request on your target device.

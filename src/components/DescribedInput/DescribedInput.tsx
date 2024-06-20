@@ -11,6 +11,8 @@ interface DescribedInputProps {
   placeholder?: string;
   autoCapitalize?: string;
   onChange?: React.ChangeEventHandler<HTMLInputElement>;
+  value?: string;
+  onKeyUp?: React.KeyboardEventHandler<HTMLInputElement>;
   description: ReactNode;
 }
 
@@ -19,6 +21,8 @@ export default function R_DescribedInput(props: DescribedInputProps) {
   return (
     <div className="described-input">
       <input
+        onKeyUp={props.onKeyUp}
+        value={props.value}
         onChange={props.onChange}
         pattern={props.pattern}
         maxLength={props.maxLength}

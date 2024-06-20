@@ -14,9 +14,17 @@ import {
 } from "./outgoing_request";
 import { IncomingRequest } from "./incoming_request";
 import { LogRecordInitializer, LogRecordType } from "./logger";
+import { array, object, string } from "superstruct";
+
+export const ConnectionStruct = array(
+  object({
+    name: string(),
+    webhookId: string(),
+    id: string(),
+  }),
+);
 
 export class Connection {
-  public readonly id: string;
   public listening = false;
   public lastActivityTimestamp = 0;
   private eventSource?: EventSource;
@@ -24,9 +32,8 @@ export class Connection {
   constructor(
     public readonly name: string,
     public readonly webhookId: string,
-  ) {
-    this.id = Random.readableId();
-  }
+    public readonly id: string = Random.readableId(),
+  ) {}
 
   private get ntfyTopicURL() {
     return new URL(
@@ -46,6 +53,10 @@ export class Connection {
       webhookURL.searchParams.append(param.name, param.value);
     }
     return webhookURL;
+  }
+
+  public get rawObject() {
+    return { name: this.name, webhookId: this.webhookId, id: this.id };
   }
 
   private wasActive() {

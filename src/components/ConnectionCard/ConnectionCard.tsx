@@ -17,11 +17,11 @@ export default function R_Connection(props: ConnectionProps) {
   useInterval(60000);
   const animateUnmounted: Target = {
     opacity: 0,
-    transform: `scale: ${DEFAULT_TRANSITION_UNMOUNTED_SCALE}`,
+    transform: `scale(${DEFAULT_TRANSITION_UNMOUNTED_SCALE})`,
   };
   const animateMounted: Target = {
     opacity: 1,
-    x: 0,
+    transform: "scale(1)",
   };
 
   return (
