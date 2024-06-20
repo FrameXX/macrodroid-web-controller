@@ -1,6 +1,6 @@
 import { AnimatePresence } from "framer-motion";
 import R_Icon from "../Icon/Icon";
-import R_LogRecord, { LogRecord } from "../LogRecord/LogRecord";
+import R_LogRecord from "../LogRecord/LogRecord";
 import useInnerSize from "../../modules/use_inner_size";
 import "./Log.scss";
 import { useMemo, useRef } from "react";
@@ -8,6 +8,7 @@ import { generateReadableTimestamp } from "../../modules/readable_timestamp";
 import R_IconNotice from "../IconNotice/IconNotice";
 import R_FAB from "../FAB/FAB";
 import { useImmer } from "use-immer";
+import { LogRecord } from "../../modules/logger";
 
 interface LogProps {
   logRecords: LogRecord[];

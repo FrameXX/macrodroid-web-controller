@@ -34,7 +34,7 @@ export class OutgoingRequest {
     return new OutgoingRequest(
       OutgoingRequestType.Add,
       [],
-      "Connection creation confirmation requested",
+      "Connection creation confirmation",
     );
   }
 
