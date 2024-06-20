@@ -19,7 +19,7 @@ import {
   LogRecordType,
   Logger,
 } from "./modules/logger";
-import { ConfirmDialog } from "./modules/confirmDialog";
+import { Confirm, ConfirmDialog } from "./modules/confirmDialog";
 import R_Connections from "./components/Connections/Connections";
 import { useLocalStorage } from "./modules/use_local_storage";
 import R_Actions from "./components/Actions/Actions";
@@ -71,7 +71,7 @@ function R_App() {
   );
 
   const toaster = useRef(new Toaster(setToasts));
-  const logger = useRef(new Logger(setLogRecords));
+  const logger = useRef(new Logger(setLogRecords, logRecords));
   const confirmDialog = useRef(
     new ConfirmDialog(setConfirmDialogOpen, setConfirmDialogText),
   );
@@ -228,6 +228,8 @@ function R_App() {
               onScrollUp={scrollLogTop}
               containerScrollPx={logTabScrollPx}
               logRecords={logRecords}
+              clearLog={logger.current.clear}
+              confirm={confirm}
             />
           </R_Tab>
         </div>

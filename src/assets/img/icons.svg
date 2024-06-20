@@ -4,6 +4,17 @@ https://pictogrammers.com/docs/general/license/ -->
 <!-- https://github.com/Templarian/MaterialDesign/tree/master -->
 <svg width="0" height="0" class="hidden">
   <defs>
+    <symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" id="history">
+      <path
+        d="M13.5,8H12V13L16.28,15.54L17,14.33L13.5,12.25V8M13,3A9,9 0 0,0 4,12H1L4.96,16.03L9,12H6A7,7 0 0,1 13,5A7,7 0 0,1 20,12A7,7 0 0,1 13,19C11.07,19 9.32,18.21 8.06,16.94L6.64,18.36C8.27,20 10.5,21 13,21A9,9 0 0,0 22,12A9,9 0 0,0 13,3" />
+    </symbol>
+    <symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" id="star">
+      <path
+        d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z" />
+    </symbol>
+    <symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" id="delete">
+      <path d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z" />
+    </symbol>
     <symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" id="message-arrow-right">
       <path
         d="M20 2H4C2.9 2 2 2.9 2 4V22L6 18H20C21.1 18 22 17.1 22 16V4C22 2.9 21.1 2 20 2M12 14L10.8 12.8L12.6 11H8V9H12.5L10.7 7.2L12 6L16 10L12 14Z" />

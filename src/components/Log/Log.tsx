@@ -9,11 +9,15 @@ import R_IconNotice from "../IconNotice/IconNotice";
 import R_FAB from "../FAB/FAB";
 import { useImmer } from "use-immer";
 import { LogRecord } from "../../modules/logger";
+import R_Button from "../Button/Button";
+import { Confirm } from "../../modules/confirmDialog";
 
 interface LogProps {
   logRecords: LogRecord[];
   containerScrollPx: number;
   onScrollUp: () => void;
+  clearLog: () => void;
+  confirm: Confirm;
 }
 
 enum FilterType {
@@ -96,10 +100,18 @@ export default function R_Log(props: LogProps) {
     }
   }, [filterString, filterType, props.logRecords]);
 
+  async function clearLog() {
+    if (
+      await props.confirm("Are you sure? This will delete all log entries.")
+    ) {
+      props.clearLog();
+    }
+  }
+
   return (
     <>
       <div id="log-filter">
-        <R_Icon hidden={!wideEnoughScreenForFilterIcon} iconId="filter" />
+        <R_Icon side hidden={!wideEnoughScreenForFilterIcon} iconId="filter" />
         <input
           ref={filterInput}
           onChange={(event) => onFilterChange(event.target.value)}
@@ -121,6 +133,14 @@ export default function R_Log(props: LogProps) {
           <option value="error_message">Error message</option>
         </select>
       </div>
+      <R_Button
+        hidden={props.logRecords.length === 0}
+        id="clear-log-button"
+        title="Clear log"
+        text="Clear log"
+        onClick={clearLog}
+        iconId="delete"
+      />
       <R_IconNotice hidden={props.logRecords.length > 0}>
         No logs recorded
       </R_IconNotice>

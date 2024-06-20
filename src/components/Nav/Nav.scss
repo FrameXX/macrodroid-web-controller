@@ -7,4 +7,5 @@ nav {
   box-shadow: var(--box-shadow);
   z-index: var(--z-index-nav);
   flex-shrink: 0;
+  overflow-x: hidden;
 }

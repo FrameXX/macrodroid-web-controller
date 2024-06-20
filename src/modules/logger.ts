@@ -2,6 +2,7 @@ import { Updater } from "use-immer";
 import { generateReadableTimestamp } from "./readable_timestamp";
 import { Random } from "./random";
 import { array, boolean, number, object, optional, string } from "superstruct";
+import { LOG_RECORD_LIMIT } from "./const";
 
 export enum LogRecordType {
   OutgoingRequest,
@@ -43,7 +44,10 @@ export const LogRecordsStruct = array(
 );
 
 export class Logger {
-  constructor(private readonly setLogRecords: Updater<LogRecord[]>) {}
+  constructor(
+    private readonly setLogRecords: Updater<LogRecord[]>,
+    private readonly logRecords: LogRecord[],
+  ) {}
 
   private generateFilterString(
     logRecordInitializer: LogRecordInitializer,
@@ -73,9 +77,20 @@ export class Logger {
       id,
     };
 
+    if (this.logRecords.length >= LOG_RECORD_LIMIT) {
+      this.setLogRecords((prevLogRecords) => {
+        prevLogRecords.pop();
+        return prevLogRecords;
+      });
+    }
+
     this.setLogRecords((prevLogRecords) => {
       prevLogRecords.unshift(logRecord);
       return prevLogRecords;
     });
   }
+
+  public clear = () => {
+    this.setLogRecords([]);
+  };
 }

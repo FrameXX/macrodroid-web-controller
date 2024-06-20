@@ -4,6 +4,7 @@ import "./Button.scss";
 import { Target, motion } from "framer-motion";
 
 interface ButtonProps {
+  id?: string;
   onClick: () => void;
   iconId: string;
   title: string;
@@ -29,6 +30,7 @@ export default function R_Button(props: ButtonProps) {
 
   return (
     <motion.button
+      id={props.id}
       hidden={usedProps.hidden}
       animate={animate}
       type="button"

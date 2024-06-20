@@ -24,17 +24,14 @@ export default function R_Icon(props: IconProps) {
   const usedProps = useDefaultProps(props, defaultProps);
   const href = `${usedProps.sourceFilePath}#${usedProps.iconId}`;
   const animate: Target = {
-    width: usedProps.hidden ? 0 : "var(--icon-size)",
     transform: `scaleY(${usedProps.upsideDown ? -1 : 1})`,
-    margin: usedProps.hidden ? 0 : "",
-    display: usedProps.hidden ? "none" : "block",
   };
   return (
     <motion.svg
       animate={animate}
       onClick={usedProps.onClick}
       role="img"
-      className={`icon ${usedProps.side ? "side" : ""}`}
+      className={`icon ${usedProps.side ? "side" : ""} ${usedProps.hidden ? "hidden" : ""}`}
     >
       <use aria-hidden href={href} />
     </motion.svg>

@@ -29,7 +29,6 @@ export default function R_Nav(props: NavProps) {
         justifyContent: "start",
         height: "100%",
         width: 125,
-        overflowX: "hidden",
         overflowY: "auto",
       }
     : {

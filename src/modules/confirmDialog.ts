@@ -1,5 +1,7 @@
 import { Updater } from "use-immer";
 
+export type Confirm = (text: string) => Promise<boolean>;
+
 export class ConfirmDialog {
   private _resolve?: (value: boolean) => void;
 

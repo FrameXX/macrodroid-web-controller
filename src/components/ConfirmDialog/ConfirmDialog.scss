@@ -13,7 +13,7 @@
   width: 500px;
 
   .content {
-    padding: 8px;
+    padding: 0 8px 8px 8px;
   }
 
   .actions {
@@ -27,6 +27,10 @@
     gap: 8px;
     align-items: center;
     font-size: 1.6rem;
+
+    h2 {
+      margin: 16px 0;
+    }
   }
 
   .button {
@@ -37,11 +41,10 @@
 }
 
 #confirm-dialog-backdrop {
-  background-color: var(--color-surface);
+  background-color: black;
   position: fixed;
   inset: 0;
   width: 100%;
   height: 100%;
-  opacity: 0.8;
   z-index: var(--z-index-dialog);
 }

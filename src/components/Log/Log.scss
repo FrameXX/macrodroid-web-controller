@@ -22,14 +22,20 @@
   }
 
   .icon {
-    margin-right: 8px;
+    margin-bottom: 0;
+    margin-top: 0;
   }
 }
 
 #logs {
-  padding-top: 12px;
+  padding-top: 16px;
 }
 
 .fab-placeholder {
   height: 110px;
+}
+
+#clear-log-button {
+  margin: auto;
+  margin-top: 16px;
 }

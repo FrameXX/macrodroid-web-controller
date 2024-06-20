@@ -16,7 +16,7 @@ export default function R_ConfirmDialog(props: ConfirmDialogProps) {
     ? { opacity: 1, y: 0 }
     : { display: "none", opacity: 0, y: -DEFAULT_TRANSITION_OFFSET };
   const animateBackdrop: Target = props.open
-    ? { opacity: 0.8 }
+    ? { opacity: 0.7 }
     : { display: "none", opacity: 0 };
 
   return (
