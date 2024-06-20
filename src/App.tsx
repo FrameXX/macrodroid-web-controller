@@ -22,6 +22,7 @@ import {
 import { ConfirmDialog } from "./modules/confirmDialog";
 import R_Connections from "./components/Connections/Connections";
 import { useLocalStorage } from "./modules/use_local_storage";
+import R_Actions from "./components/Actions/Actions";
 
 let initiated = false;
 
@@ -215,6 +216,9 @@ function R_App() {
               bakeToast={bakeToast}
               log={log}
             />
+          </R_Tab>
+          <R_Tab active={activeNavTabId === NavTabId.Actions}>
+            <R_Actions />
           </R_Tab>
           <R_Tab
             ref={logScrollableContainer}

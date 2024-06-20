@@ -7,7 +7,7 @@ interface TabProps extends PropsWithChildren {
   active: boolean;
 }
 
-const R_Tab = forwardRef(function (props: TabProps, ref: Ref<any>) {
+const R_Tab = forwardRef<HTMLDivElement, TabProps>((props, ref) => {
   const animate: Target = props.active
     ? {}
     : { y: -DEFAULT_TRANSITION_OFFSET, opacity: 0, display: "none" };

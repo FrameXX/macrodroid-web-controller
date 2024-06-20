@@ -3,7 +3,10 @@ import R_TitleWithIcon from "../TitleWithIcon/TitleWithIcon";
 import R_DescribedInput from "../DescribedInput/DescribedInput";
 import screenshot1Src from "../../assets/img/screenshot_1.webp";
 import R_Wizard from "../Wizard/Wizard";
-import { MACRODROID_APP_URL } from "../../modules/const";
+import {
+  MACRODROID_APP_URL,
+  SPLASHSCREEN_TIMEOUT_MS,
+} from "../../modules/const";
 import { Toast, ToastSeverity } from "../../modules/toaster";
 import { Connection } from "../../modules/connection";
 import { IncomingRequest } from "../../modules/incoming_request";
@@ -11,6 +14,7 @@ import { useImmer } from "use-immer";
 import { OutgoingRequest } from "../../modules/outgoing_request";
 import { LogRecordInitializer, LogRecordType } from "../../modules/logger";
 import "./CreateConnectionWizard.scss";
+import { useRef } from "react";
 
 interface AddConnectionWizardProps {
   open: boolean;
@@ -31,7 +35,15 @@ export default function R_CreateConnectionWizard(
   const [webhookId, setWebhookId] = useImmer("");
   const [lastConnection, setLastConnection] = useImmer<Connection | null>(null);
 
+  const connectionNameInput = useRef<HTMLInputElement>(null);
+  const webhookIdInput = useRef<HTMLInputElement>(null);
+
   function nextPage() {
+    if (activePageIndex === 0 && connectionNameInput.current)
+      setTimeout(
+        () => connectionNameInput.current?.focus(),
+        SPLASHSCREEN_TIMEOUT_MS,
+      );
     if (activePageIndex === 1) initNewConnection();
     setActivePageIndex((prevActivePageIndex) => prevActivePageIndex + 1);
   }
@@ -218,9 +230,14 @@ export default function R_CreateConnectionWizard(
           <h2>Enter info</h2>
           <form id="connection-info">
             <R_DescribedInput
+              ref={connectionNameInput}
               onChange={(event) => {
                 setConnectionName(event.target.value);
                 setConnectionNameValid(event.target.validity.valid);
+              }}
+              onKeyUp={(event) => {
+                if (event.key === "Enter" && webhookIdInput.current)
+                  webhookIdInput.current.focus();
               }}
               value={connectionName}
               required
@@ -230,6 +247,7 @@ export default function R_CreateConnectionWizard(
               description="This is your custom name, so that you can differentiate the connection from other."
             />
             <R_DescribedInput
+              ref={webhookIdInput}
               onChange={(event) => {
                 setWebhookId(event.target.value);
                 setWebhookIdValid(event.target.validity.valid);
