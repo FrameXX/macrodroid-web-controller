@@ -36,6 +36,7 @@ dialog {
   color: inherit;
   font-family: inherit;
   font-weight: inherit;
+  font-size: inherit;
 }
 
 button,
@@ -113,7 +114,7 @@ select {
   outline: none;
   border: none;
   font-weight: bold;
-  color: inherit;
+  color: var(--color-primary-item);
   padding: 8px 40px 8px 8px;
   appearance: none;
   background-repeat: no-repeat;
@@ -123,20 +124,9 @@ select {
   background-color: var(--color-primary);
   box-shadow: var(--box-shadow);
   border-radius: var(--border-radius);
+  background-image: url("./assets/img/dropdown.svg");
 
   &:active {
     outline: none;
-  }
-}
-
-@media (prefers-color-scheme: dark) {
-  select {
-    background-image: url("./assets/img/dropdown-dark.svg");
-  }
-}
-
-@media (prefers-color-scheme: light) {
-  select {
-    background-image: url("./assets/img/dropdown-light.svg");
   }
 }

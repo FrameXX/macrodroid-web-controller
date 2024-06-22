@@ -1,10 +1,10 @@
 .wizard-navigator-indicator {
-  background-color: var(--color-surface);
   padding: 8px;
   display: flex;
   justify-content: space-evenly;
   align-items: center;
   box-shadow: var(--box-shadow);
+  background-color: var(--color-surface-top);
   border-radius: var(--border-radius);
 
   .dot {

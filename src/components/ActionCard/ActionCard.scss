@@ -1,0 +1,15 @@
+.action-card {
+  padding: 12px;
+  background-color: var(--color-action);
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  margin: auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 350px;
+  color: var(--color-primary-item);
+  margin-bottom: 12px;
+}
