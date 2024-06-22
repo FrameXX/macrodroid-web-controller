@@ -1,29 +1,31 @@
-import { Target, motion } from "framer-motion";
+import { TargetAndTransition, motion } from "framer-motion";
 import { PropsWithChildren } from "react";
 import useDefaultProps from "../../modules/use_default_props";
-import "./Accordeon.scss";
+import "./Accordion.scss";
 import { DEFAULT_TRANSITION_OFFSET, TRANSITIONS } from "../../modules/const";
 
-interface AccordeonProps extends PropsWithChildren {
+interface AccordionProps extends PropsWithChildren {
   open: boolean;
-  className: string;
+  className?: string;
   closedHeight?: number | string;
 }
 
-const defaultProps: Partial<AccordeonProps> = {
+const defaultProps: Partial<AccordionProps> = {
   closedHeight: 0,
 };
 
-export default function R_Accordeon(props: AccordeonProps) {
+export default function R_Accordion(props: AccordionProps) {
   const usedProps = useDefaultProps(props, defaultProps);
+  const fullSqueeze = usedProps.closedHeight === 0;
 
   const transition = structuredClone(TRANSITIONS) as any;
   transition.bounce = 0;
 
-  const animate: Target = {
+  const animate: TargetAndTransition = {
     height: usedProps.open ? "auto" : usedProps.closedHeight,
-    y: usedProps.open ? 0 : -DEFAULT_TRANSITION_OFFSET,
-    opacity: usedProps.open ? 1 : usedProps.closedHeight === 0 ? 0 : 1,
+    y: usedProps.open || !fullSqueeze ? 0 : -DEFAULT_TRANSITION_OFFSET,
+    opacity: usedProps.open || !fullSqueeze ? 1 : 0,
+    visibility: usedProps.open || !fullSqueeze ? "visible" : "hidden",
   };
 
   return (

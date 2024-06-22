@@ -4,7 +4,7 @@ import "./LogRecord.scss";
 import { generateReadableTimestamp } from "../../modules/readable_timestamp";
 import { DEFAULT_TRANSITION_OFFSET } from "../../modules/const";
 import R_Button from "../Button/Button";
-import R_Accordeon from "../Accordeon/Accordeon";
+import R_Accordion from "../Accordion/Accordion";
 import { useImmer } from "use-immer";
 import { LogRecord, LogRecordType } from "../../modules/logger";
 
@@ -45,7 +45,7 @@ export default function R_LogRecord(props: LogRecordProps) {
         <R_Icon side iconId="alert" />
         {props.record.errorMessage}
       </div>
-      <R_Accordeon
+      <R_Accordion
         open={expanded}
         closedHeight={closedHeight}
         className={`log-record ${props.record.errorMessage ? "failed" : ""}`}
@@ -89,7 +89,7 @@ export default function R_LogRecord(props: LogRecordProps) {
           iconUpsideDown={expanded}
         />
         <div hidden={expanded || !isTooLong} className="bottom-shade" />
-      </R_Accordeon>
+      </R_Accordion>
     </motion.div>
   );
 }
