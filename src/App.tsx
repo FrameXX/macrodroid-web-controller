@@ -19,7 +19,7 @@ import {
   LogRecordType,
   Logger,
 } from "./modules/logger";
-import { Confirm, ConfirmDialog } from "./modules/confirmDialog";
+import { ConfirmDialog } from "./modules/confirmDialog";
 import R_Connections from "./components/Connections/Connections";
 import { useLocalStorage } from "./modules/use_local_storage";
 import R_Actions from "./components/Actions/Actions";
