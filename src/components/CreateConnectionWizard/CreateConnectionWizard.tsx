@@ -59,7 +59,7 @@ export default function R_CreateConnectionWizard(
     setActivePageIndex(0);
   }
 
-  function addConnection(connection: Connection) {
+  function onSuccess(connection: Connection) {
     connection.stopListeningRequests();
     props.onConnectionAdd(connection);
     props.bakeToast(
@@ -174,11 +174,12 @@ export default function R_CreateConnectionWizard(
       response: true,
       type: LogRecordType.IncomingRequest,
     });
-    addConnection(connection);
+    onSuccess(connection);
   }
 
   return (
     <R_Wizard
+      id="wizard-create-connection"
       open={props.open}
       activePageIndex={activePageIndex}
       leftButton={
@@ -230,6 +231,7 @@ export default function R_CreateConnectionWizard(
           <h2>Enter info</h2>
           <form id="connection-info">
             <R_DescribedInput
+              iconId="rename"
               ref={connectionNameInput}
               onChange={(event) => {
                 setConnectionName(event.target.value);
@@ -247,6 +249,7 @@ export default function R_CreateConnectionWizard(
               description="This is your custom name, so that you can differentiate the connection from other."
             />
             <R_DescribedInput
+              iconId="webhook"
               ref={webhookIdInput}
               onChange={(event) => {
                 setWebhookId(event.target.value);

@@ -14,27 +14,27 @@ const defaultProps: Partial<AccordionProps> = {
   closedHeight: 0,
 };
 
-export default function R_Accordion(props: AccordionProps) {
-  const usedProps = useDefaultProps(props, defaultProps);
-  const fullSqueeze = usedProps.closedHeight === 0;
+export default function R_Accordion(requiredProps: AccordionProps) {
+  const props = useDefaultProps(requiredProps, defaultProps);
+  const fullSqueeze = props.closedHeight === 0;
 
   const transition = structuredClone(TRANSITIONS) as any;
   transition.bounce = 0;
 
   const animate: TargetAndTransition = {
-    height: usedProps.open ? "auto" : usedProps.closedHeight,
-    y: usedProps.open || !fullSqueeze ? 0 : -DEFAULT_TRANSITION_OFFSET,
-    opacity: usedProps.open || !fullSqueeze ? 1 : 0,
-    visibility: usedProps.open || !fullSqueeze ? "visible" : "hidden",
+    height: props.open ? "auto" : props.closedHeight,
+    y: props.open || !fullSqueeze ? 0 : -DEFAULT_TRANSITION_OFFSET,
+    opacity: props.open || !fullSqueeze ? 1 : 0,
+    visibility: props.open || !fullSqueeze ? "visible" : "hidden",
   };
 
   return (
     <motion.div
       transition={transition}
-      className={`accordeon ${usedProps.className}`}
+      className={`accordeon ${props.className}`}
       animate={animate}
     >
-      {props.children}
+      {requiredProps.children}
     </motion.div>
   );
 }

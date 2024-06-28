@@ -20,18 +20,18 @@ const defaultProps: Partial<IconProps> = {
   upsideDown: false,
 };
 
-export default function R_Icon(props: IconProps) {
-  const usedProps = useDefaultProps(props, defaultProps);
-  const href = `${usedProps.sourceFilePath}#${usedProps.iconId}`;
+export default function R_Icon(requiredProps: IconProps) {
+  const props = useDefaultProps(requiredProps, defaultProps);
+  const href = `${props.sourceFilePath}#${props.iconId}`;
   const animate: Target = {
-    transform: `scaleY(${usedProps.upsideDown ? -1 : 1})`,
+    transform: `scaleY(${props.upsideDown ? -1 : 1})`,
   };
   return (
     <motion.svg
       animate={animate}
-      onClick={usedProps.onClick}
+      onClick={props.onClick}
       role="img"
-      className={`icon ${usedProps.side ? "side" : ""} ${usedProps.hidden ? "hidden" : ""}`}
+      className={`icon ${props.side ? "side" : ""} ${props.hidden ? "hidden" : ""}`}
     >
       <use aria-hidden href={href} />
     </motion.svg>

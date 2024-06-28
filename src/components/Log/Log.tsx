@@ -11,6 +11,7 @@ import { useImmer } from "use-immer";
 import { LogRecord } from "../../modules/logger";
 import R_Button from "../Button/Button";
 import { Confirm } from "../../modules/confirmDialog";
+import R_SearchInput from "../SearchInput/SearchInput";
 
 interface LogProps {
   logRecords: LogRecord[];
@@ -31,74 +32,66 @@ enum FilterType {
 }
 
 export default function R_Log(props: LogProps) {
-  const [filterString, setFilterString] = useImmer("");
+  const [filterValue, setFilterValue] = useImmer("");
   const [filterType, setFilterType] = useImmer(FilterType.All);
 
-  const filterInput = useRef<HTMLInputElement>(null);
+  const filterValueInput = useRef<HTMLInputElement>(null);
   const filterTypeSelect = useRef<HTMLSelectElement>(null);
-  const filterTimeout = useRef(0);
 
   const wideEnoughScreenForFilterIcon = useInnerSize(() => {
     return innerWidth > 500;
   });
 
-  function onFilterChange(value: string) {
-    clearTimeout(filterTimeout.current);
-    filterTimeout.current = setTimeout(() => {
-      setFilterString(value.toLowerCase());
-    }, 200);
-  }
-
   function setFilter(value: string, type: FilterType) {
-    if (!filterInput.current || !filterTypeSelect.current) {
+    if (!filterValueInput.current || !filterTypeSelect.current) {
       console.error("Filter input or select not found.");
       return;
     }
 
-    filterInput.current.value = value;
+    filterValueInput.current.value = value;
     filterTypeSelect.current.value = type;
-    onFilterChange(value);
+    setFilterType(type);
+    setFilterValue(value);
   }
 
   const scrolledDown = props.containerScrollPx > innerHeight * 0.5;
 
   const filteredLogRecords = useMemo(() => {
     const logRecords = props.logRecords;
+    const filter = filterValue.toLowerCase();
     switch (filterType) {
       case FilterType.Timestamp:
         return logRecords.filter((record) => {
-          return generateReadableTimestamp(record.timestamp).includes(
-            filterString,
-          );
+          return generateReadableTimestamp(record.timestamp).includes(filter);
         });
       case FilterType.ConnectionName:
         return logRecords.filter((record) => {
-          return record.connectionName.toLowerCase().includes(filterString);
+          return record.connectionName.toLowerCase().includes(filter);
         });
       case FilterType.RequestId:
         return logRecords.filter((record) => {
-          return record.requestId?.toLowerCase().includes(filterString);
+          return record.requestId?.toLowerCase().includes(filter);
         });
       case FilterType.Comment:
         return logRecords.filter((record) => {
-          return record.comment?.toLowerCase().includes(filterString);
+          return record.comment?.toLowerCase().includes(filter);
         });
       case FilterType.Details:
         return logRecords.filter((record) => {
-          return record.details?.join("").toLowerCase().includes(filterString);
+          return record.details?.join("").toLowerCase().includes(filter);
         });
       case FilterType.ErrorMessage:
         return logRecords.filter((record) => {
-          return record.errorMessage?.toLowerCase().includes(filterString);
+          return record.errorMessage?.toLowerCase().includes(filter);
         });
       case FilterType.All:
         return logRecords.filter((record) => {
-          return record.filterString.includes(filterString);
+          return record.filterString.includes(filter);
         });
       default:
         return logRecords;
     }
-  }, [filterString, filterType, props.logRecords]);
+  }, [filterValue, filterType, props.logRecords]);
 
   async function clearLog() {
     if (
@@ -112,11 +105,9 @@ export default function R_Log(props: LogProps) {
     <>
       <div id="log-filter">
         <R_Icon side hidden={!wideEnoughScreenForFilterIcon} iconId="filter" />
-        <input
-          ref={filterInput}
-          onChange={(event) => onFilterChange(event.target.value)}
-          type="search"
-          id="input-log-filter"
+        <R_SearchInput
+          ref={filterValueInput}
+          onSearch={setFilterValue}
           placeholder="Filter log using..."
         />
         <select
@@ -151,7 +142,7 @@ export default function R_Log(props: LogProps) {
         All logs have been filtered out.
       </R_IconNotice>
       <div id="logs">
-        <AnimatePresence initial={false}>
+        <AnimatePresence>
           {filteredLogRecords.map((record) => {
             return (
               <R_LogRecord

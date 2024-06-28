@@ -78,6 +78,8 @@ input {
   border: none;
   border-bottom: var(--border-width) solid var(--color-accent);
   color: inherit;
+  max-width: var(--tab-items-max-width);
+  width: 100%;
 
   &:active {
     outline: none;

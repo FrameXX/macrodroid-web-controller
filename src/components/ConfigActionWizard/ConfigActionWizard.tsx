@@ -3,9 +3,12 @@ import R_Wizard from "../Wizard/Wizard";
 import R_FAB from "../FAB/FAB";
 import { ACTIONS } from "../../modules/const";
 import R_ActionCard from "../ActionCard/ActionCard";
-import useInnerSize from "../../modules/use_inner_size";
-import { Target, motion } from "framer-motion";
+import { AnimatePresence, Target, motion } from "framer-motion";
 import "./ConfigActionWizard.scss";
+import { useMemo, useRef } from "react";
+import useResizeObserver from "../../modules/use_resize_observer";
+import R_Icon from "../Icon/Icon";
+import R_SearchInput from "../SearchInput/SearchInput";
 
 interface ConfigActionWizardProps {
   open: boolean;
@@ -14,10 +17,21 @@ interface ConfigActionWizardProps {
 
 export default function R_ConfigActionWizard(props: ConfigActionWizardProps) {
   const [activePageIndex, setActivePageIndex] = useImmer(0);
+  const [filterValue, setFilterValue] = useImmer("");
+  const actionsContainer = useRef(null);
 
-  const secondColumn = useInnerSize(() => innerWidth > 550);
-  const thirdColumn = useInnerSize(() => innerWidth > 800);
-  const fourthColumn = useInnerSize(() => innerWidth > 1100);
+  const secondColumn = useResizeObserver(
+    actionsContainer,
+    () => innerWidth > 550,
+  );
+  const thirdColumn = useResizeObserver(
+    actionsContainer,
+    () => innerWidth > 850,
+  );
+  const fourthColumn = useResizeObserver(
+    actionsContainer,
+    () => innerWidth > 1200,
+  );
 
   let animateActions: Target;
   if (fourthColumn && ACTIONS.length > 3) {
@@ -30,20 +44,40 @@ export default function R_ConfigActionWizard(props: ConfigActionWizardProps) {
     animateActions = { columns: 1 };
   }
 
+  const filteredActions = useMemo(() => {
+    const filter = filterValue.toLowerCase();
+    return ACTIONS.filter((action) =>
+      action.name.toLowerCase().includes(filter),
+    );
+  }, [filterValue]);
+
   return (
     <R_Wizard
       open={props.open}
       pages={[
         <>
           <h2>Choose action or create a custom one.</h2>
-          <motion.div id="actions" animate={animateActions}>
-            {ACTIONS.map((action) => (
-              <R_ActionCard
-                key={action.name}
-                name={action.name}
-                iconId={action.iconId}
-              />
-            ))}
+          <div id="actions-filter">
+            <R_Icon iconId="magnify" />
+            <R_SearchInput
+              placeholder="Filter actions"
+              onSearch={setFilterValue}
+            />
+          </div>
+          <motion.div
+            ref={actionsContainer}
+            id="actions"
+            animate={animateActions}
+          >
+            <AnimatePresence>
+              {filteredActions.map((action) => (
+                <R_ActionCard
+                  key={action.name}
+                  name={action.name}
+                  iconId={action.iconId}
+                />
+              ))}
+            </AnimatePresence>
           </motion.div>
         </>,
       ]}

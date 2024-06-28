@@ -2,7 +2,7 @@ import { Connection } from "../../modules/connection";
 import "./ConnectionCard.scss";
 import { generateReadableTimestamp } from "../../modules/readable_timestamp";
 import { generateReadableTimeDifference } from "../../modules/readable_time_difference";
-import { useInterval } from "../../modules/use_interval";
+import { useUpdateInterval } from "../../modules/use_update_interval";
 import R_Button from "../Button/Button";
 import { Target, motion } from "framer-motion";
 import { DEFAULT_TRANSITION_UNMOUNTED_SCALE } from "../../modules/const";
@@ -14,7 +14,7 @@ interface ConnectionProps {
 }
 
 export default function R_Connection(props: ConnectionProps) {
-  useInterval(60000);
+  useUpdateInterval(60000);
   const animateUnmounted: Target = {
     opacity: 0,
     transform: `scale(${DEFAULT_TRANSITION_UNMOUNTED_SCALE})`,

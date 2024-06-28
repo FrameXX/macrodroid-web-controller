@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 
-const useInnerSize = (
+function useInnerSize(
   checkMeetsConditions: () => boolean = () => innerWidth > innerHeight,
-) => {
+) {
   const [meetsConditions, setMeetsConditions] =
     useState<boolean>(checkMeetsConditions);
 
@@ -18,6 +18,6 @@ const useInnerSize = (
   }, []);
 
   return meetsConditions;
-};
+}
 
 export default useInnerSize;

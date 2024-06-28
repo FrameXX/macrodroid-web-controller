@@ -5,7 +5,7 @@
   margin: auto;
   position: sticky;
   width: 100%;
-  max-width: 600px;
+  max-width: var(--tab-items-max-width);
   top: 0;
   left: 0;
   right: 0;
@@ -28,7 +28,7 @@
 }
 
 #logs {
-  padding-top: 8px;
+  padding-top: 16px;
 }
 
 .fab-placeholder {

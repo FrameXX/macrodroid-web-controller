@@ -16,7 +16,7 @@ const defaultProps: Partial<FABProps> = { left: false, hidden: false };
 /**
  * Renders a floating action button (FAB) with an icon and optional title.
  *
- * @param {FABProps} props - The properties for the FAB component.
+ * @param {FABProps} requiredProps - The properties for the FAB component.
  * @param {() => void} props.onClick - The function to call when the FAB is clicked.
  * @param {boolean} [props.left] - Whether the FAB should be positioned on the left side.
  * @param {boolean} [props.hidden] - Whether the FAB should be hidden.
@@ -24,22 +24,22 @@ const defaultProps: Partial<FABProps> = { left: false, hidden: false };
  * @param {string} props.title - The title to display in the FAB.
  * @return {JSX.Element} The rendered FAB component.
  */
-export default function R_FAB(props: FABProps) {
-  const usedProps = useDefaultProps(props, defaultProps);
+export default function R_FAB(requiredProps: FABProps) {
+  const props = useDefaultProps(requiredProps, defaultProps);
   const animate: Target = {
-    scale: usedProps.hidden ? 0 : 1,
-    opacity: usedProps.hidden ? 0 : 1,
-    pointerEvents: usedProps.hidden ? "none" : "all",
+    scale: props.hidden ? 0 : 1,
+    opacity: props.hidden ? 0 : 1,
+    pointerEvents: props.hidden ? "none" : "all",
   };
   return (
     <motion.button
       animate={animate}
       type="button"
-      title={usedProps.title}
-      onClick={usedProps.onClick}
-      className={`fab ${usedProps.left ? "left" : "right"}`}
+      title={props.title}
+      onClick={props.onClick}
+      className={`fab ${props.left ? "left" : "right"}`}
     >
-      <R_Icon iconId={usedProps.iconId} />
+      <R_Icon iconId={props.iconId} />
     </motion.button>
   );
 }

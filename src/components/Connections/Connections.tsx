@@ -8,7 +8,8 @@ import { Toast, ToastSeverity } from "../../modules/toaster";
 import { LogRecordInitializer } from "../../modules/logger";
 import { OutgoingRequest } from "../../modules/outgoing_request";
 import { useImmer } from "use-immer";
-import useInnerSize from "../../modules/use_inner_size";
+import { useRef } from "react";
+import useResizeObserver from "../../modules/use_resize_observer";
 
 interface ConnectionsProps {
   connections: Connection[];
@@ -20,6 +21,7 @@ interface ConnectionsProps {
 
 export default function R_Connections(props: ConnectionsProps) {
   const [addConnectionWizardOpen, setAddConnectionWizardOpen] = useImmer(false);
+  const connectionsContainer = useRef(null);
 
   async function pokeConnection(connection: Connection) {
     const request = OutgoingRequest.poke();
@@ -47,9 +49,18 @@ export default function R_Connections(props: ConnectionsProps) {
     }
   }
 
-  const secondColumn = useInnerSize(() => innerWidth > 700);
-  const thirdColumn = useInnerSize(() => innerWidth > 1100);
-  const fourthColumn = useInnerSize(() => innerWidth > 1500);
+  const secondColumn = useResizeObserver(
+    connectionsContainer,
+    (width) => width > 700,
+  );
+  const thirdColumn = useResizeObserver(
+    connectionsContainer,
+    (width) => width > 1100,
+  );
+  const fourthColumn = useResizeObserver(
+    connectionsContainer,
+    (width) => width > 1500,
+  );
 
   let animateConnections: Target;
   if (fourthColumn && props.connections.length > 3) {
@@ -67,7 +78,11 @@ export default function R_Connections(props: ConnectionsProps) {
       <R_IconNotice hidden={props.connections.length > 0}>
         No connections configured
       </R_IconNotice>
-      <motion.div animate={animateConnections} id="connections">
+      <motion.div
+        ref={connectionsContainer}
+        animate={animateConnections}
+        id="connections"
+      >
         <AnimatePresence>
           {props.connections.map((connection) => (
             <R_Connection

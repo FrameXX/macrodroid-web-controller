@@ -32,6 +32,7 @@ export const ACTIONS: Action[] = [
   {
     name: "Set global variable",
     iconId: "help",
+    keywords: ["set", "global", "variable"],
     args: [
       { name: "Name", value: "", type: ActionArgumentType.String },
       {
@@ -70,5 +71,15 @@ export const ACTIONS: Action[] = [
     name: "Evaluate magic text",
     iconId: "code-json",
     args: [{ name: "Text", value: "", type: ActionArgumentType.String }],
+    keywords: ["eval", "evaluate", "magic text", "expression", "variables"],
+  },
+  {
+    name: "Display notification",
+    iconId: "alert-circle-outline",
+    args: [
+      { name: "Title", value: "", type: ActionArgumentType.String },
+      { name: "Text", value: "", type: ActionArgumentType.String },
+    ],
+    keywords: ["alert", "notification"],
   },
 ];

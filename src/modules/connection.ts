@@ -14,13 +14,14 @@ import {
 } from "./outgoing_request";
 import { IncomingRequest } from "./incoming_request";
 import { LogRecordInitializer, LogRecordType } from "./logger";
-import { array, object, string } from "superstruct";
+import { array, number, object, string } from "superstruct";
 
 export const ConnectionStruct = array(
   object({
     name: string(),
     webhookId: string(),
     id: string(),
+    lastActivityTimestamp: number(),
   }),
 );
 
@@ -56,7 +57,12 @@ export class Connection {
   }
 
   public get rawObject() {
-    return { name: this.name, webhookId: this.webhookId, id: this.id };
+    return {
+      name: this.name,
+      webhookId: this.webhookId,
+      id: this.id,
+      lastActivityTimestamp: this.lastActivityTimestamp,
+    };
   }
 
   private wasActive() {

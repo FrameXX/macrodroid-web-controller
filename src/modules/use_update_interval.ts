@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-export function useInterval(intervalMs: number) {
+export function useUpdateInterval(intervalMs: number) {
   const [cycles, setCycles] = useState(0);
 
   useEffect(() => {

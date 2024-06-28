@@ -19,27 +19,27 @@ const defaultProps: Partial<ButtonProps> = {
   iconUpsideDown: false,
 };
 
-export default function R_Button(props: ButtonProps) {
-  const usedProps = useDefaultProps(props, defaultProps);
+export default function R_Button(requiredProps: ButtonProps) {
+  const props = useDefaultProps(requiredProps, defaultProps);
 
   const animate: Target = {
-    gap: usedProps.text ? "4px" : undefined,
-    paddingRight: usedProps.text ? "12px" : undefined,
-    aspectRatio: usedProps.text ? undefined : "1",
+    gap: props.text ? "4px" : undefined,
+    paddingRight: props.text ? "12px" : undefined,
+    aspectRatio: props.text ? undefined : "1",
   };
 
   return (
     <motion.button
-      id={props.id}
-      hidden={usedProps.hidden}
+      id={requiredProps.id}
+      hidden={props.hidden}
       animate={animate}
       type="button"
-      title={usedProps.title}
-      className={`button ${usedProps.noBackground ? "no-background" : ""}`}
-      onClick={usedProps.onClick}
+      title={props.title}
+      className={`button ${props.noBackground ? "no-background" : ""}`}
+      onClick={props.onClick}
     >
-      <R_Icon upsideDown={usedProps.iconUpsideDown} iconId={usedProps.iconId} />
-      <div>{usedProps.text}</div>
+      <R_Icon upsideDown={props.iconUpsideDown} iconId={props.iconId} />
+      <div>{props.text}</div>
     </motion.button>
   );
 }

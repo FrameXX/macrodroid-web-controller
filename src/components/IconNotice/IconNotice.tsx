@@ -13,13 +13,13 @@ const defaultProps: Partial<IconNoticeProps> = {
   iconId: "emoticon-cry",
 };
 
-export default function R_IconNotice(props: IconNoticeProps) {
-  const usedProps = useDefaultProps(props, defaultProps);
+export default function R_IconNotice(requiredProps: IconNoticeProps) {
+  const props = useDefaultProps(requiredProps, defaultProps);
 
   return (
-    <div hidden={usedProps.hidden} className="icon-notice">
-      <R_Icon iconId={usedProps.iconId} />
-      {props.children}
+    <div hidden={props.hidden} className="icon-notice">
+      <R_Icon iconId={props.iconId} />
+      {requiredProps.children}
     </div>
   );
 }

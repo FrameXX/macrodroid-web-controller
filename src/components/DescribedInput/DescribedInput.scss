@@ -1,8 +1,16 @@
 .described-input {
   padding: 12px;
+  max-width: var(--tab-items-max-width);
+  margin: auto;
 
   img {
     width: 100%;
     max-width: 250px;
+  }
+
+  .input-container {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
   }
 }

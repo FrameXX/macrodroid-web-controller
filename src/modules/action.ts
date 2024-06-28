@@ -24,4 +24,5 @@ export interface Action {
   name: string;
   iconId: string;
   args: ActionArgument<any>[];
+  keywords: string[];
 }

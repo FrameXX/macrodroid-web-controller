@@ -1,8 +1,10 @@
 import { ReactNode, forwardRef } from "react";
 import { Random } from "../../modules/random";
 import "./DescribedInput.scss";
+import R_Icon from "../Icon/Icon";
 
 interface DescribedInputProps {
+  iconId?: string;
   pattern?: string;
   required?: boolean;
   type?: React.HTMLInputTypeAttribute;
@@ -21,19 +23,22 @@ const R_DescribedInput = forwardRef<HTMLInputElement, DescribedInputProps>(
     const id = Random.id();
     return (
       <div className="described-input">
-        <input
-          ref={ref}
-          onKeyUp={props.onKeyUp}
-          value={props.value}
-          onChange={props.onChange}
-          pattern={props.pattern}
-          maxLength={props.maxLength}
-          required={props.required}
-          type={props.type}
-          placeholder={props.placeholder}
-          autoCapitalize={props.autoCapitalize}
-          aria-describedby={`input-description-${id}`}
-        />
+        <div className="input-container">
+          {props.iconId && <R_Icon iconId={props.iconId} />}
+          <input
+            ref={ref}
+            onKeyUp={props.onKeyUp}
+            value={props.value}
+            onChange={props.onChange}
+            pattern={props.pattern}
+            maxLength={props.maxLength}
+            required={props.required}
+            type={props.type}
+            placeholder={props.placeholder}
+            autoCapitalize={props.autoCapitalize}
+            aria-describedby={`input-description-${id}`}
+          />
+        </div>
         <div id={`input-description-${id}`} className="description">
           {props.description}
         </div>
