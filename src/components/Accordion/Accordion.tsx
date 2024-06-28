@@ -22,7 +22,7 @@ export default function R_Accordion(requiredProps: AccordionProps) {
   transition.bounce = 0;
 
   const animate: TargetAndTransition = {
-    height: props.open ? "auto" : props.closedHeight,
+    height: props.open ? undefined : props.closedHeight,
     y: props.open || !fullSqueeze ? 0 : -DEFAULT_TRANSITION_OFFSET,
     opacity: props.open || !fullSqueeze ? 1 : 0,
     visibility: props.open || !fullSqueeze ? "visible" : "hidden",

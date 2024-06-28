@@ -9,6 +9,8 @@ import { useMemo, useRef } from "react";
 import useResizeObserver from "../../modules/use_resize_observer";
 import R_Icon from "../Icon/Icon";
 import R_SearchInput from "../SearchInput/SearchInput";
+import R_IconNotice from "../IconNotice/IconNotice";
+import R_Checkbox from "../Checkbox/Checkbox";
 
 interface ConfigActionWizardProps {
   open: boolean;
@@ -16,6 +18,7 @@ interface ConfigActionWizardProps {
 }
 
 export default function R_ConfigActionWizard(props: ConfigActionWizardProps) {
+  // @ts-ignore
   const [activePageIndex, setActivePageIndex] = useImmer(0);
   const [filterValue, setFilterValue] = useImmer("");
   const actionsContainer = useRef(null);
@@ -56,7 +59,7 @@ export default function R_ConfigActionWizard(props: ConfigActionWizardProps) {
       open={props.open}
       pages={[
         <>
-          <h2>Choose action or create a custom one.</h2>
+          <h2>Choose action or create a custom one</h2>
           <div id="actions-filter">
             <R_Icon iconId="magnify" />
             <R_SearchInput
@@ -64,6 +67,12 @@ export default function R_ConfigActionWizard(props: ConfigActionWizardProps) {
               onSearch={setFilterValue}
             />
           </div>
+          <R_IconNotice
+            iconId="filter-remove"
+            hidden={filteredActions.length !== 0}
+          >
+            All actions have been filtered out.
+          </R_IconNotice>
           <motion.div
             ref={actionsContainer}
             id="actions"
@@ -80,6 +89,7 @@ export default function R_ConfigActionWizard(props: ConfigActionWizardProps) {
             </AnimatePresence>
           </motion.div>
         </>,
+        <></>,
       ]}
       activePageIndex={0}
       leftButton={

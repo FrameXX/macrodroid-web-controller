@@ -13,7 +13,7 @@ export const NTFY_TOPIC_PREFIX = "macrodroid-wc";
 export const SPLASHSCREEN_TIMEOUT_MS = 350;
 export const DEFAULT_TRANSITION_OFFSET = 40;
 export const DEFAULT_TRANSITION_UNMOUNTED_SCALE = 0.8;
-export const DEFAULT_TRANSITION_DURATION_S = 0.4;
+export const DEFAULT_TRANSITION_DURATION_S = 0.35;
 const PREFERS_REDUCED_MOTION = matchMedia(
   "(prefers-reduced-motion: reduce)",
 ).matches;

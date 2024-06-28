@@ -1,0 +1,26 @@
+.checkbox {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: auto;
+  padding: 4px;
+  background-color: transparent;
+
+  &.checked {
+    .icon-unchecked {
+      display: none;
+    }
+  }
+
+  &.unchecked {
+    .icon-checked {
+      display: none;
+    }
+  }
+
+  svg {
+    width: var(--icon-size);
+    height: var(--icon-size);
+    fill: currentColor;
+  }
+}
