@@ -2,9 +2,11 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  background-color: transparent;
+  flex-shrink: 0;
+  color: var(--color-accent);
   margin: auto;
   padding: 4px;
-  background-color: transparent;
 
   &.checked {
     .icon-unchecked {

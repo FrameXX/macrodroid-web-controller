@@ -1,0 +1,24 @@
+.multi-line-string-option {
+  padding: 12px;
+  background-color: var(--color-surface-top);
+  max-width: var(--tab-items-max-width);
+  margin: auto;
+  margin-bottom: 12px;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+
+  img {
+    width: 100%;
+    max-width: 250px;
+  }
+
+  .input-container {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  textarea {
+    resize: vertical;
+  }
+}

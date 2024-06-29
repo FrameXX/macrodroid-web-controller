@@ -1,6 +1,6 @@
 import R_FAB from "../FAB/FAB";
 import R_TitleWithIcon from "../TitleWithIcon/TitleWithIcon";
-import R_DescribedInput from "../DescribedInput/DescribedInput";
+import R_StringOption from "../StringOption/StringOption";
 import screenshot1Src from "../../assets/img/screenshot_1.webp";
 import R_Wizard from "../Wizard/Wizard";
 import {
@@ -230,7 +230,7 @@ export default function R_CreateConnectionWizard(
         <>
           <h2>Enter info</h2>
           <form id="connection-info">
-            <R_DescribedInput
+            <R_StringOption
               iconId="rename"
               ref={connectionNameInput}
               onChange={(event) => {
@@ -246,9 +246,10 @@ export default function R_CreateConnectionWizard(
               type="text"
               maxLength={40}
               placeholder="Enter connection name"
+              title="Connection name"
               description="This is your custom name, so that you can differentiate the connection from other."
             />
-            <R_DescribedInput
+            <R_StringOption
               iconId="webhook"
               ref={webhookIdInput}
               onChange={(event) => {
@@ -264,6 +265,7 @@ export default function R_CreateConnectionWizard(
               type="text"
               autoCapitalize="none"
               placeholder="Enter webhook ID"
+              title="Webhook ID"
               description={
                 <>
                   <div>

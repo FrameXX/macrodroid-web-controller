@@ -1,29 +1,25 @@
-import { Target, motion } from "framer-motion";
+import { motion } from "framer-motion";
 import R_Icon from "../Icon/Icon";
 import "./ActionCard.scss";
-import { DEFAULT_TRANSITION_UNMOUNTED_SCALE } from "../../modules/const";
+import {
+  ANIMATE_SCALE_MOUNTED,
+  ANIMATE_SCALE_UNMOUNTED,
+} from "../../modules/const";
 
 interface ActionCardProps {
   name: string;
   iconId: string;
+  onClick?: () => void;
 }
 
 export default function R_ActionCard(props: ActionCardProps) {
-  const animateUnmounted: Target = {
-    opacity: 0,
-    transform: `scale(${DEFAULT_TRANSITION_UNMOUNTED_SCALE})`,
-  };
-  const animateMounted: Target = {
-    opacity: 1,
-    transform: "scale(1)",
-  };
-
   return (
     <motion.button
       layout
-      initial={animateUnmounted}
-      animate={animateMounted}
-      exit={animateUnmounted}
+      onClick={props.onClick}
+      initial={ANIMATE_SCALE_UNMOUNTED}
+      animate={ANIMATE_SCALE_MOUNTED}
+      exit={ANIMATE_SCALE_UNMOUNTED}
       type="button"
       title={props.name}
       className="action-card"

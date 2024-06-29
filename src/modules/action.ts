@@ -1,5 +1,6 @@
 export enum ActionArgumentType {
   String,
+  MultiLineString,
   Int,
   Decimal,
   Boolean,
@@ -17,12 +18,13 @@ export interface ActionArgument<T> {
   value: T;
   type: ActionArgumentType;
   options?: string[];
-  use?: ActionArgumentUseCondition;
+  useCondition?: ActionArgumentUseCondition;
 }
 
 export interface Action {
+  id: string;
   name: string;
   iconId: string;
-  args: ActionArgument<any>[];
+  arguments: ActionArgument<any>[];
   keywords: string[];
 }

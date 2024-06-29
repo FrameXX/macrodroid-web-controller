@@ -1,6 +1,6 @@
 import { ReactNode, forwardRef } from "react";
 import { Random } from "../../modules/random";
-import "./DescribedInput.scss";
+import "./StringOption.scss";
 import R_Icon from "../Icon/Icon";
 
 interface DescribedInputProps {
@@ -15,17 +15,20 @@ interface DescribedInputProps {
   onChange?: React.ChangeEventHandler<HTMLInputElement>;
   value?: string;
   onKeyUp?: React.KeyboardEventHandler<HTMLInputElement>;
-  description: ReactNode;
+  description?: ReactNode;
+  title: string;
 }
 
-const R_DescribedInput = forwardRef<HTMLInputElement, DescribedInputProps>(
+const R_StringOption = forwardRef<HTMLInputElement, DescribedInputProps>(
   (props, ref) => {
     const id = Random.id();
     return (
-      <div className="described-input">
+      <label title={props.title} className="string-option">
+        <h3>{props.title}</h3>
         <div className="input-container">
           {props.iconId && <R_Icon iconId={props.iconId} />}
           <input
+            title={props.title}
             ref={ref}
             onKeyUp={props.onKeyUp}
             value={props.value}
@@ -39,12 +42,14 @@ const R_DescribedInput = forwardRef<HTMLInputElement, DescribedInputProps>(
             aria-describedby={`input-description-${id}`}
           />
         </div>
-        <div id={`input-description-${id}`} className="description">
-          {props.description}
-        </div>
-      </div>
+        {props.description && (
+          <div id={`input-description-${id}`} className="description">
+            {props.description}
+          </div>
+        )}
+      </label>
     );
   },
 );
 
-export default R_DescribedInput;
+export default R_StringOption;

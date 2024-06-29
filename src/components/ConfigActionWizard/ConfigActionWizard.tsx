@@ -10,7 +10,8 @@ import useResizeObserver from "../../modules/use_resize_observer";
 import R_Icon from "../Icon/Icon";
 import R_SearchInput from "../SearchInput/SearchInput";
 import R_IconNotice from "../IconNotice/IconNotice";
-import R_Checkbox from "../Checkbox/Checkbox";
+import { Action, ActionArgument } from "../../modules/action";
+import R_ActionArgumentInput from "../ActionArgumentInput/ActionArgumentInput";
 
 interface ConfigActionWizardProps {
   open: boolean;
@@ -22,6 +23,10 @@ export default function R_ConfigActionWizard(props: ConfigActionWizardProps) {
   const [activePageIndex, setActivePageIndex] = useImmer(0);
   const [filterValue, setFilterValue] = useImmer("");
   const actionsContainer = useRef(null);
+  const configuredAction = useRef<Action | null>(null);
+  const [configuredArguments, setConfiguredArguments] = useImmer<
+    ActionArgument<any>[]
+  >([]);
 
   const secondColumn = useResizeObserver(
     actionsContainer,
@@ -54,6 +59,30 @@ export default function R_ConfigActionWizard(props: ConfigActionWizardProps) {
     );
   }, [filterValue]);
 
+  function selectAction(action: Action) {
+    configuredAction.current = structuredClone(action);
+    setConfiguredArguments(configuredAction.current.arguments);
+    setActivePageIndex(1);
+  }
+
+  function clearActionSelection() {
+    configuredAction.current = null;
+    setConfiguredArguments([]);
+  }
+
+  function previousPage() {
+    if (activePageIndex === 1) clearActionSelection();
+    setActivePageIndex((prevActivePageIndex) => prevActivePageIndex - 1);
+  }
+
+  function shouldArgumentBeRendered(argument: ActionArgument<any>): boolean {
+    if (!argument.useCondition) return true;
+    return (
+      configuredArguments[argument.useCondition.argumentIndex].value ===
+      argument.useCondition.argumentValue
+    );
+  }
+
   return (
     <R_Wizard
       open={props.open}
@@ -81,28 +110,67 @@ export default function R_ConfigActionWizard(props: ConfigActionWizardProps) {
             <AnimatePresence>
               {filteredActions.map((action) => (
                 <R_ActionCard
-                  key={action.name}
+                  key={action.id}
                   name={action.name}
                   iconId={action.iconId}
+                  onClick={() => {
+                    selectAction(action);
+                  }}
                 />
               ))}
             </AnimatePresence>
           </motion.div>
         </>,
-        <></>,
+        <>
+          <h2>{configuredAction.current?.name}</h2>
+          {configuredAction.current && (
+            <div>
+              <AnimatePresence>
+                {configuredArguments.map(
+                  (argument, index) =>
+                    shouldArgumentBeRendered(argument) && (
+                      <R_ActionArgumentInput
+                        onChange={(newValue) => {
+                          setConfiguredArguments((draft) => {
+                            draft[index].value = newValue;
+                          });
+                        }}
+                        key={`${configuredAction.current?.id}-${index}`}
+                        argument={argument}
+                      />
+                    ),
+                )}
+              </AnimatePresence>
+            </div>
+          )}
+        </>,
       ]}
-      activePageIndex={0}
+      activePageIndex={activePageIndex}
       leftButton={
-        <R_FAB
-          hidden={activePageIndex !== 0}
-          left
-          title="Cancel configuration of new action"
-          onClick={props.onClose}
-          iconId="close"
-        />
+        <>
+          <R_FAB
+            hidden={activePageIndex !== 0}
+            left
+            title="Cancel configuration of new action"
+            onClick={props.onClose}
+            iconId="close"
+          />
+          <R_FAB
+            hidden={activePageIndex === 0}
+            left
+            title="Previous page"
+            onClick={previousPage}
+            iconId="chevron-left"
+          />
+        </>
       }
       rightButton={
-        <R_FAB title="Create custom action" iconId="plus" onClick={() => {}} />
+        <R_FAB
+          hidden={activePageIndex !== 0}
+          title="Create custom action"
+          iconId="plus"
+          onClick={() => {}}
+        />
       }
     />
   );

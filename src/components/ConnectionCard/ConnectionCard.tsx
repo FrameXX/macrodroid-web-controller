@@ -4,8 +4,11 @@ import { generateReadableTimestamp } from "../../modules/readable_timestamp";
 import { generateReadableTimeDifference } from "../../modules/readable_time_difference";
 import { useUpdateInterval } from "../../modules/use_update_interval";
 import R_Button from "../Button/Button";
-import { Target, motion } from "framer-motion";
-import { DEFAULT_TRANSITION_UNMOUNTED_SCALE } from "../../modules/const";
+import { motion } from "framer-motion";
+import {
+  ANIMATE_SCALE_MOUNTED,
+  ANIMATE_SCALE_UNMOUNTED,
+} from "../../modules/const";
 
 interface ConnectionProps {
   connection: Connection;
@@ -15,21 +18,13 @@ interface ConnectionProps {
 
 export default function R_Connection(props: ConnectionProps) {
   useUpdateInterval(60000);
-  const animateUnmounted: Target = {
-    opacity: 0,
-    transform: `scale(${DEFAULT_TRANSITION_UNMOUNTED_SCALE})`,
-  };
-  const animateMounted: Target = {
-    opacity: 1,
-    transform: "scale(1)",
-  };
 
   return (
     <motion.div
       layout
-      initial={animateUnmounted}
-      animate={animateMounted}
-      exit={animateUnmounted}
+      initial={ANIMATE_SCALE_UNMOUNTED}
+      animate={ANIMATE_SCALE_MOUNTED}
+      exit={ANIMATE_SCALE_UNMOUNTED}
       className="connection-card"
     >
       <div className="info">

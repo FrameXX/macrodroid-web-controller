@@ -1,3 +1,4 @@
+import { Target } from "framer-motion";
 import { Action, ActionArgumentType } from "./action";
 
 // URL
@@ -22,6 +23,17 @@ export const TRANSITIONS = {
   bounce: 0.4,
   type: "spring",
 } as const;
+export const TOASTER_MAX_TOASTS = 3;
+export const TOAST_START_DELAY_MS = 3000;
+export const TOAST_MS_PER_CHAR = 70;
+export const ANIMATE_SCALE_UNMOUNTED: Target = {
+  opacity: 0,
+  transform: `scale(${DEFAULT_TRANSITION_UNMOUNTED_SCALE})`,
+};
+export const ANIMATE_SCALE_MOUNTED: Target = {
+  opacity: 1,
+  transform: "scale(1)",
+};
 
 // OTHER
 export const MACRODROID_APP_URL =
@@ -30,55 +42,81 @@ export const LOG_RECORD_LIMIT = 60;
 
 export const ACTIONS: Action[] = [
   {
+    id: "set_global_variable",
     name: "Set global variable",
     iconId: "help",
     keywords: ["set", "global", "variable"],
-    args: [
+    arguments: [
       { name: "Name", value: "", type: ActionArgumentType.String },
       {
         name: "Type",
         value: 0,
         type: ActionArgumentType.Selection,
-        options: ["boolean", "integer", "string", "decimal"],
+        options: ["Boolean", "Integer", "String", "Decimal"],
       },
       {
         name: "Value",
         value: false,
         type: ActionArgumentType.Boolean,
-        use: { argumentIndex: 2, argumentValue: "boolean" },
+        useCondition: { argumentIndex: 1, argumentValue: 0 },
       },
       {
         name: "Value",
         value: 0,
         type: ActionArgumentType.Int,
-        use: { argumentIndex: 2, argumentValue: "integer" },
+        useCondition: { argumentIndex: 1, argumentValue: 1 },
       },
       {
         name: "Value",
         value: "",
-        type: ActionArgumentType.String,
-        use: { argumentIndex: 2, argumentValue: "string" },
+        type: ActionArgumentType.MultiLineString,
+        useCondition: { argumentIndex: 1, argumentValue: 2 },
       },
       {
         name: "Value",
         value: 0,
         type: ActionArgumentType.Decimal,
-        use: { argumentIndex: 2, argumentValue: "decimal" },
+        useCondition: { argumentIndex: 1, argumentValue: 3 },
       },
     ],
   },
   {
+    id: "evaluate_magic_text",
     name: "Evaluate magic text",
     iconId: "code-json",
-    args: [{ name: "Text", value: "", type: ActionArgumentType.String }],
+    arguments: [
+      {
+        name: "Text",
+        description:
+          "The entered text can provide MacroDroid magic text in the same format as in MacroDroid. For example both {battery} and [battery] is allowed.",
+        value: "",
+        type: ActionArgumentType.String,
+      },
+    ],
     keywords: ["eval", "evaluate", "magic text", "expression", "variables"],
   },
   {
+    id: "display_notification",
     name: "Display notification",
     iconId: "alert-circle-outline",
-    args: [
+    arguments: [
       { name: "Title", value: "", type: ActionArgumentType.String },
       { name: "Text", value: "", type: ActionArgumentType.String },
+    ],
+    keywords: ["alert", "notification"],
+  },
+  {
+    id: "shell_script",
+    name: "Shell script",
+    iconId: "script-outline",
+    arguments: [
+      {
+        name: "Use helper app",
+        value: false,
+        type: ActionArgumentType.Boolean,
+      },
+      { name: "Rooted", value: false, type: ActionArgumentType.Boolean },
+      { name: "Command", value: "", type: ActionArgumentType.MultiLineString },
     ],
     keywords: ["alert", "notification"],
   },

@@ -29,6 +29,11 @@ main {
   background: var(--color-surface);
 }
 
+input,
+textarea {
+  box-shadow: inset var(--box-shadow);
+}
+
 button,
 input,
 select,
@@ -39,11 +44,18 @@ dialog {
   font-size: inherit;
 }
 
+textarea {
+  font-family: "Jetbrains Mono", "monospace";
+}
+
 button,
 [role="button"],
-select,
-label {
+select {
   cursor: pointer;
+}
+
+label {
+  display: block;
 }
 
 button {
@@ -55,6 +67,12 @@ button {
 // h2 {
 //   font-family: "Helvetica", "Roboto", "system-ui", "Arial";
 // }
+
+h3 {
+  margin: 0;
+  margin-bottom: 0.6rem;
+  width: fit-content;
+}
 
 a {
   color: var(--color-accent);
@@ -70,7 +88,8 @@ hr {
   border: 1px solid var(--color-text);
 }
 
-input {
+input,
+textarea {
   font-size: 1rem;
   padding: 6px;
   background-color: var(--color-surface);
@@ -80,6 +99,7 @@ input {
   color: inherit;
   max-width: var(--tab-items-max-width);
   width: 100%;
+  box-sizing: border-box;
 
   &:active {
     outline: none;
@@ -96,7 +116,7 @@ input {
 }
 
 .description {
-  padding: 8px;
+  padding-top: 8px;
   opacity: 0.8;
   font-size: 0.8rem;
 }

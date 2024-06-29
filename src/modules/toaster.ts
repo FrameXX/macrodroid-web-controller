@@ -1,5 +1,10 @@
 import { Updater } from "use-immer";
 import { Random } from "./random";
+import {
+  TOASTER_MAX_TOASTS,
+  TOAST_MS_PER_CHAR,
+  TOAST_START_DELAY_MS,
+} from "./const";
 
 export enum ToastSeverity {
   Success = "success",
@@ -8,7 +13,6 @@ export enum ToastSeverity {
 }
 
 export class Toaster {
-  private readonly maxToasts = 3;
   private toastReadingTimeoutId = 0;
   private toasts: Toast[] = [];
 
@@ -46,7 +50,7 @@ export class Toaster {
   }
 
   private get isFull() {
-    return this.toasts.length >= this.maxToasts;
+    return this.toasts.length >= TOASTER_MAX_TOASTS;
   }
 
   public removeToastById(toastId: number) {
@@ -72,8 +76,6 @@ export class Toaster {
 }
 
 export class Toast {
-  private static readonly startDurationMs = 1200;
-  private static readonly readingDurationPerCharMs = 80;
   public readonly readingDurationMs: number;
   public readonly id: number = Random.id();
 
@@ -85,7 +87,7 @@ export class Toast {
   ) {
     if (!readingDurationMs) {
       this.readingDurationMs =
-        Toast.startDurationMs + message.length * Toast.readingDurationPerCharMs;
+        TOAST_START_DELAY_MS + message.length * TOAST_MS_PER_CHAR;
       return;
     }
     if (readingDurationMs < 0)
