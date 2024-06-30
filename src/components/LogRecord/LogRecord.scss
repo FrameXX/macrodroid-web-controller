@@ -1,9 +1,8 @@
+@use "../../partials/mixins" as *;
+
 .log-record {
+  @include card;
   position: relative;
-  padding: 8px;
-  border-radius: var(--border-radius);
-  box-shadow: var(--box-shadow);
-  margin: auto;
   display: flex;
   justify-content: center;
   background: var(--color-surface-top);

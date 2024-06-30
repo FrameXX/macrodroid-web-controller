@@ -1,16 +1,13 @@
+@use "../../partials/mixins" as *;
+
 .connection-card {
+  @include card;
+  @include surface-top;
   text-align: left;
-  background: var(--color-surface-top);
-  padding: 8px;
-  border-radius: var(--border-radius);
-  box-shadow: var(--box-shadow);
-  box-sizing: border-box;
   display: flex;
   align-items: start;
   break-inside: avoid;
   max-width: var(--tab-items-max-width);
-  margin: auto;
-  margin-bottom: 12px;
 
   &:first-child {
     margin-top: 0;

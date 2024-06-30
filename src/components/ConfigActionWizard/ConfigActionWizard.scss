@@ -1,10 +1,12 @@
+@use "../../partials/mixins" as *;
+
 #actions {
   column-gap: 12px;
   padding-top: 16px;
 }
 
 #actions-filter {
-  margin: auto;
+  @include card;
   text-align: left;
   gap: 8px;
   display: flex;
@@ -14,14 +16,10 @@
   top: 0;
   left: 0;
   right: 0;
-  padding: 8px;
   background: var(--color-surface-top);
-  box-shadow: var(--box-shadow);
   z-index: var(--z-index-nav);
-  border-radius: var(--border-radius);
   width: 100%;
   max-width: var(--tab-items-max-width);
-  box-sizing: border-box;
 
   input {
     width: 100%;

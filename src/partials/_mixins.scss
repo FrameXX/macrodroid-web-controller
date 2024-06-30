@@ -1,0 +1,24 @@
+@mixin card {
+  @include box-shadow();
+  @include border-radius();
+  margin: auto;
+  margin-bottom: 12px;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+@mixin surface-top {
+  background: var(--color-surface-top);
+}
+
+@mixin border-radius {
+  border-radius: var(--border-radius);
+}
+
+@mixin box-shadow {
+  box-shadow: var(--box-shadow);
+}
+
+@mixin clickable {
+  cursor: pointer;
+}

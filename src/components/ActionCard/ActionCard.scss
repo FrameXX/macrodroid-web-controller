@@ -1,15 +1,12 @@
+@use "../../partials/mixins" as *;
+
 .action-card {
-  padding: 12px;
+  @include card;
   background-color: var(--color-action);
-  border-radius: var(--border-radius);
-  box-shadow: var(--box-shadow);
-  margin: auto;
   display: flex;
   align-items: center;
   gap: 8px;
-  box-sizing: border-box;
   width: 100%;
   max-width: 400px;
   color: var(--color-primary-item);
-  margin-bottom: 12px;
 }

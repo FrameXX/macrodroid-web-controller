@@ -1,8 +1,9 @@
+@use "../../partials/mixins" as *;
+
 #log-filter {
+  @include card;
   display: flex;
   align-items: center;
-  padding: 8px;
-  margin: auto;
   position: sticky;
   width: 100%;
   max-width: var(--tab-items-max-width);
@@ -10,9 +11,6 @@
   left: 0;
   right: 0;
   justify-content: center;
-  box-shadow: var(--box-shadow);
-  box-sizing: border-box;
-  border-radius: var(--border-radius);
   background: var(--color-surface-top);
   z-index: var(--z-index-nav);
 
