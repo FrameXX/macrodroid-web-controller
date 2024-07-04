@@ -8,21 +8,18 @@
   margin: auto;
   padding: 4px;
 
-  &.checked {
-    .icon-unchecked {
-      display: none;
-    }
-  }
-
-  &.unchecked {
-    .icon-checked {
-      display: none;
-    }
+  > div {
+    position: relative;
+    width: var(--icon-size);
+    height: var(--icon-size);
   }
 
   svg {
+    left: 0;
+    top: 0;
     width: var(--icon-size);
     height: var(--icon-size);
     fill: currentColor;
+    position: absolute;
   }
 }
