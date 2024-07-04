@@ -10,6 +10,7 @@ import { OutgoingRequest } from "../../modules/outgoing_request";
 import { useImmer } from "use-immer";
 import { useRef } from "react";
 import useResizeObserver from "../../modules/use_resize_observer";
+import { useColumnDeterminator } from "../../modules/use_column_determinator";
 
 interface ConnectionsProps {
   connections: Connection[];
@@ -49,29 +50,7 @@ export default function R_Connections(props: ConnectionsProps) {
     }
   }
 
-  const secondColumn = useResizeObserver(
-    connectionsContainer,
-    (width) => width > 700,
-  );
-  const thirdColumn = useResizeObserver(
-    connectionsContainer,
-    (width) => width > 1100,
-  );
-  const fourthColumn = useResizeObserver(
-    connectionsContainer,
-    (width) => width > 1500,
-  );
-
-  let animateConnections: Target;
-  if (fourthColumn && props.connections.length > 3) {
-    animateConnections = { columns: 4 };
-  } else if (thirdColumn && props.connections.length > 2) {
-    animateConnections = { columns: 3 };
-  } else if (secondColumn && props.connections.length > 1) {
-    animateConnections = { columns: 2 };
-  } else {
-    animateConnections = { columns: 1 };
-  }
+  const connectionsColumns = useColumnDeterminator(connectionsContainer, props.connections, 400);
 
   return (
     <>
@@ -80,7 +59,7 @@ export default function R_Connections(props: ConnectionsProps) {
       </R_IconNotice>
       <motion.div
         ref={connectionsContainer}
-        animate={animateConnections}
+        animate={{columns: connectionsColumns}}
         id="connections"
       >
         <AnimatePresence>

@@ -3,15 +3,15 @@ import R_Wizard from "../Wizard/Wizard";
 import R_FAB from "../FAB/FAB";
 import { ACTIONS } from "../../modules/const";
 import R_ActionCard from "../ActionCard/ActionCard";
-import { AnimatePresence, Target, motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import "./ConfigActionWizard.scss";
 import { useMemo, useRef } from "react";
-import useResizeObserver from "../../modules/use_resize_observer";
 import R_Icon from "../Icon/Icon";
 import R_SearchInput from "../SearchInput/SearchInput";
 import R_IconNotice from "../IconNotice/IconNotice";
 import { Action, ActionArgument } from "../../modules/action";
 import R_ActionArgumentInput from "../ActionArgumentInput/ActionArgumentInput";
+import { useColumnDeterminator } from "../../modules/use_column_determinator";
 
 interface ConfigActionWizardProps {
   open: boolean;
@@ -23,34 +23,18 @@ export default function R_ConfigActionWizard(props: ConfigActionWizardProps) {
   const [activePageIndex, setActivePageIndex] = useImmer(0);
   const [filterValue, setFilterValue] = useImmer("");
   const actionsContainer = useRef(null);
+  const actionArgumentsContainer = useRef(null);
   const configuredAction = useRef<Action | null>(null);
   const [configuredArguments, setConfiguredArguments] = useImmer<
     ActionArgument<any>[]
   >([]);
 
-  const secondColumn = useResizeObserver(
-    actionsContainer,
-    () => innerWidth > 550,
+  const actionsColumns = useColumnDeterminator(actionsContainer, ACTIONS, 270);
+  const actionArgumentsColumns = useColumnDeterminator(
+    actionArgumentsContainer,
+    configuredArguments,
+    400,
   );
-  const thirdColumn = useResizeObserver(
-    actionsContainer,
-    () => innerWidth > 850,
-  );
-  const fourthColumn = useResizeObserver(
-    actionsContainer,
-    () => innerWidth > 1200,
-  );
-
-  let animateActions: Target;
-  if (fourthColumn && ACTIONS.length > 3) {
-    animateActions = { columns: 4 };
-  } else if (thirdColumn && ACTIONS.length > 2) {
-    animateActions = { columns: 3 };
-  } else if (secondColumn && ACTIONS.length > 1) {
-    animateActions = { columns: 2 };
-  } else {
-    animateActions = { columns: 1 };
-  }
 
   const filteredActions = useMemo(() => {
     const filter = filterValue.toLowerCase();
@@ -105,7 +89,7 @@ export default function R_ConfigActionWizard(props: ConfigActionWizardProps) {
           <motion.div
             ref={actionsContainer}
             id="actions"
-            animate={animateActions}
+            animate={{columns: actionsColumns}}
           >
             <AnimatePresence>
               {filteredActions.map((action) => (
@@ -122,17 +106,17 @@ export default function R_ConfigActionWizard(props: ConfigActionWizardProps) {
           </motion.div>
         </>,
         <>
-          <h2>{configuredAction.current?.name}</h2>
+          <h2>{`Enter action arguments - ${configuredAction.current?.name}`}</h2>
+          <motion.div id="action-arguments" animate={{columns: actionArgumentsColumns}} ref={actionArgumentsContainer}>
           {configuredAction.current && (
-            <div>
               <AnimatePresence>
                 {configuredArguments.map(
                   (argument, index) =>
                     shouldArgumentBeRendered(argument) && (
                       <R_ActionArgumentInput
                         onChange={(newValue) => {
-                          setConfiguredArguments((draft) => {
-                            draft[index].value = newValue;
+                          setConfiguredArguments((configuredArguments) => {
+                            configuredArguments[index].value = newValue;
                           });
                         }}
                         key={`${configuredAction.current?.id}-${index}`}
@@ -141,8 +125,8 @@ export default function R_ConfigActionWizard(props: ConfigActionWizardProps) {
                     ),
                 )}
               </AnimatePresence>
-            </div>
           )}
+          </motion.div>
         </>,
       ]}
       activePageIndex={activePageIndex}

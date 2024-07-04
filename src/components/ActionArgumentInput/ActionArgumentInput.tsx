@@ -75,6 +75,7 @@ export default function R_ActionArgumentInput(props: ActionArgumentInputProps) {
 
   return (
     <motion.div
+    className="action-argument-input"
       layout
       initial={ANIMATE_SCALE_UNMOUNTED}
       animate={ANIMATE_SCALE_MOUNTED}
