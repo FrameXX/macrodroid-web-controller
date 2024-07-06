@@ -2,7 +2,11 @@ import { Target, motion } from "framer-motion";
 import R_Icon from "../Icon/Icon";
 import "./ConfirmDialog.scss";
 import R_Button from "../Button/Button";
-import { DEFAULT_TRANSITION_OFFSET } from "../../modules/const";
+import {
+  DEFAULT_TRANSITION_DURATION_S,
+  DEFAULT_TRANSITION_OFFSET,
+} from "../../modules/const";
+import { useEffect, useRef } from "react";
 
 interface ConfirmDialogProps {
   open: boolean;
@@ -18,6 +22,15 @@ export default function R_ConfirmDialog(props: ConfirmDialogProps) {
   const animateBackdrop: Target = props.open
     ? { opacity: 0.7 }
     : { display: "none", opacity: 0 };
+  const confirmButton = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    if (props.open)
+      setTimeout(
+        () => confirmButton.current?.focus(),
+        DEFAULT_TRANSITION_DURATION_S * 1000,
+      );
+  }, [props.open]);
 
   return (
     <>
@@ -38,6 +51,7 @@ export default function R_ConfirmDialog(props: ConfirmDialogProps) {
             text="Cancel"
           />
           <R_Button
+            ref={confirmButton}
             onClick={props.onConfirm}
             title="Confirm"
             iconId="check"

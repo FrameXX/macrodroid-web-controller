@@ -88,7 +88,7 @@ export const ACTIONS: Action[] = [
       {
         name: "Text",
         description:
-          "The entered text can provide MacroDroid magic text in the same format as in MacroDroid. For example both {battery} and [battery] is allowed.",
+          "The entered text can provide MacroDroid magic text in the same format as in MacroDroid. For example both {battery} and [battery] should both be overwritten with battery level.",
         value: "",
         type: ActionArgumentType.String,
       },
@@ -101,7 +101,7 @@ export const ACTIONS: Action[] = [
     iconId: "alert-circle-outline",
     arguments: [
       { name: "Title", value: "", type: ActionArgumentType.String },
-      { name: "Text", value: "", type: ActionArgumentType.String },
+      { name: "Text", value: "", type: ActionArgumentType.MultiLineString },
     ],
     keywords: ["alert", "notification"],
   },

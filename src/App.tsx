@@ -46,14 +46,14 @@ function R_App() {
       onRecoverError(errorMessage, "log records");
     },
   });
-  useLocalStorage(
+  const saveConnections = useLocalStorage(
     connections,
     (connections) => connections.forEach(addConnection),
     {
       storageKey: "connections",
       struct: ConnectionStruct,
       stringify: (connections) =>
-        JSON.stringify(connections.map((c) => c.rawObject)),
+        JSON.stringify(connections.map((connection) => connection.rawObject)),
       parse: JSON.parse,
       onRecoverError: (errorMessage) => {
         onRecoverError(errorMessage, "connections");
@@ -65,6 +65,7 @@ function R_App() {
               connection.name,
               connection.webhookId,
               connection.id,
+              connection.lastActivityTimestamp,
             ),
         ),
     },
@@ -76,6 +77,7 @@ function R_App() {
     new ConfirmDialog(setConfirmDialogOpen, setConfirmDialogText),
   );
   const logScrollableContainer = useRef<HTMLDivElement>(null);
+  const currentConnections = useRef<Connection[]>([]);
 
   useEffect(() => {
     if (!logScrollableContainer.current) {
@@ -117,6 +119,7 @@ function R_App() {
       prevConnections.push(connection);
       return prevConnections;
     });
+    currentConnections.current.push(connection);
     connection.listenRequests(
       (request) => {
         handleIncomingRequest(request, connection);
@@ -130,10 +133,31 @@ function R_App() {
     );
   }
 
+  function reportConnectionActivity(activeConnection: Connection) {
+    const activeConnectionIndex = currentConnections.current.findIndex(
+      (connection) => connection.id === activeConnection.id,
+    );
+    if (activeConnectionIndex === -1) {
+      console.warn(
+        "Connection that was reported to be active could not be found in connections list.",
+      );
+      return;
+    }
+
+    setConnections((prevConnections) => {
+      prevConnections[activeConnectionIndex].lastActivityTimestamp = Date.now();
+      return prevConnections;
+    });
+    currentConnections.current[activeConnectionIndex].lastActivityTimestamp =
+      Date.now();
+    saveConnections(currentConnections.current);
+  }
+
   function handleIncomingRequest(
     request: IncomingRequest,
     connection: Connection,
   ) {
+    reportConnectionActivity(connection);
     log({
       connectionName: connection.name,
       requestId: request.id,
@@ -176,6 +200,9 @@ function R_App() {
       prevConnections.splice(index, 1);
       return prevConnections;
     });
+    currentConnections.current = currentConnections.current.filter(
+      (currentConnection) => currentConnection.id !== connection.id,
+    );
   }
 
   function bakeToast(toast: Toast) {
@@ -198,7 +225,9 @@ function R_App() {
     init();
   }, []);
 
-  const wideScreen = useInnerSize();
+  const wideScreen = useInnerSize(
+    () => innerWidth > innerHeight && innerHeight > 500,
+  );
 
   const animate: Target = wideScreen
     ? { flexDirection: "row-reverse" }
@@ -210,15 +239,16 @@ function R_App() {
         <div id="tab-content">
           <R_Tab active={activeNavTabId === NavTabId.Connections}>
             <R_Connections
+              reportConnectionActivity={reportConnectionActivity}
               connections={connections}
-              onConnectionAdd={addConnection}
+              onConnectionConfirm={addConnection}
               onConnectionDelete={deleteConnection}
               bakeToast={bakeToast}
               log={log}
             />
           </R_Tab>
           <R_Tab active={activeNavTabId === NavTabId.Actions}>
-            <R_Actions />
+            <R_Actions bakeToast={bakeToast} />
           </R_Tab>
           <R_Tab
             ref={logScrollableContainer}

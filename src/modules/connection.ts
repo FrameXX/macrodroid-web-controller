@@ -34,7 +34,12 @@ export class Connection {
     public readonly name: string,
     public readonly webhookId: string,
     public readonly id: string = Random.readableId(),
-  ) {}
+    lastActivityTimestamp?: number,
+  ) {
+    if (lastActivityTimestamp) {
+      this.lastActivityTimestamp = lastActivityTimestamp;
+    }
+  }
 
   private get ntfyTopicURL() {
     return new URL(
@@ -65,10 +70,6 @@ export class Connection {
     };
   }
 
-  private wasActive() {
-    this.lastActivityTimestamp = Date.now();
-  }
-
   public listenRequests(
     onRequest: (request: IncomingRequest) => void,
     onFailedRequest?: (errorMessage: string) => void,
@@ -78,7 +79,6 @@ export class Connection {
       throw Error("This connection is already listening to new messages.");
     this.eventSource = new EventSource(this.ntfyTopicURL);
     this.eventSource.addEventListener("message", (event) => {
-      this.wasActive();
       let request: IncomingRequest | null = null;
       try {
         request = IncomingRequest.fromNtfyRequest(event.data);

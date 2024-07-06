@@ -6,6 +6,8 @@ import {
   TOAST_START_DELAY_MS,
 } from "./const";
 
+export type BakeToast = (toast: Toast) => void;
+
 export enum ToastSeverity {
   Success = "success",
   Info = "info",

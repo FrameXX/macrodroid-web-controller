@@ -12,10 +12,13 @@ import R_IconNotice from "../IconNotice/IconNotice";
 import { Action, ActionArgument } from "../../modules/action";
 import R_ActionArgumentInput from "../ActionArgumentInput/ActionArgumentInput";
 import { useColumnDeterminator } from "../../modules/use_column_determinator";
+import { BakeToast, Toast, ToastSeverity } from "../../modules/toaster";
 
 interface ConfigActionWizardProps {
   open: boolean;
   onClose: () => void;
+  onActionConfigure: (action: Action) => void;
+  bakeToast: BakeToast;
 }
 
 export default function R_ConfigActionWizard(props: ConfigActionWizardProps) {
@@ -67,6 +70,19 @@ export default function R_ConfigActionWizard(props: ConfigActionWizardProps) {
     );
   }
 
+  function onActionConfigurationConfirm() {
+    props.onActionConfigure(configuredAction.current!);
+    props.bakeToast(
+      new Toast("Action configured.", "play", ToastSeverity.Success),
+    );
+    reset();
+  }
+
+  function reset() {
+    clearActionSelection();
+    setActivePageIndex(0);
+  }
+
   return (
     <R_Wizard
       open={props.open}
@@ -89,7 +105,7 @@ export default function R_ConfigActionWizard(props: ConfigActionWizardProps) {
           <motion.div
             ref={actionsContainer}
             id="actions"
-            animate={{columns: actionsColumns}}
+            animate={{ columns: actionsColumns }}
           >
             <AnimatePresence>
               {filteredActions.map((action) => (
@@ -107,8 +123,12 @@ export default function R_ConfigActionWizard(props: ConfigActionWizardProps) {
         </>,
         <>
           <h2>{`Enter action arguments - ${configuredAction.current?.name}`}</h2>
-          <motion.div id="action-arguments" animate={{columns: actionArgumentsColumns}} ref={actionArgumentsContainer}>
-          {configuredAction.current && (
+          <motion.div
+            id="action-arguments"
+            animate={{ columns: actionArgumentsColumns }}
+            ref={actionArgumentsContainer}
+          >
+            {configuredAction.current && (
               <AnimatePresence>
                 {configuredArguments.map(
                   (argument, index) =>
@@ -125,7 +145,7 @@ export default function R_ConfigActionWizard(props: ConfigActionWizardProps) {
                     ),
                 )}
               </AnimatePresence>
-          )}
+            )}
           </motion.div>
         </>,
       ]}
@@ -149,12 +169,20 @@ export default function R_ConfigActionWizard(props: ConfigActionWizardProps) {
         </>
       }
       rightButton={
-        <R_FAB
-          hidden={activePageIndex !== 0}
-          title="Create custom action"
-          iconId="plus"
-          onClick={() => {}}
-        />
+        <>
+          <R_FAB
+            hidden={activePageIndex !== 0}
+            title="Create custom action"
+            iconId="plus"
+            onClick={() => {}}
+          />
+          <R_FAB
+            hidden={activePageIndex !== 1}
+            title="Confirm action configuration"
+            iconId="check"
+            onClick={onActionConfigurationConfirm}
+          />
+        </>
       }
     />
   );

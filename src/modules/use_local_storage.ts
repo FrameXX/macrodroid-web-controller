@@ -1,6 +1,8 @@
 import { useEffect, useRef } from "react";
 import { Struct, assert } from "superstruct";
 
+type ManualSave<T> = (state: T) => void;
+
 export interface StoreConfig<T> {
   struct: Struct<any>;
   storageKey: string;
@@ -10,30 +12,30 @@ export interface StoreConfig<T> {
   finalize?: (validated: T) => T;
 }
 
-export function useLocalStorage<T extends any[]>(
+export function useLocalStorage<T>(
   state: T,
   setState: (newState: T) => void,
-  recoverConfig: StoreConfig<T>,
-) {
+  storeConfig: StoreConfig<T>,
+): ManualSave<T> {
   const firstRender = useRef(true);
 
   useEffect(() => {
     if (!firstRender.current) return;
     if (!navigator.cookieEnabled) return;
-    const recovered = recover<T>(recoverConfig);
+    const recovered = recover<T>(storeConfig);
     if (recovered) setState(recovered);
   }, []);
 
   useEffect(() => {
-    if (!navigator.cookieEnabled) return;
     if (firstRender.current) {
       firstRender.current = false;
       return;
     }
-    save(state, recoverConfig.stringify, recoverConfig.storageKey);
+    if (!navigator.cookieEnabled) return;
+    save(state, storeConfig.stringify, storeConfig.storageKey);
   }, [state]);
 
-  return [state, setState] as const;
+  return (state) => save(state, storeConfig.stringify, storeConfig.storageKey);
 }
 
 function save<T>(

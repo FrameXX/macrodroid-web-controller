@@ -28,6 +28,7 @@ const R_MultiLineStringOption = forwardRef<
       <div className="input-container">
         {props.iconId && <R_Icon iconId={props.iconId} />}
         <textarea
+          rows={4}
           title={props.title}
           ref={ref}
           onKeyUp={props.onKeyUp}

@@ -1,23 +1,23 @@
-import { AnimatePresence, Target, motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import R_IconNotice from "../IconNotice/IconNotice";
 import R_Connection from "../ConnectionCard/ConnectionCard";
 import R_FAB from "../FAB/FAB";
 import R_CreateConnectionWizard from "../CreateConnectionWizard/CreateConnectionWizard";
 import { Connection } from "../../modules/connection";
-import { Toast, ToastSeverity } from "../../modules/toaster";
+import { BakeToast, Toast, ToastSeverity } from "../../modules/toaster";
 import { LogRecordInitializer } from "../../modules/logger";
 import { OutgoingRequest } from "../../modules/outgoing_request";
 import { useImmer } from "use-immer";
 import { useRef } from "react";
-import useResizeObserver from "../../modules/use_resize_observer";
 import { useColumnDeterminator } from "../../modules/use_column_determinator";
 
 interface ConnectionsProps {
   connections: Connection[];
-  onConnectionAdd: (connection: Connection) => void;
+  onConnectionConfirm: (connection: Connection) => void;
   onConnectionDelete: (connection: Connection) => void;
-  bakeToast: (toast: Toast) => void;
+  bakeToast: BakeToast;
   log: (record: LogRecordInitializer) => void;
+  reportConnectionActivity: (connection: Connection) => void;
 }
 
 export default function R_Connections(props: ConnectionsProps) {
@@ -50,7 +50,11 @@ export default function R_Connections(props: ConnectionsProps) {
     }
   }
 
-  const connectionsColumns = useColumnDeterminator(connectionsContainer, props.connections, 400);
+  const connectionsColumns = useColumnDeterminator(
+    connectionsContainer,
+    props.connections,
+    400,
+  );
 
   return (
     <>
@@ -59,7 +63,7 @@ export default function R_Connections(props: ConnectionsProps) {
       </R_IconNotice>
       <motion.div
         ref={connectionsContainer}
-        animate={{columns: connectionsColumns}}
+        animate={{ columns: connectionsColumns }}
         id="connections"
       >
         <AnimatePresence>
@@ -83,9 +87,10 @@ export default function R_Connections(props: ConnectionsProps) {
         iconId="plus"
       />
       <R_CreateConnectionWizard
+        reportConnectionActivity={props.reportConnectionActivity}
         log={props.log}
-        onConnectionAdd={(connection) => {
-          props.onConnectionAdd(connection);
+        onConnectionConfirm={(connection) => {
+          props.onConnectionConfirm(connection);
           setAddConnectionWizardOpen(false);
         }}
         bakeToast={props.bakeToast}

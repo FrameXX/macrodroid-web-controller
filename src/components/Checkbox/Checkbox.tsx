@@ -24,7 +24,7 @@ export default function R_Checkbox(props: CheckboxProps) {
 
   const animateUncheckedSvg: Target = { display: value ? "none" : "block" };
   const animateCheckedSvg: Target = {
-    scale: value ? 1 : DEFAULT_TRANSITION_UNMOUNTED_SCALE * 0.5,
+    scale: value ? 1 : 0,
     opacity: value ? 1 : 0,
   };
 

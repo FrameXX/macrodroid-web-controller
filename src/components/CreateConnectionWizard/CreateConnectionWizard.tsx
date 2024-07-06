@@ -7,7 +7,7 @@ import {
   MACRODROID_APP_URL,
   SPLASHSCREEN_TIMEOUT_MS,
 } from "../../modules/const";
-import { Toast, ToastSeverity } from "../../modules/toaster";
+import { BakeToast, Toast, ToastSeverity } from "../../modules/toaster";
 import { Connection } from "../../modules/connection";
 import { IncomingRequest } from "../../modules/incoming_request";
 import { useImmer } from "use-immer";
@@ -18,10 +18,11 @@ import { useRef } from "react";
 
 interface AddConnectionWizardProps {
   open: boolean;
-  bakeToast: (toast: Toast) => void;
+  bakeToast: BakeToast;
   onClose: () => void;
-  onConnectionAdd: (connection: Connection) => void;
+  onConnectionConfirm: (connection: Connection) => void;
   log: (record: LogRecordInitializer) => void;
+  reportConnectionActivity: (connection: Connection) => void;
 }
 
 export default function R_CreateConnectionWizard(
@@ -61,10 +62,11 @@ export default function R_CreateConnectionWizard(
 
   function onSuccess(connection: Connection) {
     connection.stopListeningRequests();
-    props.onConnectionAdd(connection);
+    props.onConnectionConfirm(connection);
+    props.reportConnectionActivity(connection);
     props.bakeToast(
       new Toast(
-        "Connection was confirmed and added successfully.",
+        "Connection was confirmed and added.",
         "transit-connection-variant",
         ToastSeverity.Success,
       ),
