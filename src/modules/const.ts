@@ -46,7 +46,7 @@ export const ACTIONS: Action[] = [
     name: "Set global variable",
     iconId: "help",
     keywords: ["set", "global", "variable"],
-    arguments: [
+    args: [
       { name: "Name", value: "", type: ActionArgumentType.String },
       {
         name: "Type",
@@ -84,7 +84,7 @@ export const ACTIONS: Action[] = [
     id: "evaluate_magic_text",
     name: "Evaluate magic text",
     iconId: "code-json",
-    arguments: [
+    args: [
       {
         name: "Text",
         description:
@@ -99,7 +99,7 @@ export const ACTIONS: Action[] = [
     id: "display_notification",
     name: "Display notification",
     iconId: "alert-circle-outline",
-    arguments: [
+    args: [
       { name: "Title", value: "", type: ActionArgumentType.String },
       { name: "Text", value: "", type: ActionArgumentType.MultiLineString },
     ],
@@ -109,7 +109,7 @@ export const ACTIONS: Action[] = [
     id: "shell_script",
     name: "Shell script",
     iconId: "script-outline",
-    arguments: [
+    args: [
       {
         name: "Use helper app",
         value: false,

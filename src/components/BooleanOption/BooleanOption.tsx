@@ -6,6 +6,7 @@ interface BooleanOptionProps {
   title: string;
   onChange: (newValue: boolean) => void;
   iconId?: string;
+  value?: boolean;
 }
 
 export default function R_BooleanOption(props: BooleanOptionProps) {
@@ -13,7 +14,11 @@ export default function R_BooleanOption(props: BooleanOptionProps) {
     <label title={props.title} className="boolean-option">
       {props.iconId && <R_Icon iconId={props.iconId} />}
       <h3>{props.title}</h3>
-      <R_Checkbox title={props.title} onChange={props.onChange} />
+      <R_Checkbox
+        title={props.title}
+        value={props.value}
+        onChange={props.onChange}
+      />
     </label>
   );
 }

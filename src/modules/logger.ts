@@ -4,6 +4,8 @@ import { Random } from "./random";
 import { array, boolean, number, object, optional, string } from "superstruct";
 import { LOG_RECORD_LIMIT } from "./const";
 
+export type Log = (record: LogRecordInitializer) => void;
+
 export enum LogRecordType {
   OutgoingRequest,
   IncomingRequest,

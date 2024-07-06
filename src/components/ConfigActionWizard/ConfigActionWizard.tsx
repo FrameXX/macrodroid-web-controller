@@ -13,29 +13,33 @@ import { Action, ActionArgument } from "../../modules/action";
 import R_ActionArgumentInput from "../ActionArgumentInput/ActionArgumentInput";
 import { useColumnDeterminator } from "../../modules/use_column_determinator";
 import { BakeToast, Toast, ToastSeverity } from "../../modules/toaster";
+import R_StringOption from "../StringOption/StringOption";
+import R_BooleanOption from "../BooleanOption/BooleanOption";
 
 interface ConfigActionWizardProps {
   open: boolean;
   onClose: () => void;
-  onActionConfigure: (action: Action) => void;
+  onActionConfigure: (action: Action, save: boolean) => void;
   bakeToast: BakeToast;
 }
 
 export default function R_ConfigActionWizard(props: ConfigActionWizardProps) {
   // @ts-ignore
+  const [saveWithoutRunning, setSaveWithoutRunning] = useImmer(false);
+  const [actionName, setActionName] = useImmer("");
   const [activePageIndex, setActivePageIndex] = useImmer(0);
   const [filterValue, setFilterValue] = useImmer("");
   const actionsContainer = useRef(null);
-  const actionArgumentsContainer = useRef(null);
+  const actionArgsContainer = useRef(null);
   const configuredAction = useRef<Action | null>(null);
-  const [configuredArguments, setConfiguredArguments] = useImmer<
-    ActionArgument<any>[]
-  >([]);
+  const [configuredArgs, setConfiguredArgs] = useImmer<ActionArgument<any>[]>(
+    [],
+  );
 
   const actionsColumns = useColumnDeterminator(actionsContainer, ACTIONS, 270);
-  const actionArgumentsColumns = useColumnDeterminator(
-    actionArgumentsContainer,
-    configuredArguments,
+  const actionArgsColumns = useColumnDeterminator(
+    actionArgsContainer,
+    configuredArgs,
     400,
   );
 
@@ -48,13 +52,14 @@ export default function R_ConfigActionWizard(props: ConfigActionWizardProps) {
 
   function selectAction(action: Action) {
     configuredAction.current = structuredClone(action);
-    setConfiguredArguments(configuredAction.current.arguments);
+    setConfiguredArgs(configuredAction.current.args);
+    setActionName(configuredAction.current.name);
     setActivePageIndex(1);
   }
 
   function clearActionSelection() {
     configuredAction.current = null;
-    setConfiguredArguments([]);
+    setConfiguredArgs([]);
   }
 
   function previousPage() {
@@ -65,13 +70,14 @@ export default function R_ConfigActionWizard(props: ConfigActionWizardProps) {
   function shouldArgumentBeRendered(argument: ActionArgument<any>): boolean {
     if (!argument.useCondition) return true;
     return (
-      configuredArguments[argument.useCondition.argumentIndex].value ===
+      configuredArgs[argument.useCondition.argumentIndex].value ===
       argument.useCondition.argumentValue
     );
   }
 
   function onActionConfigurationConfirm() {
-    props.onActionConfigure(configuredAction.current!);
+    configuredAction.current!.name = actionName;
+    props.onActionConfigure(configuredAction.current!, saveWithoutRunning);
     props.bakeToast(
       new Toast("Action configured.", "play", ToastSeverity.Success),
     );
@@ -81,6 +87,7 @@ export default function R_ConfigActionWizard(props: ConfigActionWizardProps) {
   function reset() {
     clearActionSelection();
     setActivePageIndex(0);
+    setSaveWithoutRunning(false);
   }
 
   return (
@@ -122,21 +129,21 @@ export default function R_ConfigActionWizard(props: ConfigActionWizardProps) {
           </motion.div>
         </>,
         <>
-          <h2>{`Enter action arguments - ${configuredAction.current?.name}`}</h2>
+          <h2>{`Enter action args - ${configuredAction.current?.name}`}</h2>
           <motion.div
-            id="action-arguments"
-            animate={{ columns: actionArgumentsColumns }}
-            ref={actionArgumentsContainer}
+            id="action-args"
+            animate={{ columns: actionArgsColumns }}
+            ref={actionArgsContainer}
           >
             {configuredAction.current && (
               <AnimatePresence>
-                {configuredArguments.map(
+                {configuredArgs.map(
                   (argument, index) =>
                     shouldArgumentBeRendered(argument) && (
                       <R_ActionArgumentInput
                         onChange={(newValue) => {
-                          setConfiguredArguments((configuredArguments) => {
-                            configuredArguments[index].value = newValue;
+                          setConfiguredArgs((configuredArgs) => {
+                            configuredArgs[index].value = newValue;
                           });
                         }}
                         key={`${configuredAction.current?.id}-${index}`}
@@ -147,6 +154,25 @@ export default function R_ConfigActionWizard(props: ConfigActionWizardProps) {
               </AnimatePresence>
             )}
           </motion.div>
+        </>,
+        <>
+          <h2>Extra options</h2>
+          <R_BooleanOption
+            value={saveWithoutRunning}
+            title="Save without running"
+            iconId="star-plus"
+            onChange={(newValue) => setSaveWithoutRunning(newValue)}
+          />
+          <R_StringOption
+            iconId="rename"
+            value={actionName}
+            type="text"
+            maxLength={40}
+            onChange={(newValue) => setActionName(newValue)}
+            placeholder="Enter configured action name"
+            title="Rename configured action"
+            description="You can rename the action to differentiate it from other actions of the same type. This is not so important if you want to just run the action and never save it."
+          />
         </>,
       ]}
       activePageIndex={activePageIndex}
@@ -178,6 +204,12 @@ export default function R_ConfigActionWizard(props: ConfigActionWizardProps) {
           />
           <R_FAB
             hidden={activePageIndex !== 1}
+            title="Next page"
+            iconId="chevron-right"
+            onClick={() => setActivePageIndex(2)}
+          />
+          <R_FAB
+            hidden={activePageIndex !== 2}
             title="Confirm action configuration"
             iconId="check"
             onClick={onActionConfigurationConfirm}

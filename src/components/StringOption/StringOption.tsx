@@ -12,7 +12,7 @@ interface DescribedInputProps {
   maxLength?: number;
   placeholder?: string;
   autoCapitalize?: string;
-  onChange?: React.ChangeEventHandler<HTMLInputElement>;
+  onChange?: (newValue: string, validity: boolean) => void;
   value?: string;
   onKeyUp?: React.KeyboardEventHandler<HTMLInputElement>;
   description?: ReactNode;
@@ -32,7 +32,10 @@ const R_StringOption = forwardRef<HTMLInputElement, DescribedInputProps>(
             ref={ref}
             onKeyUp={props.onKeyUp}
             value={props.value}
-            onChange={props.onChange}
+            onChange={(event) => {
+              if (props.onChange)
+                props.onChange(event.target.value, event.target.validity.valid);
+            }}
             pattern={props.pattern}
             maxLength={props.maxLength}
             required={props.required}

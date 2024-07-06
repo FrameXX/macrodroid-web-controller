@@ -8,24 +8,43 @@ import { BakeToast } from "../../modules/toaster";
 import { AnimatePresence } from "framer-motion";
 import R_ConfiguredActionCard from "../ConfiguredActionCard/ConfiguredActionCard";
 import "./Actions.scss";
+import { OutgoingRequest } from "../../modules/outgoing_request";
+import { Log } from "../../modules/logger";
 
 interface ActionsProps {
   bakeToast: BakeToast;
+  log: Log;
 }
 
 export default function R_Actions(props: ActionsProps) {
   const [configActionWizardOpen, setConfigActionWizardOpen] = useImmer(false);
-  const [configuredActions, setConfiguredActions] = useImmer<Action[]>([]);
+  const [runActions, setRunActions] = useImmer<Action[]>([]);
+  const [savedActions, setSavedActions] = useImmer<Action[]>([]);
 
-  function onActionConfigure(action: Action) {
+  function onActionConfigure(action: Action, save: boolean) {
     setConfigActionWizardOpen(false);
-    addConfiguredAction(action);
+    if (save) {
+      addSavedAction(action);
+    } else {
+      addRunAction(action);
+    }
   }
 
-  function addConfiguredAction(action: Action) {
-    setConfiguredActions((configuredActions) => {
+  function runAction(action: Action) {
+    const request = OutgoingRequest.runAction(action);
+  }
+
+  function addRunAction(action: Action) {
+    setRunActions((configuredActions) => {
       configuredActions.push(action);
       return configuredActions;
+    });
+  }
+
+  function addSavedAction(action: Action) {
+    setSavedActions((savedActions) => {
+      savedActions.push(action);
+      return savedActions;
     });
   }
 
@@ -34,13 +53,13 @@ export default function R_Actions(props: ActionsProps) {
       <R_Category defaultOpen name="Saved" iconId="star">
         <R_IconNotice>No actions saved</R_IconNotice>
       </R_Category>
-      <R_Category defaultOpen name="Configured" iconId="cog">
-        <R_IconNotice hidden={configuredActions.length > 0}>
-          No actions configured
+      <R_Category defaultOpen name="Recently run" iconId="history">
+        <R_IconNotice hidden={runAction.length > 0}>
+          No actions run
         </R_IconNotice>
         <div id="configured-actions">
           <AnimatePresence>
-            {configuredActions.map((action) => (
+            {runActions.map((action) => (
               <R_ConfiguredActionCard
                 key={action.id}
                 name={action.name}

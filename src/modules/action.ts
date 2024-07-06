@@ -4,7 +4,7 @@ export const ActionStruct = object({
   id: string(),
   name: string(),
   iconId: string(),
-  arguments: array(
+  args: array(
     object({
       name: string(),
       description: optional(string()),
@@ -49,6 +49,6 @@ export interface Action {
   id: string;
   name: string;
   iconId: string;
-  arguments: ActionArgument<any>[];
+  args: ActionArgument<any>[];
   keywords: string[];
 }

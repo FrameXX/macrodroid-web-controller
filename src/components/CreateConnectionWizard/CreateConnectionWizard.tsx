@@ -12,7 +12,7 @@ import { Connection } from "../../modules/connection";
 import { IncomingRequest } from "../../modules/incoming_request";
 import { useImmer } from "use-immer";
 import { OutgoingRequest } from "../../modules/outgoing_request";
-import { LogRecordInitializer, LogRecordType } from "../../modules/logger";
+import { Log, LogRecordType } from "../../modules/logger";
 import "./CreateConnectionWizard.scss";
 import { useRef } from "react";
 
@@ -21,7 +21,7 @@ interface AddConnectionWizardProps {
   bakeToast: BakeToast;
   onClose: () => void;
   onConnectionConfirm: (connection: Connection) => void;
-  log: (record: LogRecordInitializer) => void;
+  log: Log;
   reportConnectionActivity: (connection: Connection) => void;
 }
 
@@ -235,9 +235,9 @@ export default function R_CreateConnectionWizard(
             <R_StringOption
               iconId="rename"
               ref={connectionNameInput}
-              onChange={(event) => {
-                setConnectionName(event.target.value);
-                setConnectionNameValid(event.target.validity.valid);
+              onChange={(newValue, validity) => {
+                setConnectionName(newValue);
+                setConnectionNameValid(validity);
               }}
               onKeyUp={(event) => {
                 if (event.key === "Enter" && webhookIdInput.current)
@@ -254,9 +254,9 @@ export default function R_CreateConnectionWizard(
             <R_StringOption
               iconId="webhook"
               ref={webhookIdInput}
-              onChange={(event) => {
-                setWebhookId(event.target.value);
-                setWebhookIdValid(event.target.validity.valid);
+              onChange={(newValue, validity) => {
+                setWebhookId(newValue);
+                setWebhookIdValid(validity);
               }}
               onKeyUp={(event) => {
                 if (event.key === "Enter" && !cantNextPage()) nextPage();
