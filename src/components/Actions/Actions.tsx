@@ -51,7 +51,20 @@ export default function R_Actions(props: ActionsProps) {
   return (
     <>
       <R_Category defaultOpen name="Saved" iconId="star">
-        <R_IconNotice>No actions saved</R_IconNotice>
+        <R_IconNotice hidden={savedActions.length > 0}>
+          No actions saved
+        </R_IconNotice>
+        <div id="saved-actions">
+          <AnimatePresence>
+            {savedActions.map((action) => (
+              <R_ConfiguredActionCard
+                key={action.id}
+                name={action.name}
+                iconId={action.iconId}
+              />
+            ))}
+          </AnimatePresence>
+        </div>
       </R_Category>
       <R_Category defaultOpen name="Recently run" iconId="history">
         <R_IconNotice hidden={runAction.length > 0}>
