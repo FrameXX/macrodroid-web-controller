@@ -20,7 +20,9 @@ export default function R_Nav(props: NavProps) {
     props.onTabSwitch(newId);
   }
 
-  const wideScreen = useInnerSize();
+  const wideScreen = useInnerSize(
+    () => innerWidth > innerHeight && innerHeight > 500,
+  );
 
   const animate: Target = wideScreen
     ? {

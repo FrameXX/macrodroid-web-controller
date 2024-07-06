@@ -6,6 +6,7 @@
   background: var(--color-surface);
   inset: 0;
   box-sizing: border-box;
+  z-index: var(--z-index-top);
 
   .content {
     height: 100%;

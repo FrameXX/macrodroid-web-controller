@@ -4,6 +4,7 @@
   margin: auto;
   margin-bottom: 12px;
   padding: 10px;
+  gap: 10px;
   box-sizing: border-box;
 }
 
@@ -21,4 +22,9 @@
 
 @mixin clickable {
   cursor: pointer;
+}
+
+@mixin button-colors {
+  background: var(--color-action);
+  color: var(--color-primary-item);
 }

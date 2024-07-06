@@ -6,7 +6,8 @@ import R_ConfigActionWizard from "../ConfigActionWizard/ConfigActionWizard";
 import { Action } from "../../modules/action";
 import { BakeToast } from "../../modules/toaster";
 import { AnimatePresence } from "framer-motion";
-import R_ActionCard from "../ActionCard/ActionCard";
+import R_ConfiguredActionCard from "../ConfiguredActionCard/ConfiguredActionCard";
+import "./Actions.scss";
 
 interface ActionsProps {
   bakeToast: BakeToast;
@@ -33,14 +34,14 @@ export default function R_Actions(props: ActionsProps) {
       <R_Category defaultOpen name="Saved" iconId="star">
         <R_IconNotice>No actions saved</R_IconNotice>
       </R_Category>
-      <R_Category defaultOpen name="Configured" iconId="history">
+      <R_Category defaultOpen name="Configured" iconId="cog">
         <R_IconNotice hidden={configuredActions.length > 0}>
           No actions configured
         </R_IconNotice>
         <div id="configured-actions">
           <AnimatePresence>
             {configuredActions.map((action) => (
-              <R_ActionCard
+              <R_ConfiguredActionCard
                 key={action.id}
                 name={action.name}
                 iconId={action.iconId}

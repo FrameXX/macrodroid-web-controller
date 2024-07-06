@@ -34,7 +34,7 @@ export default function R_Accordion(requiredProps: AccordionProps) {
       className={`accordeon ${props.className}`}
       animate={animate}
     >
-      {requiredProps.children}
+      {props.children}
     </motion.div>
   );
 }

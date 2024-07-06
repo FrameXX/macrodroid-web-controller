@@ -1,15 +1,14 @@
 @use "../../partials/mixins" as *;
 
-.select-option {
+.configured-action-card {
   @include card;
+  background-color: var(--color-surface-top);
   display: flex;
   align-items: center;
-  background-color: var(--color-surface-top);
+  width: 100%;
   max-width: var(--tab-items-max-width);
 
-  h3 {
-    margin: 0;
+  .name {
     width: 100%;
-    text-align: left;
   }
 }

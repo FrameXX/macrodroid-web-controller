@@ -20,7 +20,6 @@ export default function R_ActionCard(props: ActionCardProps) {
       initial={ANIMATE_SCALE_UNMOUNTED}
       animate={ANIMATE_SCALE_MOUNTED}
       exit={ANIMATE_SCALE_UNMOUNTED}
-      type="button"
       title={props.name}
       className="action-card"
     >

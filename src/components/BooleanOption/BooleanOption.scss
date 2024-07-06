@@ -1,14 +1,11 @@
+@use "../../partials/mixins" as *;
+
 .boolean-option {
+  @include card;
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 12px;
   background-color: var(--color-surface-top);
   max-width: var(--tab-items-max-width);
-  margin: auto;
-  margin-bottom: 12px;
-  border-radius: var(--border-radius);
-  box-shadow: var(--box-shadow);
 
   h3 {
     margin: 0;

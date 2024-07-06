@@ -1,4 +1,4 @@
-@use "./partials/mixins";
+@use "./partials/mixins" as *;
 @use "./partials/splashscreen";
 @use "./partials/fonts";
 @use "./partials/colors";
@@ -134,7 +134,7 @@ strong {
 }
 
 select {
-  background-color: transparent;
+  @include button-colors;
   outline: none;
   border: none;
   font-weight: bold;
@@ -145,7 +145,6 @@ select {
   background-position: right;
   border-right: 8px solid transparent;
   background-size: 15%;
-  background-color: var(--color-primary);
   box-shadow: var(--box-shadow);
   border-radius: var(--border-radius);
   background-image: url("./assets/img/dropdown.svg");

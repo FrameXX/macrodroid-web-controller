@@ -2,7 +2,6 @@ import { useEffect } from "react";
 import { useImmer } from "use-immer";
 import "./Checkbox.scss";
 import { Target, motion } from "framer-motion";
-import { DEFAULT_TRANSITION_UNMOUNTED_SCALE } from "../../modules/const";
 
 interface CheckboxProps {
   title: string;

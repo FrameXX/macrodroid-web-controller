@@ -1,6 +1,7 @@
+@use "../../partials/mixins" as *;
+
 .button {
-  background: var(--color-primary);
-  color: var(--color-primary-item);
+  @include button-colors;
   border-radius: var(--border-radius);
   box-shadow: var(--box-shadow);
   display: flex;

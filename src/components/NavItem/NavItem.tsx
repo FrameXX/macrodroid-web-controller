@@ -21,7 +21,9 @@ interface NavItemProps {
  * @return {JSX.Element} The rendered navigation item.
  */
 export default function R_NavItem(props: NavItemProps) {
-  const wideScreen = useInnerSize();
+  const wideScreen = useInnerSize(
+    () => innerWidth > innerHeight && innerHeight > 500,
+  );
   const animate: Target = {
     color: props.active
       ? "var(--color-primary-item)"
