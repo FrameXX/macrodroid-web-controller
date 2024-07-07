@@ -1,5 +1,5 @@
 import { forwardRef, useRef } from "react";
-import useDefaultProps from "../../modules/use_default_props";
+import { useDefaultProps } from "../../modules/use_default_props";
 
 interface SearchInputProps {
   onSearch: (value: string) => void;
@@ -11,7 +11,7 @@ const defaultProps: Partial<SearchInputProps> = {
   throttleMs: 200,
 };
 
-const R_SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(
+export const R_SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(
   (requiredProps, ref) => {
     const props = useDefaultProps(requiredProps, defaultProps);
     const inputTimeout = useRef(0);
@@ -33,5 +33,3 @@ const R_SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(
     );
   },
 );
-
-export default R_SearchInput;

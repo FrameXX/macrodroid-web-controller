@@ -1,6 +1,6 @@
 import { AnimatePresence } from "framer-motion";
 import { Toast } from "../../modules/toaster";
-import R_Toast from "../Toast/Toast";
+import { R_Toast } from "../Toast/Toast";
 import "./Toaster.scss";
 
 interface ToasterProps {
@@ -16,7 +16,7 @@ interface ToasterProps {
  * @param {(id: number) => any} props.onToastClick - The function to call when a toast is clicked.
  * @return {JSX.Element} The rendered toaster component.
  */
-export default function R_Toaster(props: ToasterProps) {
+export function R_Toaster(props: ToasterProps) {
   return (
     <div className="toaster">
       <AnimatePresence>

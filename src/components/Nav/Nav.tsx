@@ -1,7 +1,7 @@
-import R_NavItem from "../NavItem/NavItem";
+import { R_NavItem } from "../NavItem/NavItem";
 import "./Nav.scss";
 import { Target, motion } from "framer-motion";
-import useInnerSize from "../../modules/use_inner_size";
+import { useInnerSize } from "../../modules/use_inner_size";
 
 export enum NavTabId {
   Connections,
@@ -15,7 +15,7 @@ interface NavProps {
   onTabSwitch: (newNavTabId: NavTabId) => void;
 }
 
-export default function R_Nav(props: NavProps) {
+export function R_Nav(props: NavProps) {
   function swicthTab(newId: NavTabId) {
     props.onTabSwitch(newId);
   }

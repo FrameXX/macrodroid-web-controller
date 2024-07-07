@@ -7,7 +7,7 @@ interface TabProps extends PropsWithChildren {
   active: boolean;
 }
 
-const R_Tab = forwardRef<HTMLDivElement, TabProps>((props, ref) => {
+export const R_Tab = forwardRef<HTMLDivElement, TabProps>((props, ref) => {
   const animate: Target = props.active
     ? {}
     : { y: -DEFAULT_TRANSITION_OFFSET, opacity: 0, display: "none" };
@@ -20,5 +20,3 @@ const R_Tab = forwardRef<HTMLDivElement, TabProps>((props, ref) => {
     </motion.section>
   );
 });
-
-export default R_Tab;

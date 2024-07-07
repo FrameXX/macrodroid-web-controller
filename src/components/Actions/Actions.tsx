@@ -1,12 +1,12 @@
 import { useImmer } from "use-immer";
-import R_Category from "../Category/Category";
-import R_FAB from "../FAB/FAB";
-import R_IconNotice from "../IconNotice/IconNotice";
-import R_ConfigActionWizard from "../ConfigActionWizard/ConfigActionWizard";
+import { R_Category } from "../Category/Category";
+import { R_FAB } from "../FAB/FAB";
+import { R_IconNotice } from "../IconNotice/IconNotice";
+import { R_ConfigActionWizard } from "../ConfigActionWizard/ConfigActionWizard";
 import { Action } from "../../modules/action";
 import { BakeToast } from "../../modules/toaster";
 import { AnimatePresence } from "framer-motion";
-import R_ConfiguredActionCard from "../ConfiguredActionCard/ConfiguredActionCard";
+import { R_ConfiguredActionCard } from "../ConfiguredActionCard/ConfiguredActionCard";
 import "./Actions.scss";
 import { OutgoingRequest } from "../../modules/outgoing_request";
 import { Log } from "../../modules/logger";
@@ -16,7 +16,7 @@ interface ActionsProps {
   log: Log;
 }
 
-export default function R_Actions(props: ActionsProps) {
+export function R_Actions(props: ActionsProps) {
   const [configActionWizardOpen, setConfigActionWizardOpen] = useImmer(false);
   const [runActions, setRunActions] = useImmer<Action[]>([]);
   const [savedActions, setSavedActions] = useImmer<Action[]>([]);
@@ -31,6 +31,7 @@ export default function R_Actions(props: ActionsProps) {
   }
 
   function runAction(action: Action) {
+    // @ts-ignore
     const request = OutgoingRequest.runAction(action);
   }
 

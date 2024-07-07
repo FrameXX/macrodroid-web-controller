@@ -1,5 +1,5 @@
-import useInnerSize from "../../modules/use_inner_size";
-import R_Icon from "../Icon/Icon";
+import { useInnerSize } from "../../modules/use_inner_size";
+import { R_Icon } from "../Icon/Icon";
 import "./NavItem.scss";
 import { Target, motion } from "framer-motion";
 
@@ -20,7 +20,7 @@ interface NavItemProps {
  * @param {() => any} props.onClick - The function to call when the navigation item is clicked.
  * @return {JSX.Element} The rendered navigation item.
  */
-export default function R_NavItem(props: NavItemProps) {
+export function R_NavItem(props: NavItemProps) {
   const wideScreen = useInnerSize(
     () => innerWidth > innerHeight && innerHeight > 500,
   );

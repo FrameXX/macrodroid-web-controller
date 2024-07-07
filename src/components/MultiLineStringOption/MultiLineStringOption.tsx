@@ -1,7 +1,7 @@
 import { ReactNode, forwardRef } from "react";
 import { Random } from "../../modules/random";
 import "./MultiLineStringOption.scss";
-import R_Icon from "../Icon/Icon";
+import { R_Icon } from "../Icon/Icon";
 
 interface DescribedInputProps {
   iconId?: string;
@@ -17,7 +17,7 @@ interface DescribedInputProps {
   title: string;
 }
 
-const R_MultiLineStringOption = forwardRef<
+export const R_MultiLineStringOption = forwardRef<
   HTMLTextAreaElement,
   DescribedInputProps
 >((props, ref) => {
@@ -49,5 +49,3 @@ const R_MultiLineStringOption = forwardRef<
     </label>
   );
 });
-
-export default R_MultiLineStringOption;

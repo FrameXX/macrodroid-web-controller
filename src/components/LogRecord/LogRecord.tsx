@@ -1,10 +1,10 @@
 import { motion } from "framer-motion";
-import R_Icon from "../Icon/Icon";
+import { R_Icon } from "../Icon/Icon";
 import "./LogRecord.scss";
 import { generateReadableTimestamp } from "../../modules/readable_timestamp";
 import { DEFAULT_TRANSITION_OFFSET } from "../../modules/const";
-import R_Button from "../Button/Button";
-import R_Accordion from "../Accordion/Accordion";
+import { R_Button } from "../Button/Button";
+import { R_Accordion } from "../Accordion/Accordion";
 import { useImmer } from "use-immer";
 import { LogRecord, LogRecordType } from "../../modules/logger";
 
@@ -15,7 +15,7 @@ interface LogRecordProps {
   onCommentClick?: () => void;
 }
 
-export default function R_LogRecord(props: LogRecordProps) {
+export function R_LogRecord(props: LogRecordProps) {
   const iconIdMap = {
     [LogRecordType.OutgoingRequest]: "arrow-right-thick",
     [LogRecordType.IncomingRequest]: "arrow-left-thick",

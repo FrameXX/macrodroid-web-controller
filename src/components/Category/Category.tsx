@@ -1,7 +1,7 @@
 import { PropsWithChildren } from "react";
 import "./Category.scss";
-import R_Accordion from "../Accordion/Accordion";
-import R_Icon from "../Icon/Icon";
+import { R_Accordion } from "../Accordion/Accordion";
+import { R_Icon } from "../Icon/Icon";
 import { useImmer } from "use-immer";
 
 interface CategoryProps extends PropsWithChildren {
@@ -10,7 +10,7 @@ interface CategoryProps extends PropsWithChildren {
   defaultOpen?: boolean;
 }
 
-export default function R_Category(props: CategoryProps) {
+export function R_Category(props: CategoryProps) {
   const defaultOpen = props.defaultOpen ? props.defaultOpen : false;
   const [open, setOpen] = useImmer(defaultOpen);
 

@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import R_App from "./App.tsx";
+import { R_App } from "./App.tsx";
 import { hideSplashscreen } from "./modules/elements.ts";
 import { MotionConfig } from "framer-motion";
 import { SPLASHSCREEN_TIMEOUT_MS, TRANSITIONS } from "./modules/const.ts";

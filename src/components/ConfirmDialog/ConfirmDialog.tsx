@@ -1,7 +1,7 @@
 import { Target, motion } from "framer-motion";
-import R_Icon from "../Icon/Icon";
+import { R_Icon } from "../Icon/Icon";
 import "./ConfirmDialog.scss";
-import R_Button from "../Button/Button";
+import { R_Button } from "../Button/Button";
 import {
   DEFAULT_TRANSITION_DURATION_S,
   DEFAULT_TRANSITION_OFFSET,
@@ -15,7 +15,7 @@ interface ConfirmDialogProps {
   onCancel: () => void;
 }
 
-export default function R_ConfirmDialog(props: ConfirmDialogProps) {
+export function R_ConfirmDialog(props: ConfirmDialogProps) {
   const animateDialog: Target = props.open
     ? { opacity: 1, y: 0 }
     : { display: "none", opacity: 0, y: -DEFAULT_TRANSITION_OFFSET };

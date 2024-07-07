@@ -3,7 +3,7 @@ import "./ConnectionCard.scss";
 import { generateReadableTimestamp } from "../../modules/readable_timestamp";
 import { generateReadableTimeDifference } from "../../modules/readable_time_difference";
 import { useUpdateInterval } from "../../modules/use_update_interval";
-import R_Button from "../Button/Button";
+import { R_Button } from "../Button/Button";
 import { motion } from "framer-motion";
 import {
   ANIMATE_SCALE_MOUNTED,
@@ -16,7 +16,7 @@ interface ConnectionProps {
   onPoke: () => void;
 }
 
-export default function R_Connection(props: ConnectionProps) {
+export function R_Connection(props: ConnectionProps) {
   useUpdateInterval(60000);
 
   return (

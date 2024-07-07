@@ -1,20 +1,20 @@
 import { useImmer } from "use-immer";
-import R_Wizard from "../Wizard/Wizard";
-import R_FAB from "../FAB/FAB";
+import { R_Wizard } from "../Wizard/Wizard";
+import { R_FAB } from "../FAB/FAB";
 import { ACTIONS } from "../../modules/const";
-import R_ActionCard from "../ActionCard/ActionCard";
+import { R_ActionCard } from "../ActionCard/ActionCard";
 import { AnimatePresence, motion } from "framer-motion";
 import "./ConfigActionWizard.scss";
 import { useMemo, useRef } from "react";
-import R_Icon from "../Icon/Icon";
-import R_SearchInput from "../SearchInput/SearchInput";
-import R_IconNotice from "../IconNotice/IconNotice";
+import { R_Icon } from "../Icon/Icon";
+import { R_SearchInput } from "../SearchInput/SearchInput";
+import { R_IconNotice } from "../IconNotice/IconNotice";
 import { Action, ActionArgument } from "../../modules/action";
-import R_ActionArgumentInput from "../ActionArgumentInput/ActionArgumentInput";
+import { R_ActionArgumentInput } from "../ActionArgumentInput/ActionArgumentInput";
 import { useColumnDeterminator } from "../../modules/use_column_determinator";
 import { BakeToast, Toast, ToastSeverity } from "../../modules/toaster";
-import R_StringOption from "../StringOption/StringOption";
-import R_BooleanOption from "../BooleanOption/BooleanOption";
+import { R_StringOption } from "../StringOption/StringOption";
+import { R_BooleanOption } from "../BooleanOption/BooleanOption";
 
 interface ConfigActionWizardProps {
   open: boolean;
@@ -23,7 +23,7 @@ interface ConfigActionWizardProps {
   bakeToast: BakeToast;
 }
 
-export default function R_ConfigActionWizard(props: ConfigActionWizardProps) {
+export function R_ConfigActionWizard(props: ConfigActionWizardProps) {
   // @ts-ignore
   const [saveWithoutRunning, setSaveWithoutRunning] = useImmer(false);
   const [actionName, setActionName] = useImmer("");

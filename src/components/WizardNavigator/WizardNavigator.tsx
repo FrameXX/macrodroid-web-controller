@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import R_WizardNavigatorIndicator from "../WizardNavigatorIndicator/WizardNavigatorIndicator";
+import { R_WizardNavigatorIndicator } from "../WizardNavigatorIndicator/WizardNavigatorIndicator";
 import "./WizardNavigator.scss";
 
 interface WizardNavigatorProps {
@@ -9,7 +9,7 @@ interface WizardNavigatorProps {
   activePageIndex: number;
 }
 
-export default function R_WizardNavigator(props: WizardNavigatorProps) {
+export function R_WizardNavigator(props: WizardNavigatorProps) {
   return (
     <div className="wizard-navigator">
       <div className="filler">{props.leftButton}</div>

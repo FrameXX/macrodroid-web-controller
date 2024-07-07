@@ -1,9 +1,9 @@
 import { ActionArgument, ActionArgumentType } from "../../modules/action";
-import R_BooleanOption from "../BooleanOption/BooleanOption";
-import R_NumberOption from "../NumberOption/NumberOption";
-import R_MultiLineStringOption from "../MultiLineStringOption/MultiLineStringOption";
-import R_SelectOption from "../SelectOption/SelectOption";
-import R_StringOption from "../StringOption/StringOption";
+import { R_BooleanOption } from "../BooleanOption/BooleanOption";
+import { R_NumberOption } from "../NumberOption/NumberOption";
+import { R_MultiLineStringOption } from "../MultiLineStringOption/MultiLineStringOption";
+import { R_SelectOption } from "../SelectOption/SelectOption";
+import { R_StringOption } from "../StringOption/StringOption";
 import "./ActionArgumentInput.scss";
 import { motion } from "framer-motion";
 import {
@@ -16,7 +16,7 @@ interface ActionArgumentInputProps {
   onChange: (value: any) => void;
 }
 
-export default function R_ActionArgumentInput(props: ActionArgumentInputProps) {
+export function R_ActionArgumentInput(props: ActionArgumentInputProps) {
   function renderArgument() {
     switch (props.argument.type) {
       case ActionArgumentType.Boolean:
@@ -75,7 +75,7 @@ export default function R_ActionArgumentInput(props: ActionArgumentInputProps) {
 
   return (
     <motion.div
-    className="action-argument-input"
+      className="action-argument-input"
       layout
       initial={ANIMATE_SCALE_UNMOUNTED}
       animate={ANIMATE_SCALE_MOUNTED}

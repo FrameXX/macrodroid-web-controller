@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-function useResizeObserver(
+export function useResizeObserver(
   elementRef: React.MutableRefObject<HTMLElement | null>,
   checkMeetsConditions: (width: number, height: number) => boolean = (
     width,
@@ -32,5 +32,3 @@ function useResizeObserver(
 
   return meetsConditions;
 }
-
-export default useResizeObserver;

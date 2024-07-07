@@ -1,7 +1,7 @@
 import { ReactNode } from "react";
 import "./Wizard.scss";
 import { Target, motion } from "framer-motion";
-import R_WizardNavigator from "../WizardNavigator/WizardNavigator";
+import { R_WizardNavigator } from "../WizardNavigator/WizardNavigator";
 import { DEFAULT_TRANSITION_OFFSET } from "../../modules/const";
 
 interface WizardProps {
@@ -13,7 +13,7 @@ interface WizardProps {
   id?: string;
 }
 
-export default function R_Wizard(props: WizardProps) {
+export function R_Wizard(props: WizardProps) {
   const pageCount = props.pages.length;
   if (props.activePageIndex < 0 || props.activePageIndex >= pageCount)
     throw new RangeError("Active page index does not match page count.");

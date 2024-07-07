@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-function useInnerSize(checkMeetsConditions: () => boolean) {
+export function useInnerSize(checkMeetsConditions: () => boolean) {
   const [meetsConditions, setMeetsConditions] =
     useState<boolean>(checkMeetsConditions);
 
@@ -17,5 +17,3 @@ function useInnerSize(checkMeetsConditions: () => boolean) {
 
   return meetsConditions;
 }
-
-export default useInnerSize;

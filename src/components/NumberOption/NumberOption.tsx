@@ -1,4 +1,4 @@
-import R_Icon from "../Icon/Icon";
+import { R_Icon } from "../Icon/Icon";
 import "./NumberOption.scss";
 
 interface BooleanOptionProps {
@@ -8,7 +8,7 @@ interface BooleanOptionProps {
   step?: React.InputHTMLAttributes<HTMLInputElement>["step"];
 }
 
-export default function R_NumberOption(props: BooleanOptionProps) {
+export function R_NumberOption(props: BooleanOptionProps) {
   return (
     <label title={props.title} className="integer-option">
       {props.iconId && <R_Icon iconId={props.iconId} />}

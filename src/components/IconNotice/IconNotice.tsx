@@ -1,8 +1,8 @@
 import { PropsWithChildren } from "react";
-import R_Icon from "../Icon/Icon";
+import { R_Icon } from "../Icon/Icon";
 import "./IconNotice.scss";
-import useDefaultProps from "../../modules/use_default_props";
-import R_Accordion from "../Accordion/Accordion";
+import { useDefaultProps } from "../../modules/use_default_props";
+import { R_Accordion } from "../Accordion/Accordion";
 
 interface IconNoticeProps extends PropsWithChildren {
   hidden?: boolean;
@@ -14,7 +14,7 @@ const defaultProps: Partial<IconNoticeProps> = {
   iconId: "emoticon-cry",
 };
 
-export default function R_IconNotice(requiredProps: IconNoticeProps) {
+export function R_IconNotice(requiredProps: IconNoticeProps) {
   const props = useDefaultProps(requiredProps, defaultProps);
 
   return (

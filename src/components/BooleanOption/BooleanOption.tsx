@@ -1,5 +1,5 @@
-import R_Checkbox from "../Checkbox/Checkbox";
-import R_Icon from "../Icon/Icon";
+import { R_Checkbox } from "../Checkbox/Checkbox";
+import { R_Icon } from "../Icon/Icon";
 import "./BooleanOption.scss";
 
 interface BooleanOptionProps {
@@ -9,7 +9,7 @@ interface BooleanOptionProps {
   value?: boolean;
 }
 
-export default function R_BooleanOption(props: BooleanOptionProps) {
+export function R_BooleanOption(props: BooleanOptionProps) {
   return (
     <label title={props.title} className="boolean-option">
       {props.iconId && <R_Icon iconId={props.iconId} />}

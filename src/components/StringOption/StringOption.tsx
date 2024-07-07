@@ -1,7 +1,7 @@
 import { ReactNode, forwardRef } from "react";
 import { Random } from "../../modules/random";
 import "./StringOption.scss";
-import R_Icon from "../Icon/Icon";
+import { R_Icon } from "../Icon/Icon";
 
 interface DescribedInputProps {
   iconId?: string;
@@ -19,7 +19,7 @@ interface DescribedInputProps {
   title: string;
 }
 
-const R_StringOption = forwardRef<HTMLInputElement, DescribedInputProps>(
+export const R_StringOption = forwardRef<HTMLInputElement, DescribedInputProps>(
   (props, ref) => {
     const id = Random.id();
     return (
@@ -54,5 +54,3 @@ const R_StringOption = forwardRef<HTMLInputElement, DescribedInputProps>(
     );
   },
 );
-
-export default R_StringOption;

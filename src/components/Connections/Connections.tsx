@@ -1,8 +1,8 @@
 import { AnimatePresence, motion } from "framer-motion";
-import R_IconNotice from "../IconNotice/IconNotice";
-import R_Connection from "../ConnectionCard/ConnectionCard";
-import R_FAB from "../FAB/FAB";
-import R_CreateConnectionWizard from "../CreateConnectionWizard/CreateConnectionWizard";
+import { R_IconNotice } from "../IconNotice/IconNotice";
+import { R_Connection } from "../ConnectionCard/ConnectionCard";
+import { R_FAB } from "../FAB/FAB";
+import { R_CreateConnectionWizard } from "../CreateConnectionWizard/CreateConnectionWizard";
 import { Connection } from "../../modules/connection";
 import { BakeToast, Toast, ToastSeverity } from "../../modules/toaster";
 import { LogRecordInitializer } from "../../modules/logger";
@@ -20,7 +20,7 @@ interface ConnectionsProps {
   reportConnectionActivity: (connection: Connection) => void;
 }
 
-export default function R_Connections(props: ConnectionsProps) {
+export function R_Connections(props: ConnectionsProps) {
   const [addConnectionWizardOpen, setAddConnectionWizardOpen] = useImmer(false);
   const connectionsContainer = useRef(null);
 

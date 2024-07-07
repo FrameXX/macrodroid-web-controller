@@ -1,6 +1,6 @@
 import { TargetAndTransition, motion } from "framer-motion";
 import { PropsWithChildren } from "react";
-import useDefaultProps from "../../modules/use_default_props";
+import { useDefaultProps } from "../../modules/use_default_props";
 import "./Accordion.scss";
 import { DEFAULT_TRANSITION_OFFSET, TRANSITIONS } from "../../modules/const";
 
@@ -14,7 +14,7 @@ const defaultProps: Partial<AccordionProps> = {
   closedHeight: 0,
 };
 
-export default function R_Accordion(requiredProps: AccordionProps) {
+export function R_Accordion(requiredProps: AccordionProps) {
   const props = useDefaultProps(requiredProps, defaultProps);
   const fullSqueeze = props.closedHeight === 0;
 

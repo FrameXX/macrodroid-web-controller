@@ -9,7 +9,7 @@ interface CheckboxProps {
   onChange: (newValue: boolean) => void;
 }
 
-export default function R_Checkbox(props: CheckboxProps) {
+export function R_Checkbox(props: CheckboxProps) {
   const [value, setValue] = useImmer(props.value || false);
 
   useEffect(() => {

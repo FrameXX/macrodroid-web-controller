@@ -1,17 +1,17 @@
 import { useEffect, useRef } from "react";
 import { Toast, ToastSeverity, Toaster } from "./modules/toaster";
-import R_Toaster from "./components/Toaster/Toaster";
+import { R_Toaster } from "./components/Toaster/Toaster";
 import "./App.scss";
-import R_Nav from "./components/Nav/Nav";
+import { R_Nav } from "./components/Nav/Nav";
 import { NavTabId } from "./components/Nav/Nav";
-import useInnerSize from "./modules/use_inner_size";
+import { useInnerSize } from "./modules/use_inner_size";
 import { Target, motion } from "framer-motion";
 import { Connection, ConnectionStruct } from "./modules/connection";
-import R_Log from "./components/Log/Log";
+import { R_Log } from "./components/Log/Log";
 import { IncomingRequest } from "./modules/incoming_request";
-import R_Tab from "./components/Tab/Tab";
+import { R_Tab } from "./components/Tab/Tab";
 import { useImmer } from "use-immer";
-import R_ConfirmDialog from "./components/ConfirmDialog/ConfirmDialog";
+import { R_ConfirmDialog } from "./components/ConfirmDialog/ConfirmDialog";
 import {
   LogRecord,
   LogRecordInitializer,
@@ -20,13 +20,13 @@ import {
   Logger,
 } from "./modules/logger";
 import { ConfirmDialog } from "./modules/confirmDialog";
-import R_Connections from "./components/Connections/Connections";
+import { R_Connections } from "./components/Connections/Connections";
 import { useLocalStorage } from "./modules/use_local_storage";
-import R_Actions from "./components/Actions/Actions";
+import { R_Actions } from "./components/Actions/Actions";
 
 let initiated = false;
 
-function R_App() {
+export function R_App() {
   const [toasts, setToasts] = useImmer<Toast[]>([]);
   const [activeNavTabId, setActiveNavTabId] = useImmer<NavTabId>(
     NavTabId.Connections,
@@ -283,5 +283,3 @@ function R_App() {
     </>
   );
 }
-
-export default R_App;

@@ -1,6 +1,6 @@
 import { Target, motion } from "framer-motion";
-import useDefaultProps from "../../modules/use_default_props";
-import R_Icon from "../Icon/Icon";
+import { useDefaultProps } from "../../modules/use_default_props";
+import { R_Icon } from "../Icon/Icon";
 import "./FAB.scss";
 
 interface FABProps {
@@ -24,7 +24,7 @@ const defaultProps: Partial<FABProps> = { left: false, hidden: false };
  * @param {string} props.title - The title to display in the FAB.
  * @return {JSX.Element} The rendered FAB component.
  */
-export default function R_FAB(requiredProps: FABProps) {
+export function R_FAB(requiredProps: FABProps) {
   const props = useDefaultProps(requiredProps, defaultProps);
   const animate: Target = {
     scale: props.hidden ? 0 : 1,

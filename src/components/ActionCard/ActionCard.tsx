@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import R_Icon from "../Icon/Icon";
+import { R_Icon } from "../Icon/Icon";
 import "./ActionCard.scss";
 import {
   ANIMATE_SCALE_MOUNTED,
@@ -12,7 +12,7 @@ interface ActionCardProps {
   onClick?: () => void;
 }
 
-export default function R_ActionCard(props: ActionCardProps) {
+export function R_ActionCard(props: ActionCardProps) {
   return (
     <motion.button
       layout

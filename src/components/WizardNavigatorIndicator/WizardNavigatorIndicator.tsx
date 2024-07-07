@@ -7,7 +7,7 @@ interface WizardNavigatorIndicatorProps {
   activePageIndex: number;
 }
 
-export default function R_WizardNavigatorIndicator(
+export function R_WizardNavigatorIndicator(
   props: WizardNavigatorIndicatorProps,
 ) {
   if (props.activePageIndex < 0 || props.activePageIndex >= props.pageCount)

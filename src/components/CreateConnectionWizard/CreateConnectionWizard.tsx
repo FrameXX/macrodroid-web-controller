@@ -1,8 +1,8 @@
-import R_FAB from "../FAB/FAB";
-import R_TitleWithIcon from "../TitleWithIcon/TitleWithIcon";
-import R_StringOption from "../StringOption/StringOption";
+import { R_FAB } from "../FAB/FAB";
+import { R_TitleWithIcon } from "../TitleWithIcon/TitleWithIcon";
+import { R_StringOption } from "../StringOption/StringOption";
 import screenshot1Src from "../../assets/img/screenshot_1.webp";
-import R_Wizard from "../Wizard/Wizard";
+import { R_Wizard } from "../Wizard/Wizard";
 import {
   MACRODROID_APP_URL,
   SPLASHSCREEN_TIMEOUT_MS,
@@ -25,9 +25,7 @@ interface AddConnectionWizardProps {
   reportConnectionActivity: (connection: Connection) => void;
 }
 
-export default function R_CreateConnectionWizard(
-  props: AddConnectionWizardProps,
-) {
+export function R_CreateConnectionWizard(props: AddConnectionWizardProps) {
   const [activePageIndex, setActivePageIndex] = useImmer(0);
   const [connectionNameValid, setConnectionNameValid] = useImmer(false);
   const [webhookIdValid, setWebhookIdValid] = useImmer(false);

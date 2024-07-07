@@ -1,4 +1,4 @@
-import R_Icon from "../Icon/Icon";
+import { R_Icon } from "../Icon/Icon";
 import "./SelectOption.scss";
 
 interface SelectOptionProps {
@@ -8,7 +8,7 @@ interface SelectOptionProps {
   options: string[];
 }
 
-export default function R_SelectOption(props: SelectOptionProps) {
+export function R_SelectOption(props: SelectOptionProps) {
   return (
     <label title={props.title} className="boolean-option">
       {props.iconId && <R_Icon iconId={props.iconId} />}

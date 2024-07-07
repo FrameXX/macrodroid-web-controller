@@ -1,5 +1,5 @@
-import R_Icon from "../Icon/Icon";
-import useDefaultProps from "../../modules/use_default_props";
+import { R_Icon } from "../Icon/Icon";
+import { useDefaultProps } from "../../modules/use_default_props";
 import "./Button.scss";
 import { Target, motion } from "framer-motion";
 import { forwardRef } from "react";
@@ -20,7 +20,7 @@ const defaultProps: Partial<ButtonProps> = {
   iconUpsideDown: false,
 };
 
-const R_Button = forwardRef<HTMLButtonElement, ButtonProps>(
+export const R_Button = forwardRef<HTMLButtonElement, ButtonProps>(
   (requiredProps, ref) => {
     const props = useDefaultProps(requiredProps, defaultProps);
 
@@ -47,5 +47,3 @@ const R_Button = forwardRef<HTMLButtonElement, ButtonProps>(
     );
   },
 );
-
-export default R_Button;

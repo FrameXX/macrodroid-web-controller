@@ -1,6 +1,6 @@
 import { PropsWithChildren } from "react";
 import defaultSourceFilePath from "../../assets/img/icons.svg";
-import useDefaultProps from "../../modules/use_default_props";
+import { useDefaultProps } from "../../modules/use_default_props";
 import "./Icon.scss";
 import { Target, motion } from "framer-motion";
 
@@ -20,7 +20,7 @@ const defaultProps: Partial<IconProps> = {
   upsideDown: false,
 };
 
-export default function R_Icon(requiredProps: IconProps) {
+export function R_Icon(requiredProps: IconProps) {
   const props = useDefaultProps(requiredProps, defaultProps);
   const href = `${props.sourceFilePath}#${props.iconId}`;
   const animate: Target = {
