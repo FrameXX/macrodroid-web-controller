@@ -16,7 +16,7 @@ import { IncomingRequest } from "./incoming_request";
 import { LogRecordInitializer, LogRecordType } from "./logger";
 import { array, number, object, string } from "superstruct";
 
-export const ConnectionStruct = array(
+export const ConnectionsStruct = array(
   object({
     name: string(),
     webhookId: string(),

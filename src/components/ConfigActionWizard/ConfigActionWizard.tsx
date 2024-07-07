@@ -61,7 +61,6 @@ export function R_ConfigActionWizard(props: ConfigActionWizardProps) {
   }
 
   function onActionConfigurationConfirm() {
-    console.log(configuredAction.current);
     configuredAction.current!.name = actionName;
     props.onActionConfigure(configuredAction.current!, saveWithoutRunning);
     if (saveWithoutRunning)

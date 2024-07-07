@@ -3,7 +3,7 @@ import { R_Category } from "../Category/Category";
 import { R_FAB } from "../FAB/FAB";
 import { R_IconNotice } from "../IconNotice/IconNotice";
 import { R_ConfigActionWizard } from "../ConfigActionWizard/ConfigActionWizard";
-import { Action } from "../../modules/action";
+import { Action, ActionsStruct } from "../../modules/action";
 import { BakeToast } from "../../modules/toaster";
 import { AnimatePresence } from "framer-motion";
 import { R_ConfiguredActionCard } from "../ConfiguredActionCard/ConfiguredActionCard";
@@ -12,11 +12,13 @@ import { OutgoingRequest } from "../../modules/outgoing_request";
 import { Log } from "../../modules/logger";
 import { Connection } from "../../modules/connection";
 import { R_RunActionWizard } from "../RunActionWizard/RunActionWizard";
+import { useLocalStorage } from "../../modules/use_local_storage";
 
 interface ActionsProps {
   bakeToast: BakeToast;
   log: Log;
   connections: Connection[];
+  onRecoverError: (errorMessage: string, name: string) => void;
 }
 
 export function R_Actions(props: ActionsProps) {
@@ -25,6 +27,26 @@ export function R_Actions(props: ActionsProps) {
   const [recentlyRunActions, setRunActions] = useImmer<Action[]>([]);
   const [savedActions, setSavedActions] = useImmer<Action[]>([]);
   const [runAction, setRunAction] = useImmer<Action | null>(null);
+  const [runActionWizardSkipArgs, setRunActionWizardSkipArgs] = useImmer(false);
+
+  useLocalStorage(savedActions, setSavedActions, {
+    storageKey: "savedActions",
+    struct: ActionsStruct,
+    stringify: JSON.stringify,
+    parse: JSON.parse,
+    onRecoverError: (errorMessage) => {
+      props.onRecoverError(errorMessage, "saved actions");
+    },
+  });
+  useLocalStorage(recentlyRunActions, setRunActions, {
+    storageKey: "recentlyRunActions",
+    struct: ActionsStruct,
+    stringify: JSON.stringify,
+    parse: JSON.parse,
+    onRecoverError: (errorMessage) => {
+      props.onRecoverError(errorMessage, "recently run actions");
+    },
+  });
 
   function onActionConfigure(action: Action, save: boolean) {
     if (save) {
@@ -33,13 +55,17 @@ export function R_Actions(props: ActionsProps) {
     } else {
       // Action has to be copyed so that the ConfigActionWizard can still modify its version.
       setRunAction(structuredClone(action));
+      setRunActionWizardSkipArgs(true);
       setRunActionWizardOpen(true);
     }
   }
 
+  // @ts-ignore
   function dispatchAction(action: Action, connections: Connection[]) {
     setConfigActionWizardOpen(false);
     setRunActionWizardOpen(false);
+    setRunActionWizardSkipArgs(false);
+    // @ts-ignore
     const request = OutgoingRequest.runAction(action);
     addRunAction(action);
   }
@@ -104,6 +130,7 @@ export function R_Actions(props: ActionsProps) {
         onActionConfigure={onActionConfigure}
       />
       <R_RunActionWizard
+        skipArgs={runActionWizardSkipArgs}
         open={runActionWizardOpen}
         connections={props.connections}
         onCancel={() => setRunActionWizardOpen(false)}

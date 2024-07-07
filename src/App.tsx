@@ -6,7 +6,7 @@ import { R_Nav } from "./components/Nav/Nav";
 import { NavTabId } from "./components/Nav/Nav";
 import { useInnerSize } from "./modules/use_inner_size";
 import { Target, motion } from "framer-motion";
-import { Connection, ConnectionStruct } from "./modules/connection";
+import { Connection, ConnectionsStruct } from "./modules/connection";
 import { R_Log } from "./components/Log/Log";
 import { IncomingRequest } from "./modules/incoming_request";
 import { R_Tab } from "./components/Tab/Tab";
@@ -23,6 +23,7 @@ import { ConfirmDialog } from "./modules/confirmDialog";
 import { R_Connections } from "./components/Connections/Connections";
 import { useLocalStorage } from "./modules/use_local_storage";
 import { R_Actions } from "./components/Actions/Actions";
+import { enums } from "superstruct";
 
 let initiated = false;
 
@@ -51,7 +52,7 @@ export function R_App() {
     (connections) => connections.forEach(addConnection),
     {
       storageKey: "connections",
-      struct: ConnectionStruct,
+      struct: ConnectionsStruct,
       stringify: (connections) =>
         JSON.stringify(connections.map((connection) => connection.rawObject)),
       parse: JSON.parse,
@@ -70,6 +71,20 @@ export function R_App() {
         ),
     },
   );
+  useLocalStorage(activeNavTabId, setActiveNavTabId, {
+    storageKey: "activeNavTabId",
+    struct: enums([
+      NavTabId.Connections,
+      NavTabId.Log,
+      NavTabId.Actions,
+      NavTabId.Extras,
+    ]),
+    stringify: (activeNavTabId) => activeNavTabId.toString(),
+    parse: (activeNavTabId) => +activeNavTabId,
+    onRecoverError: (errorMessage) => {
+      onRecoverError(errorMessage, "active navigation tab");
+    },
+  });
 
   const toaster = useRef(new Toaster(setToasts));
   const logger = useRef(new Logger(setLogRecords, logRecords));
@@ -249,6 +264,7 @@ export function R_App() {
           </R_Tab>
           <R_Tab active={activeNavTabId === NavTabId.Actions}>
             <R_Actions
+              onRecoverError={onRecoverError}
               connections={connections}
               log={log}
               bakeToast={bakeToast}

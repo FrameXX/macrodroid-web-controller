@@ -3,6 +3,7 @@ import "./Wizard.scss";
 import { Target, motion } from "framer-motion";
 import { R_WizardNavigator } from "../WizardNavigator/WizardNavigator";
 import { DEFAULT_TRANSITION_OFFSET } from "../../modules/const";
+import { useDefaultProps } from "../../modules/use_default_props";
 
 interface WizardProps {
   open: boolean;
@@ -11,9 +12,16 @@ interface WizardProps {
   leftButton: ReactNode;
   rightButton: ReactNode;
   id?: string;
+  hideNavigatorIndicator?: boolean;
 }
 
-export function R_Wizard(props: WizardProps) {
+const defaultProps: Partial<WizardProps> = {
+  hideNavigatorIndicator: false,
+};
+
+export function R_Wizard(requiredProps: WizardProps) {
+  const props = useDefaultProps(requiredProps, defaultProps);
+
   const pageCount = props.pages.length;
   if (props.activePageIndex < 0 || props.activePageIndex >= pageCount)
     throw new RangeError("Active page index does not match page count.");
@@ -49,6 +57,7 @@ export function R_Wizard(props: WizardProps) {
         </motion.div>
       ))}
       <R_WizardNavigator
+        hideIndicator={props.hideNavigatorIndicator || props.pages.length < 2}
         pageCount={pageCount}
         activePageIndex={props.activePageIndex}
         leftButton={props.leftButton}
