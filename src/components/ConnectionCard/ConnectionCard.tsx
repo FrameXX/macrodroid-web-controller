@@ -39,14 +39,12 @@ export function R_Connection(props: ConnectionProps) {
           ago
         </div>
       </div>
-      <div className="actions">
-        <R_Button
-          title="Delete"
-          iconId="delete-forever"
-          onClick={props.onDelete}
-        />
-        <R_Button title="Poke" iconId="web-sync" onClick={props.onPoke} />
-      </div>
+      <R_Button
+        title="Delete"
+        iconId="delete-forever"
+        onClick={props.onDelete}
+      />
+      <R_Button title="Poke" iconId="web-sync" onClick={props.onPoke} />
     </motion.div>
   );
 }

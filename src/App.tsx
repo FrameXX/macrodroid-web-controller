@@ -248,7 +248,11 @@ export function R_App() {
             />
           </R_Tab>
           <R_Tab active={activeNavTabId === NavTabId.Actions}>
-            <R_Actions log={log} bakeToast={bakeToast} />
+            <R_Actions
+              connections={connections}
+              log={log}
+              bakeToast={bakeToast}
+            />
           </R_Tab>
           <R_Tab
             ref={logScrollableContainer}

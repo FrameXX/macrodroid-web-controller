@@ -2,7 +2,7 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 
 // https://vitejs.dev/config/
-export defineConfig({
+export default defineConfig({
   plugins: [react()],
   build: {
     assetsInlineLimit: 0,

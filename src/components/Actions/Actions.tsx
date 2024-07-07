@@ -10,29 +10,38 @@ import { R_ConfiguredActionCard } from "../ConfiguredActionCard/ConfiguredAction
 import "./Actions.scss";
 import { OutgoingRequest } from "../../modules/outgoing_request";
 import { Log } from "../../modules/logger";
+import { Connection } from "../../modules/connection";
+import { R_RunActionWizard } from "../RunActionWizard/RunActionWizard";
 
 interface ActionsProps {
   bakeToast: BakeToast;
   log: Log;
+  connections: Connection[];
 }
 
 export function R_Actions(props: ActionsProps) {
   const [configActionWizardOpen, setConfigActionWizardOpen] = useImmer(false);
-  const [runActions, setRunActions] = useImmer<Action[]>([]);
+  const [runActionWizardOpen, setRunActionWizardOpen] = useImmer(false);
+  const [recentlyRunActions, setRunActions] = useImmer<Action[]>([]);
   const [savedActions, setSavedActions] = useImmer<Action[]>([]);
+  const [runAction, setRunAction] = useImmer<Action | null>(null);
 
   function onActionConfigure(action: Action, save: boolean) {
-    setConfigActionWizardOpen(false);
     if (save) {
       addSavedAction(action);
+      setConfigActionWizardOpen(false);
     } else {
-      addRunAction(action);
+      // Action has to be copyed so that the ConfigActionWizard can still modify its version.
+      setRunAction(structuredClone(action));
+      setRunActionWizardOpen(true);
     }
   }
 
-  function runAction(action: Action) {
-    // @ts-ignore
+  function dispatchAction(action: Action, connections: Connection[]) {
+    setConfigActionWizardOpen(false);
+    setRunActionWizardOpen(false);
     const request = OutgoingRequest.runAction(action);
+    addRunAction(action);
   }
 
   function addRunAction(action: Action) {
@@ -68,12 +77,12 @@ export function R_Actions(props: ActionsProps) {
         </div>
       </R_Category>
       <R_Category defaultOpen name="Recently run" iconId="history">
-        <R_IconNotice hidden={runAction.length > 0}>
+        <R_IconNotice hidden={recentlyRunActions.length > 0}>
           No actions run
         </R_IconNotice>
-        <div id="configured-actions">
+        <div id="recently-run-actions">
           <AnimatePresence>
-            {runActions.map((action) => (
+            {recentlyRunActions.map((action) => (
               <R_ConfiguredActionCard
                 key={action.id}
                 name={action.name}
@@ -91,8 +100,15 @@ export function R_Actions(props: ActionsProps) {
       <R_ConfigActionWizard
         bakeToast={props.bakeToast}
         open={configActionWizardOpen}
-        onClose={() => setConfigActionWizardOpen(false)}
+        onCancel={() => setConfigActionWizardOpen(false)}
         onActionConfigure={onActionConfigure}
+      />
+      <R_RunActionWizard
+        open={runActionWizardOpen}
+        connections={props.connections}
+        onCancel={() => setRunActionWizardOpen(false)}
+        onActionRunConfirm={dispatchAction}
+        runAction={runAction}
       />
     </>
   );

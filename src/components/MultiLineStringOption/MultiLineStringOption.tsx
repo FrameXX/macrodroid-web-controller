@@ -10,7 +10,7 @@ interface DescribedInputProps {
   maxLength?: number;
   placeholder?: string;
   autoCapitalize?: string;
-  onChange?: React.ChangeEventHandler<HTMLTextAreaElement>;
+  onChange?: (newValue: string) => void;
   value?: string;
   onKeyUp?: React.KeyboardEventHandler<HTMLTextAreaElement>;
   description?: ReactNode;
@@ -33,7 +33,9 @@ export const R_MultiLineStringOption = forwardRef<
           ref={ref}
           onKeyUp={props.onKeyUp}
           value={props.value}
-          onChange={props.onChange}
+          onChange={(event) => {
+            if (props.onChange) props.onChange(event.target.value);
+          }}
           maxLength={props.maxLength}
           required={props.required}
           placeholder={props.placeholder}

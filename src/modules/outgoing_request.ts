@@ -1,4 +1,4 @@
-import { Action, ActionArgument, ActionArgumentType } from "./action";
+import { Action, ActionArg, ActionArgumentType } from "./action";
 import { Random } from "./random";
 
 export enum OutgoingRequestType {
@@ -36,9 +36,7 @@ function searchParamNameFromActionArgument(
   }
 }
 
-function actionArgsToSearchParams(
-  actionArgs: ActionArgument<any>[],
-): SearchParam[] {
+function actionArgsToSearchParams(actionArgs: ActionArg<any>[]): SearchParam[] {
   return actionArgs.map((argument, index) => {
     return {
       name: searchParamNameFromActionArgument(argument.type, index),

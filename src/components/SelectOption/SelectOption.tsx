@@ -6,6 +6,7 @@ interface SelectOptionProps {
   onChange: (newValue: number) => void;
   iconId?: string;
   options: string[];
+  value?: number;
 }
 
 export function R_SelectOption(props: SelectOptionProps) {
@@ -13,7 +14,10 @@ export function R_SelectOption(props: SelectOptionProps) {
     <label title={props.title} className="boolean-option">
       {props.iconId && <R_Icon iconId={props.iconId} />}
       <h3>{props.title}</h3>
-      <select onChange={(event) => props.onChange(+event.target.value)}>
+      <select
+        value={props.value}
+        onChange={(event) => props.onChange(+event.target.value)}
+      >
         {props.options.map((option, index) => (
           <option key={index} value={index}>
             {option}

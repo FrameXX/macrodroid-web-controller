@@ -1,10 +1,10 @@
-import { ActionArgument, ActionArgumentType } from "../../modules/action";
+import { ActionArg, ActionArgumentType } from "../../modules/action";
 import { R_BooleanOption } from "../BooleanOption/BooleanOption";
 import { R_NumberOption } from "../NumberOption/NumberOption";
 import { R_MultiLineStringOption } from "../MultiLineStringOption/MultiLineStringOption";
 import { R_SelectOption } from "../SelectOption/SelectOption";
 import { R_StringOption } from "../StringOption/StringOption";
-import "./ActionArgumentInput.scss";
+import "./ActionArgInput.scss";
 import { motion } from "framer-motion";
 import {
   ANIMATE_SCALE_MOUNTED,
@@ -12,11 +12,12 @@ import {
 } from "../../modules/const";
 
 interface ActionArgumentInputProps {
-  argument: ActionArgument<any>;
+  argument: ActionArg<any>;
   onChange: (value: any) => void;
+  value?: any;
 }
 
-export function R_ActionArgumentInput(props: ActionArgumentInputProps) {
+export function R_ActionArgInput(props: ActionArgumentInputProps) {
   function renderArgument() {
     switch (props.argument.type) {
       case ActionArgumentType.Boolean:
@@ -24,6 +25,7 @@ export function R_ActionArgumentInput(props: ActionArgumentInputProps) {
           <R_BooleanOption
             title={props.argument.name}
             onChange={props.onChange}
+            value={props.value}
           />
         );
       case ActionArgumentType.String:
@@ -34,6 +36,7 @@ export function R_ActionArgumentInput(props: ActionArgumentInputProps) {
             placeholder={props.argument.name}
             title={props.argument.name}
             description={props.argument.description}
+            value={props.value}
           />
         );
       case ActionArgumentType.MultiLineString:
@@ -43,11 +46,13 @@ export function R_ActionArgumentInput(props: ActionArgumentInputProps) {
             placeholder={props.argument.name}
             title={props.argument.name}
             description={props.argument.description}
+            value={props.value}
           />
         );
       case ActionArgumentType.Int:
         return (
           <R_NumberOption
+            value={props.value}
             title={props.argument.name}
             onChange={props.onChange}
           />
@@ -55,6 +60,7 @@ export function R_ActionArgumentInput(props: ActionArgumentInputProps) {
       case ActionArgumentType.Decimal:
         return (
           <R_NumberOption
+            value={props.value}
             title={props.argument.name}
             onChange={props.onChange}
             step={0.01}
@@ -63,6 +69,7 @@ export function R_ActionArgumentInput(props: ActionArgumentInputProps) {
       case ActionArgumentType.Selection:
         return (
           <R_SelectOption
+            value={props.value}
             onChange={props.onChange}
             options={props.argument.options as string[]}
             title={props.argument.name}

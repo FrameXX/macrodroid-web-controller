@@ -5,20 +5,20 @@ import { ACTIONS } from "../../modules/const";
 import { R_ActionCard } from "../ActionCard/ActionCard";
 import { AnimatePresence, motion } from "framer-motion";
 import "./ConfigActionWizard.scss";
-import { useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { R_Icon } from "../Icon/Icon";
 import { R_SearchInput } from "../SearchInput/SearchInput";
 import { R_IconNotice } from "../IconNotice/IconNotice";
-import { Action, ActionArgument } from "../../modules/action";
-import { R_ActionArgumentInput } from "../ActionArgumentInput/ActionArgumentInput";
+import { Action } from "../../modules/action";
 import { useColumnDeterminator } from "../../modules/use_column_determinator";
 import { BakeToast, Toast, ToastSeverity } from "../../modules/toaster";
 import { R_StringOption } from "../StringOption/StringOption";
 import { R_BooleanOption } from "../BooleanOption/BooleanOption";
+import { R_ActionArgInputList } from "../ActionArgInputList/ActionArgInputList";
 
 interface ConfigActionWizardProps {
   open: boolean;
-  onClose: () => void;
+  onCancel: () => void;
   onActionConfigure: (action: Action, save: boolean) => void;
   bakeToast: BakeToast;
 }
@@ -30,18 +30,9 @@ export function R_ConfigActionWizard(props: ConfigActionWizardProps) {
   const [activePageIndex, setActivePageIndex] = useImmer(0);
   const [filterValue, setFilterValue] = useImmer("");
   const actionsContainer = useRef(null);
-  const actionArgsContainer = useRef(null);
   const configuredAction = useRef<Action | null>(null);
-  const [configuredArgs, setConfiguredArgs] = useImmer<ActionArgument<any>[]>(
-    [],
-  );
 
   const actionsColumns = useColumnDeterminator(actionsContainer, ACTIONS, 270);
-  const actionArgsColumns = useColumnDeterminator(
-    actionArgsContainer,
-    configuredArgs,
-    400,
-  );
 
   const filteredActions = useMemo(() => {
     const filter = filterValue.toLowerCase();
@@ -50,16 +41,18 @@ export function R_ConfigActionWizard(props: ConfigActionWizardProps) {
     );
   }, [filterValue]);
 
+  useEffect(() => {
+    if (props.open) reset();
+  }, [props.open]);
+
   function selectAction(action: Action) {
     configuredAction.current = structuredClone(action);
-    setConfiguredArgs(configuredAction.current.args);
     setActionName(configuredAction.current.name);
     setActivePageIndex(1);
   }
 
   function clearActionSelection() {
     configuredAction.current = null;
-    setConfiguredArgs([]);
   }
 
   function previousPage() {
@@ -67,21 +60,14 @@ export function R_ConfigActionWizard(props: ConfigActionWizardProps) {
     setActivePageIndex((prevActivePageIndex) => prevActivePageIndex - 1);
   }
 
-  function shouldArgumentBeRendered(argument: ActionArgument<any>): boolean {
-    if (!argument.useCondition) return true;
-    return (
-      configuredArgs[argument.useCondition.argumentIndex].value ===
-      argument.useCondition.argumentValue
-    );
-  }
-
   function onActionConfigurationConfirm() {
+    console.log(configuredAction.current);
     configuredAction.current!.name = actionName;
     props.onActionConfigure(configuredAction.current!, saveWithoutRunning);
-    props.bakeToast(
-      new Toast("Action configured.", "play", ToastSeverity.Success),
-    );
-    reset();
+    if (saveWithoutRunning)
+      props.bakeToast(
+        new Toast("Action saved.", "star", ToastSeverity.Success),
+      );
   }
 
   function reset() {
@@ -129,31 +115,13 @@ export function R_ConfigActionWizard(props: ConfigActionWizardProps) {
           </motion.div>
         </>,
         <>
-          <h2>{`Enter action args - ${configuredAction.current?.name}`}</h2>
-          <motion.div
-            id="action-args"
-            animate={{ columns: actionArgsColumns }}
-            ref={actionArgsContainer}
-          >
-            {configuredAction.current && (
-              <AnimatePresence>
-                {configuredArgs.map(
-                  (argument, index) =>
-                    shouldArgumentBeRendered(argument) && (
-                      <R_ActionArgumentInput
-                        onChange={(newValue) => {
-                          setConfiguredArgs((configuredArgs) => {
-                            configuredArgs[index].value = newValue;
-                          });
-                        }}
-                        key={`${configuredAction.current?.id}-${index}`}
-                        argument={argument}
-                      />
-                    ),
-                )}
-              </AnimatePresence>
-            )}
-          </motion.div>
+          <h2>{`Enter action args: ${configuredAction.current?.name}`}</h2>
+          <R_ActionArgInputList
+            configuredAction={configuredAction.current}
+            onArgChange={(index, newValue) =>
+              (configuredAction.current!.args[index].value = newValue)
+            }
+          />
         </>,
         <>
           <h2>Extra options</h2>
@@ -182,7 +150,7 @@ export function R_ConfigActionWizard(props: ConfigActionWizardProps) {
             hidden={activePageIndex !== 0}
             left
             title="Cancel configuration of new action"
-            onClick={props.onClose}
+            onClick={props.onCancel}
             iconId="close"
           />
           <R_FAB

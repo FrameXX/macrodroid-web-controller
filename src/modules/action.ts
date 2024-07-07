@@ -31,24 +31,24 @@ export enum ActionArgumentType {
   Selection,
 }
 
-export interface ActionArgumentUseCondition {
+export interface ActionArgUseCondition {
   argumentIndex: number;
   argumentValue: any;
 }
 
-export interface ActionArgument<T> {
+export interface ActionArg<T> {
   name: string;
   description?: string;
   value: T;
   type: ActionArgumentType;
   options?: string[];
-  useCondition?: ActionArgumentUseCondition;
+  useCondition?: ActionArgUseCondition;
 }
 
 export interface Action {
   id: string;
   name: string;
   iconId: string;
-  args: ActionArgument<any>[];
+  args: ActionArg<any>[];
   keywords: string[];
 }
