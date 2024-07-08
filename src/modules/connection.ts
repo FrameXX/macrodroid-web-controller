@@ -116,6 +116,7 @@ export class Connection {
       comment: request.comment,
       requestId: request.id,
       type: LogRecordType.OutgoingRequest,
+      details: request.details,
     };
     if (!response.ok)
       requestLog.errorMessage = `HTTP request failed. Error ${response.status}.`;

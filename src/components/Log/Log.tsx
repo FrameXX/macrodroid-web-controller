@@ -15,7 +15,7 @@ import { R_SearchInput } from "../SearchInput/SearchInput";
 
 interface LogProps {
   logRecords: LogRecord[];
-  containerScrollPx: number;
+  scrolledDown: boolean;
   onScrollUp: () => void;
   clearLog: () => void;
   confirm: Confirm;
@@ -53,8 +53,6 @@ export function R_Log(props: LogProps) {
     setFilterType(type);
     setFilterValue(value);
   }
-
-  const scrolledDown = props.containerScrollPx > innerHeight * 0.5;
 
   const filteredLogRecords = useMemo(() => {
     const logRecords = props.logRecords;
@@ -167,7 +165,7 @@ export function R_Log(props: LogProps) {
         <div className="fab-placeholder" />
       </div>
       <R_FAB
-        hidden={!scrolledDown}
+        hidden={!props.scrolledDown}
         title="Scroll up"
         onClick={props.onScrollUp}
         iconId="arrow-up"

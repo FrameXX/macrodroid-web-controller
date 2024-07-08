@@ -64,13 +64,16 @@ export function R_Actions(props: ActionsProps) {
     setRunActionWizardOpen(true);
   }
 
-  // @ts-ignore
-  function dispatchAction(action: Action, connections: Connection[]) {
+  async function dispatchAction(action: Action, connections: Connection[]) {
+    console.log(action, connections);
     setConfigActionWizardOpen(false);
     setRunActionWizardOpen(false);
     setRunActionWizardSkipArgs(false);
-    // @ts-ignore
     const request = OutgoingRequest.runAction(action);
+    for (const connection of connections) {
+      const logRecord = await connection.makeRequest(request);
+      props.log(logRecord);
+    }
     addRunAction(action);
   }
 

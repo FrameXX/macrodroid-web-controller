@@ -34,9 +34,9 @@ export function R_App() {
   );
   const [connections, setConnections] = useImmer<Connection[]>([]);
   const [logRecords, setLogRecords] = useImmer<LogRecord[]>([]);
-  const [logTabScrollPx, setLogTabScrollPx] = useImmer(0);
   const [confirmDialogOpen, setConfirmDialogOpen] = useImmer(false);
   const [confirmDialogText, setConfirmDialogText] = useImmer("");
+  const [logScrolledDown, setLogScrolledDown] = useImmer(false);
 
   useLocalStorage(logRecords, setLogRecords, {
     storageKey: "logRecords",
@@ -97,7 +97,6 @@ export function R_App() {
   );
   const logScrollableContainer = useRef<HTMLDivElement>(null);
   const currentConnections = useRef<Connection[]>([]);
-
   useEffect(() => {
     if (!logScrollableContainer.current) {
       console.warn("Logs scrollable container not found.");
@@ -106,7 +105,7 @@ export function R_App() {
     const container = logScrollableContainer.current;
 
     function onScroll() {
-      setLogTabScrollPx(container.scrollTop);
+      setLogScrolledDown(container.scrollTop > innerHeight * 0.5);
     }
 
     container.addEventListener("scroll", onScroll);
@@ -198,12 +197,14 @@ export function R_App() {
   }
 
   function handleListenFailed(connection: Connection) {
+    const errorMessage = "Failed to listen for incoming requests.";
     log({
       connectionName: connection.name,
       response: false,
       type: LogRecordType.Technicality,
       errorMessage: "Failed to listen for incoming requests.",
     });
+    bakeToast(new Toast(errorMessage, "alert", ToastSeverity.Error));
   }
 
   async function deleteConnection(connection: Connection) {
@@ -279,8 +280,8 @@ export function R_App() {
             active={activeNavTabId === NavTabId.Log}
           >
             <R_Log
+              scrolledDown={logScrolledDown}
               onScrollUp={scrollLogTop}
-              containerScrollPx={logTabScrollPx}
               logRecords={logRecords}
               clearLog={logger.current.clear}
               confirm={confirm}

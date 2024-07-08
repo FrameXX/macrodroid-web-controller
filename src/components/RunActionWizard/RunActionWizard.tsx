@@ -69,6 +69,11 @@ export function R_RunActionWizard(props: RunActionWizardProps) {
     }
   }
 
+  function reset() {
+    setSelectedConnections([]);
+    setActivePageIndex(0);
+  }
+
   const argsPage = (
     <>
       <h2>Optionally alter arguments</h2>
@@ -93,6 +98,7 @@ export function R_RunActionWizard(props: RunActionWizardProps) {
             key={connection.id}
             title={connection.name}
             onChange={(newValue) => toggleConnection(connection, newValue)}
+            value={selectedConnections.includes(connection)}
           />
         ))}
       </motion.div>
@@ -141,7 +147,10 @@ export function R_RunActionWizard(props: RunActionWizardProps) {
             }
             title="Run action"
             iconId="play"
-            onClick={() => props.onActionRunConfirm(runAction.current!, [])}
+            onClick={() => {
+              props.onActionRunConfirm(runAction.current!, selectedConnections);
+              reset();
+            }}
           />
         </>
       }

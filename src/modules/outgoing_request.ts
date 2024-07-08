@@ -52,7 +52,7 @@ export class OutgoingRequest {
     public readonly type: OutgoingRequestType,
     public readonly data: SearchParam[],
     public readonly comment?: string,
-    public readonly detail?: string,
+    public readonly details?: string[],
     idLenght: number = 5,
   ) {
     this.id = Random.readableId(idLenght);
@@ -72,16 +72,16 @@ export class OutgoingRequest {
 
   public static runAction(action: Action) {
     const comment = `Action: ${action.name}`;
-    const detail = action.args
-      .map((argument) => {
-        return `${argument.name}: ${argument.value}`;
-      })
-      .join("\n");
+    const details = action.args.map((arg) => `${arg.name}: ${arg.value}`);
+    const searchParams = [
+      ...actionArgsToSearchParams(action.args),
+      { name: "actionId", value: action.id },
+    ];
     return new OutgoingRequest(
       OutgoingRequestType.Action,
-      actionArgsToSearchParams(action.args),
+      searchParams,
       comment,
-      detail,
+      details,
     );
   }
 }

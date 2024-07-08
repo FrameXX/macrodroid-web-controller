@@ -8,6 +8,7 @@ interface AccordionProps extends PropsWithChildren {
   open: boolean;
   className?: string;
   closedHeight?: number | string;
+  openHeight?: number | string;
 }
 
 const defaultProps: Partial<AccordionProps> = {
@@ -16,21 +17,30 @@ const defaultProps: Partial<AccordionProps> = {
 
 export function R_Accordion(requiredProps: AccordionProps) {
   const props = useDefaultProps(requiredProps, defaultProps);
-  const fullSqueeze = props.closedHeight === 0;
 
+  const fullSqueeze = props.closedHeight === 0;
   const transition = structuredClone(TRANSITIONS) as any;
   transition.bounce = 0;
 
+  const defaultOpenHeight = fullSqueeze ? "auto" : undefined;
+  console.log(defaultOpenHeight);
+
   const animate: TargetAndTransition = {
-    height: props.open ? "auto" : props.closedHeight,
+    height: props.open
+      ? props.openHeight || defaultOpenHeight
+      : props.closedHeight,
     y: props.open || !fullSqueeze ? 0 : -DEFAULT_TRANSITION_OFFSET,
     opacity: props.open || !fullSqueeze ? 1 : 0,
     visibility: props.open || !fullSqueeze ? "visible" : "hidden",
   };
 
   return (
-    <motion.div transition={transition} animate={animate}>
-      <div className={props.className}>{props.children}</div>
+    <motion.div
+      className={props.className}
+      transition={transition}
+      animate={animate}
+    >
+      {props.children}
     </motion.div>
   );
 }

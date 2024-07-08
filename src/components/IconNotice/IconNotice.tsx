@@ -18,7 +18,7 @@ export function R_IconNotice(requiredProps: IconNoticeProps) {
   const props = useDefaultProps(requiredProps, defaultProps);
 
   return (
-    <R_Accordion open={!props.hidden} className="icon-notice">
+    <R_Accordion openHeight={350} open={!props.hidden} className="icon-notice">
       <R_Icon iconId={props.iconId} />
       {requiredProps.children}
     </R_Accordion>
