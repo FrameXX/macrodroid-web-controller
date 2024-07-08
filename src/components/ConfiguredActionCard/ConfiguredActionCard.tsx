@@ -12,7 +12,8 @@ interface ActionCardProps {
   saved?: boolean;
   name: string;
   iconId: string;
-  onClick?: () => void;
+  onToggleSave: () => void;
+  onRun: () => void;
 }
 
 const defaultProps: Partial<ActionCardProps> = {
@@ -27,7 +28,6 @@ export function R_ConfiguredActionCard(requiredProps: ActionCardProps) {
   return (
     <motion.div
       layout
-      onClick={props.onClick}
       initial={ANIMATE_SCALE_UNMOUNTED}
       animate={ANIMATE_SCALE_MOUNTED}
       exit={ANIMATE_SCALE_UNMOUNTED}
@@ -37,11 +37,11 @@ export function R_ConfiguredActionCard(requiredProps: ActionCardProps) {
       <R_Icon iconId={props.iconId} />
       <div className="name">{props.name}</div>
       <R_Button
-        onClick={() => {}}
+        onClick={props.onToggleSave}
         iconId={saveButtonIcondId}
         title={saveButtonTitle}
       />
-      <R_Button onClick={() => {}} title="Run" iconId="play" />
+      <R_Button onClick={props.onRun} title="Run" iconId="play" />
     </motion.div>
   );
 }

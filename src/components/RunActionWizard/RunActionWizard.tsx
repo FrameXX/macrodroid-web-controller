@@ -9,12 +9,14 @@ import { R_BooleanOption } from "../BooleanOption/BooleanOption";
 import { useColumnDeterminator } from "../../modules/use_column_determinator";
 import { R_ActionArgInputList } from "../ActionArgInputList/ActionArgInputList";
 import { useForceUpdate } from "../../modules/use_force_update";
+import { BakeToast, Toast, ToastSeverity } from "../../modules/toaster";
 
 interface RunActionWizardProps {
   open: boolean;
   runAction: Action | null;
   onCancel: () => void;
   onActionRunConfirm: (action: Action, connections: Connection[]) => void;
+  bakeToast: BakeToast;
   connections: Connection[];
   skipArgs: boolean;
 }
@@ -34,6 +36,19 @@ export function R_RunActionWizard(props: RunActionWizardProps) {
   );
 
   const forceUpdate = useForceUpdate();
+
+  useEffect(() => {
+    if (props.open && props.connections.length < 1) {
+      props.bakeToast(
+        new Toast(
+          "Cannot run action if no connections are configured.",
+          "alert",
+          ToastSeverity.Error,
+        ),
+      );
+      props.onCancel();
+    }
+  }, [props.open]);
 
   useEffect(() => {
     runAction.current = structuredClone(props.runAction);

@@ -53,11 +53,15 @@ export function R_Actions(props: ActionsProps) {
       addSavedAction(action);
       setConfigActionWizardOpen(false);
     } else {
-      // Action has to be copyed so that the ConfigActionWizard can still modify its version.
-      setRunAction(structuredClone(action));
-      setRunActionWizardSkipArgs(true);
-      setRunActionWizardOpen(true);
+      runRunActionWizard(action, true);
     }
+  }
+
+  function runRunActionWizard(action: Action, skipArgs: boolean) {
+    // Action has to be copyed so that the ConfigActionWizard can still modify its version.
+    setRunAction(structuredClone(action));
+    setRunActionWizardSkipArgs(skipArgs);
+    setRunActionWizardOpen(true);
   }
 
   // @ts-ignore
@@ -72,7 +76,7 @@ export function R_Actions(props: ActionsProps) {
 
   function addRunAction(action: Action) {
     setRunActions((configuredActions) => {
-      configuredActions.push(action);
+      configuredActions.unshift(action);
       return configuredActions;
     });
   }
@@ -80,6 +84,20 @@ export function R_Actions(props: ActionsProps) {
   function addSavedAction(action: Action) {
     setSavedActions((savedActions) => {
       savedActions.push(action);
+      return savedActions;
+    });
+  }
+
+  function unsaveAction(index: number) {
+    setSavedActions((savedActions) => {
+      savedActions.splice(index, 1);
+      return savedActions;
+    });
+  }
+
+  function saveAction(index: number) {
+    setSavedActions((savedActions) => {
+      savedActions.push(recentlyRunActions[index]);
       return savedActions;
     });
   }
@@ -95,9 +113,11 @@ export function R_Actions(props: ActionsProps) {
             {savedActions.map((action, index) => (
               <R_ConfiguredActionCard
                 saved
+                onToggleSave={() => unsaveAction(index)}
                 key={`${action.id}-${index}`}
                 name={action.name}
                 iconId={action.iconId}
+                onRun={() => runRunActionWizard(action, false)}
               />
             ))}
           </AnimatePresence>
@@ -111,9 +131,11 @@ export function R_Actions(props: ActionsProps) {
           <AnimatePresence>
             {recentlyRunActions.map((action, index) => (
               <R_ConfiguredActionCard
+                onToggleSave={() => saveAction(index)}
                 key={`${action.id}-${index}`}
                 name={action.name}
                 iconId={action.iconId}
+                onRun={() => runRunActionWizard(action, false)}
               />
             ))}
           </AnimatePresence>
@@ -131,6 +153,7 @@ export function R_Actions(props: ActionsProps) {
         onActionConfigure={onActionConfigure}
       />
       <R_RunActionWizard
+        bakeToast={props.bakeToast}
         skipArgs={runActionWizardSkipArgs}
         open={runActionWizardOpen}
         connections={props.connections}
