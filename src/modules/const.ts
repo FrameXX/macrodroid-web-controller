@@ -38,7 +38,7 @@ export const ANIMATE_SCALE_MOUNTED: Target = {
 // OTHER
 export const MACRODROID_APP_URL =
   "https://play.google.com/store/apps/details?id=com.arlosoft.macrodroid";
-export const LOG_RECORD_LIMIT = 60;
+export const LOG_RECORD_LIMIT = 40;
 
 export const ACTIONS: Action[] = [
   {

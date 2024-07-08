@@ -92,9 +92,10 @@ export function R_Actions(props: ActionsProps) {
         </R_IconNotice>
         <div id="saved-actions">
           <AnimatePresence>
-            {savedActions.map((action) => (
+            {savedActions.map((action, index) => (
               <R_ConfiguredActionCard
-                key={action.id}
+                saved
+                key={`${action.id}-${index}`}
                 name={action.name}
                 iconId={action.iconId}
               />
@@ -108,9 +109,9 @@ export function R_Actions(props: ActionsProps) {
         </R_IconNotice>
         <div id="recently-run-actions">
           <AnimatePresence>
-            {recentlyRunActions.map((action) => (
+            {recentlyRunActions.map((action, index) => (
               <R_ConfiguredActionCard
-                key={action.id}
+                key={`${action.id}-${index}`}
                 name={action.name}
                 iconId={action.iconId}
               />

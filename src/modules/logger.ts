@@ -46,10 +46,9 @@ export const LogRecordsStruct = array(
 );
 
 export class Logger {
-  constructor(
-    private readonly setLogRecords: Updater<LogRecord[]>,
-    private readonly logRecords: LogRecord[],
-  ) {}
+  public logRecordsLen: number = 0;
+
+  constructor(private readonly setLogRecords: Updater<LogRecord[]>) {}
 
   private generateFilterString(
     logRecordInitializer: LogRecordInitializer,
@@ -79,20 +78,18 @@ export class Logger {
       id,
     };
 
-    if (this.logRecords.length >= LOG_RECORD_LIMIT) {
-      this.setLogRecords((prevLogRecords) => {
-        prevLogRecords.pop();
-        return prevLogRecords;
-      });
-    }
-
-    this.setLogRecords((prevLogRecords) => {
-      prevLogRecords.unshift(logRecord);
-      return prevLogRecords;
+    this.setLogRecords((logRecords) => {
+      if (this.logRecordsLen >= LOG_RECORD_LIMIT) {
+        logRecords.pop();
+        this.logRecordsLen--;
+      }
+      logRecords.unshift(logRecord);
+      this.logRecordsLen++;
     });
   }
 
   public clear = () => {
     this.setLogRecords([]);
+    this.logRecordsLen = 0;
   };
 }

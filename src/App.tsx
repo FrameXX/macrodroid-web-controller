@@ -46,6 +46,10 @@ export function R_App() {
     onRecoverError: (errorMessage) => {
       onRecoverError(errorMessage, "log records");
     },
+    finalize: (logRecords) => {
+      logger.current.logRecordsLen = logRecords.length;
+      return logRecords;
+    },
   });
   const saveConnections = useLocalStorage(
     connections,
@@ -87,7 +91,7 @@ export function R_App() {
   });
 
   const toaster = useRef(new Toaster(setToasts));
-  const logger = useRef(new Logger(setLogRecords, logRecords));
+  const logger = useRef(new Logger(setLogRecords));
   const confirmDialog = useRef(
     new ConfirmDialog(setConfirmDialogOpen, setConfirmDialogText),
   );
