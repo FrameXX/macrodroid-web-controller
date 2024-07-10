@@ -19,28 +19,31 @@ export interface SearchParam {
 }
 
 function searchParamNameFromActionArgument(
-  argumentType: ActionArgType,
-  index: number,
+  argType: ActionArgType,
+  argId: string,
 ) {
-  switch (argumentType) {
+  console.log(argType, ActionArgType.Selection);
+  switch (argType) {
     case ActionArgType.Boolean:
-      return `booleanArgs(${index})`;
-    case ActionArgType.Int || ActionArgType.Selection:
-      return `intArgs(${index})`;
+      return `booleanArgs(${argId})`;
+    case ActionArgType.Int:
+    case ActionArgType.Selection:
+      return `integerArgs(${argId})`;
     case ActionArgType.Decimal:
-      return `decimalArgs(${index})`;
-    case ActionArgType.String || ActionArgType.MultiLineString:
-      return `stringArgs(${index})`;
+      return `decimalArgs(${argId})`;
+    case ActionArgType.String:
+    case ActionArgType.MultiLineString:
+      return `stringArgs(${argId})`;
     default:
       throw new TypeError("Unsupported argument type.");
   }
 }
 
 function actionArgsToSearchParams(actionArgs: ActionArg<any>[]): SearchParam[] {
-  return actionArgs.map((argument, index) => {
+  return actionArgs.map((arg) => {
     return {
-      name: searchParamNameFromActionArgument(argument.type, index),
-      value: `${argument.value}`,
+      name: searchParamNameFromActionArgument(arg.type, arg.id),
+      value: `${arg.value}`,
     };
   });
 }

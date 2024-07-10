@@ -7,6 +7,7 @@ export const ActionsStruct = array(
     iconId: string(),
     args: array(
       object({
+        id: string(),
         name: string(),
         description: optional(string()),
         value: any(),
@@ -39,6 +40,7 @@ export interface ActionArgUseCondition {
 }
 
 export interface ActionArg<T> {
+  id: string;
   name: string;
   description?: string;
   value: T;
