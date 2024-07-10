@@ -139,7 +139,7 @@ export const ACTIONS: Action[] = [
         name: "Script",
         value: "",
         type: ActionArgType.MultiLineString,
-        id: "text",
+        id: "script",
       },
     ],
     keywords: ["alert", "notification"],

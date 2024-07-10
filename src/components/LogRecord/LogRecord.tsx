@@ -7,6 +7,7 @@ import { R_Button } from "../Button/Button";
 import { R_Accordion } from "../Accordion/Accordion";
 import { useImmer } from "use-immer";
 import { LogRecord, LogRecordType } from "../../modules/logger";
+import { ReactNode } from "react";
 
 interface LogRecordProps {
   record: LogRecord;
@@ -25,6 +26,17 @@ export function R_LogRecord(props: LogRecordProps) {
   const isTooLong = props.record.filterString.length > 340;
   const closedHeight = isTooLong ? 150 : "auto";
   const [expanded, setExpanded] = useImmer(false);
+
+  function renderMultiLineString(string: string) {
+    const lines = string.split("\n");
+    return (
+      <div>
+        {lines.map((line, index) => (
+          <div key={index}>{line}</div>
+        ))}
+      </div>
+    );
+  }
 
   return (
     <motion.div
@@ -75,7 +87,7 @@ export function R_LogRecord(props: LogRecordProps) {
               return (
                 <div key={index}>
                   <hr />
-                  {detail}
+                  {renderMultiLineString(detail)}
                 </div>
               );
             })}
