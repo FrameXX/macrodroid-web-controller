@@ -1,4 +1,4 @@
-import { Action, ActionArg, ActionArgumentType } from "./action";
+import { Action, ActionArg, ActionArgType } from "./action";
 import { Random } from "./random";
 
 export enum OutgoingRequestType {
@@ -19,17 +19,17 @@ export interface SearchParam {
 }
 
 function searchParamNameFromActionArgument(
-  argumentType: ActionArgumentType,
+  argumentType: ActionArgType,
   index: number,
 ) {
   switch (argumentType) {
-    case ActionArgumentType.Boolean:
+    case ActionArgType.Boolean:
       return `booleanArgs(${index})`;
-    case ActionArgumentType.Int || ActionArgumentType.Selection:
+    case ActionArgType.Int || ActionArgType.Selection:
       return `intArgs(${index})`;
-    case ActionArgumentType.Decimal:
+    case ActionArgType.Decimal:
       return `decimalArgs(${index})`;
-    case ActionArgumentType.String || ActionArgumentType.MultiLineString:
+    case ActionArgType.String || ActionArgType.MultiLineString:
       return `stringArgs(${index})`;
     default:
       throw new TypeError("Unsupported argument type.");

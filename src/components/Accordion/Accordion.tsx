@@ -23,7 +23,6 @@ export function R_Accordion(requiredProps: AccordionProps) {
   transition.bounce = 0;
 
   const defaultOpenHeight = fullSqueeze ? "auto" : undefined;
-  console.log(defaultOpenHeight);
 
   const animate: TargetAndTransition = {
     height: props.open

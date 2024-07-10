@@ -24,7 +24,7 @@ export const ActionsStruct = array(
   }),
 );
 
-export enum ActionArgumentType {
+export enum ActionArgType {
   String,
   MultiLineString,
   Int,
@@ -42,7 +42,7 @@ export interface ActionArg<T> {
   name: string;
   description?: string;
   value: T;
-  type: ActionArgumentType;
+  type: ActionArgType;
   options?: string[];
   useCondition?: ActionArgUseCondition;
 }

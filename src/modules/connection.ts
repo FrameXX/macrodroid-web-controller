@@ -109,7 +109,6 @@ export class Connection {
       ...request.data,
     ];
     const URL = this.generateRequestURL(request.type, URLParams);
-    const response = await fetch(URL);
     const requestLog: LogRecordInitializer = {
       connectionName: this.name,
       response: false,
@@ -118,6 +117,14 @@ export class Connection {
       type: LogRecordType.OutgoingRequest,
       details: request.details,
     };
+    let response: Response;
+    try {
+      response = await fetch(URL);
+    } catch (error) {
+      requestLog.errorMessage =
+        error instanceof Error ? error.message : "Unknown error.";
+      return requestLog;
+    }
     if (!response.ok)
       requestLog.errorMessage = `HTTP request failed. Error ${response.status}.`;
     return requestLog;

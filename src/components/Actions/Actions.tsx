@@ -13,6 +13,7 @@ import { Log } from "../../modules/logger";
 import { Connection } from "../../modules/connection";
 import { R_RunActionWizard } from "../RunActionWizard/RunActionWizard";
 import { useLocalStorage } from "../../modules/use_local_storage";
+import { RECENT_ACTIONS_LIMIT } from "../../modules/const";
 
 interface ActionsProps {
   bakeToast: BakeToast;
@@ -24,7 +25,7 @@ interface ActionsProps {
 export function R_Actions(props: ActionsProps) {
   const [configActionWizardOpen, setConfigActionWizardOpen] = useImmer(false);
   const [runActionWizardOpen, setRunActionWizardOpen] = useImmer(false);
-  const [recentlyRunActions, setRunActions] = useImmer<Action[]>([]);
+  const [recentActions, setRecentActions] = useImmer<Action[]>([]);
   const [savedActions, setSavedActions] = useImmer<Action[]>([]);
   const [runAction, setRunAction] = useImmer<Action | null>(null);
   const [runActionWizardSkipArgs, setRunActionWizardSkipArgs] = useImmer(false);
@@ -38,7 +39,7 @@ export function R_Actions(props: ActionsProps) {
       props.onRecoverError(errorMessage, "saved actions");
     },
   });
-  useLocalStorage(recentlyRunActions, setRunActions, {
+  useLocalStorage(recentActions, setRecentActions, {
     storageKey: "recentlyRunActions",
     struct: ActionsStruct,
     stringify: JSON.stringify,
@@ -65,7 +66,6 @@ export function R_Actions(props: ActionsProps) {
   }
 
   async function dispatchAction(action: Action, connections: Connection[]) {
-    console.log(action, connections);
     setConfigActionWizardOpen(false);
     setRunActionWizardOpen(false);
     setRunActionWizardSkipArgs(false);
@@ -74,13 +74,18 @@ export function R_Actions(props: ActionsProps) {
       const logRecord = await connection.makeRequest(request);
       props.log(logRecord);
     }
-    addRunAction(action);
+    addRecentAction(action);
   }
 
-  function addRunAction(action: Action) {
-    setRunActions((configuredActions) => {
-      configuredActions.unshift(action);
-      return configuredActions;
+  function addRecentAction(action: Action) {
+    if (recentActions.length >= RECENT_ACTIONS_LIMIT)
+      setRecentActions((recentActions) => {
+        recentActions.pop();
+        return recentActions;
+      });
+    setRecentActions((recentActions) => {
+      recentActions.unshift(action);
+      return recentActions;
     });
   }
 
@@ -98,11 +103,8 @@ export function R_Actions(props: ActionsProps) {
     });
   }
 
-  function saveAction(index: number) {
-    setSavedActions((savedActions) => {
-      savedActions.push(recentlyRunActions[index]);
-      return savedActions;
-    });
+  function saveActionFromRecentActions(index: number) {
+    addSavedAction(recentActions[index]);
   }
 
   return (
@@ -127,14 +129,14 @@ export function R_Actions(props: ActionsProps) {
         </div>
       </R_Category>
       <R_Category defaultOpen name="Recently run" iconId="history">
-        <R_IconNotice hidden={recentlyRunActions.length > 0}>
+        <R_IconNotice hidden={recentActions.length > 0}>
           No actions run
         </R_IconNotice>
-        <div id="recently-run-actions">
+        <div id="recent-actions">
           <AnimatePresence>
-            {recentlyRunActions.map((action, index) => (
+            {recentActions.map((action, index) => (
               <R_ConfiguredActionCard
-                onToggleSave={() => saveAction(index)}
+                onToggleSave={() => saveActionFromRecentActions(index)}
                 key={`${action.id}-${index}`}
                 name={action.name}
                 iconId={action.iconId}

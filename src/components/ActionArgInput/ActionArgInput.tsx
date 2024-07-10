@@ -1,4 +1,4 @@
-import { ActionArg, ActionArgumentType } from "../../modules/action";
+import { ActionArg, ActionArgType } from "../../modules/action";
 import { R_BooleanOption } from "../BooleanOption/BooleanOption";
 import { R_NumberOption } from "../NumberOption/NumberOption";
 import { R_MultiLineStringOption } from "../MultiLineStringOption/MultiLineStringOption";
@@ -20,7 +20,7 @@ interface ActionArgumentInputProps {
 export function R_ActionArgInput(props: ActionArgumentInputProps) {
   function renderArgument() {
     switch (props.argument.type) {
-      case ActionArgumentType.Boolean:
+      case ActionArgType.Boolean:
         return (
           <R_BooleanOption
             title={props.argument.name}
@@ -28,7 +28,7 @@ export function R_ActionArgInput(props: ActionArgumentInputProps) {
             value={props.value}
           />
         );
-      case ActionArgumentType.String:
+      case ActionArgType.String:
         return (
           <R_StringOption
             onChange={props.onChange}
@@ -39,7 +39,7 @@ export function R_ActionArgInput(props: ActionArgumentInputProps) {
             value={props.value}
           />
         );
-      case ActionArgumentType.MultiLineString:
+      case ActionArgType.MultiLineString:
         return (
           <R_MultiLineStringOption
             onChange={props.onChange}
@@ -49,7 +49,7 @@ export function R_ActionArgInput(props: ActionArgumentInputProps) {
             value={props.value}
           />
         );
-      case ActionArgumentType.Int:
+      case ActionArgType.Int:
         return (
           <R_NumberOption
             value={props.value}
@@ -57,7 +57,7 @@ export function R_ActionArgInput(props: ActionArgumentInputProps) {
             onChange={props.onChange}
           />
         );
-      case ActionArgumentType.Decimal:
+      case ActionArgType.Decimal:
         return (
           <R_NumberOption
             value={props.value}
@@ -66,7 +66,7 @@ export function R_ActionArgInput(props: ActionArgumentInputProps) {
             step={0.01}
           />
         );
-      case ActionArgumentType.Selection:
+      case ActionArgType.Selection:
         return (
           <R_SelectOption
             value={props.value}

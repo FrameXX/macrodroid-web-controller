@@ -1,5 +1,5 @@
 import { Target } from "framer-motion";
-import { Action, ActionArgumentType } from "./action";
+import { Action, ActionArgType } from "./action";
 
 // URL
 export const MACRODROID_WEBHOOK_DOMAIN = "trigger.macrodroid.com";
@@ -39,6 +39,7 @@ export const ANIMATE_SCALE_MOUNTED: Target = {
 export const MACRODROID_APP_URL =
   "https://play.google.com/store/apps/details?id=com.arlosoft.macrodroid";
 export const LOG_RECORD_LIMIT = 40;
+export const RECENT_ACTIONS_LIMIT = 20;
 
 export const ACTIONS: Action[] = [
   {
@@ -47,35 +48,35 @@ export const ACTIONS: Action[] = [
     iconId: "help",
     keywords: ["set", "global", "variable"],
     args: [
-      { name: "Name", value: "", type: ActionArgumentType.String },
+      { name: "Name", value: "", type: ActionArgType.String },
       {
         name: "Type",
         value: 0,
-        type: ActionArgumentType.Selection,
+        type: ActionArgType.Selection,
         options: ["Boolean", "Integer", "String", "Decimal"],
       },
       {
         name: "Value",
         value: false,
-        type: ActionArgumentType.Boolean,
+        type: ActionArgType.Boolean,
         useCondition: { argumentIndex: 1, argumentValue: 0 },
       },
       {
         name: "Value",
         value: 0,
-        type: ActionArgumentType.Int,
+        type: ActionArgType.Int,
         useCondition: { argumentIndex: 1, argumentValue: 1 },
       },
       {
         name: "Value",
         value: "",
-        type: ActionArgumentType.MultiLineString,
+        type: ActionArgType.MultiLineString,
         useCondition: { argumentIndex: 1, argumentValue: 2 },
       },
       {
         name: "Value",
         value: 0,
-        type: ActionArgumentType.Decimal,
+        type: ActionArgType.Decimal,
         useCondition: { argumentIndex: 1, argumentValue: 3 },
       },
     ],
@@ -90,7 +91,7 @@ export const ACTIONS: Action[] = [
         description:
           "The entered text can provide MacroDroid magic text in the same format as in MacroDroid. For example both {battery} and [battery] should both be overwritten with battery level.",
         value: "",
-        type: ActionArgumentType.String,
+        type: ActionArgType.String,
       },
     ],
     keywords: ["eval", "evaluate", "magic text", "expression", "variables"],
@@ -100,8 +101,8 @@ export const ACTIONS: Action[] = [
     name: "Display notification",
     iconId: "alert-circle-outline",
     args: [
-      { name: "Title", value: "", type: ActionArgumentType.String },
-      { name: "Text", value: "", type: ActionArgumentType.MultiLineString },
+      { name: "Title", value: "", type: ActionArgType.String },
+      { name: "Text", value: "", type: ActionArgType.MultiLineString },
     ],
     keywords: ["alert", "notification"],
   },
@@ -111,12 +112,17 @@ export const ACTIONS: Action[] = [
     iconId: "script-outline",
     args: [
       {
+        name: "Environment",
+        value: false,
+        type: ActionArgType.Selection,
+        options: ["Rooted", "Non-rooted", "Shizuku"],
+      },
+      {
         name: "Use helper app",
         value: false,
-        type: ActionArgumentType.Boolean,
+        type: ActionArgType.Boolean,
       },
-      { name: "Rooted", value: false, type: ActionArgumentType.Boolean },
-      { name: "Command", value: "", type: ActionArgumentType.MultiLineString },
+      { name: "Script", value: "", type: ActionArgType.MultiLineString },
     ],
     keywords: ["alert", "notification"],
   },

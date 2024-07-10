@@ -181,6 +181,7 @@ export function R_App() {
       requestId: request.id,
       response: true,
       type: LogRecordType.IncomingRequest,
+      details: request.details,
     });
   }
 
