@@ -13,11 +13,13 @@ interface WizardProps {
   id?: string;
   hideNavigatorIndicator?: boolean;
   hideNavigatorPlaceholder?: boolean;
+  fullscreen?: boolean;
 }
 
 const defaultProps: Partial<WizardProps> = {
   hideNavigatorIndicator: false,
   hideNavigatorPlaceholder: false,
+  fullscreen: false,
 };
 
 export function R_Wizard(requiredProps: WizardProps) {
@@ -50,7 +52,11 @@ export function R_Wizard(requiredProps: WizardProps) {
   }
 
   return (
-    <motion.div id={props.id} animate={animate} className="wizard">
+    <motion.div
+      id={props.id}
+      animate={animate}
+      className={`wizard ${props.fullscreen ? "fullscreen" : ""}`}
+    >
       {props.pages.map((page, index) => (
         <motion.div key={index} className="page" animate={animatePage(index)}>
           {page}

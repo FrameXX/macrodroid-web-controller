@@ -43,6 +43,7 @@ export function R_WelcomeWizard(props: WelcomeWizardProps) {
 
   return (
     <R_Wizard
+      fullscreen
       open={open}
       pages={[
         <R_SplashBox splash={<R_Icon iconId="web" />}>

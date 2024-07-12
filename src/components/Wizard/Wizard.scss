@@ -9,6 +9,11 @@
   z-index: var(--z-index-top);
   overflow-x: hidden;
 
+  &.fullscreen {
+    position: fixed;
+    inset: 0;
+  }
+
   .content {
     height: 100%;
     box-sizing: border-box;
