@@ -23,7 +23,7 @@ export function useLocalStorage<T>(
     if (!firstRender.current) return;
     if (!navigator.cookieEnabled) return;
     const recovered = recover<T>(storeConfig);
-    if (recovered) setState(recovered);
+    if (recovered !== null) setState(recovered);
   }, []);
 
   useEffect(() => {

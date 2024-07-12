@@ -7,7 +7,6 @@ import { R_Button } from "../Button/Button";
 import { R_Accordion } from "../Accordion/Accordion";
 import { useImmer } from "use-immer";
 import { LogRecord, LogRecordType } from "../../modules/logger";
-import { ReactNode } from "react";
 
 interface LogRecordProps {
   record: LogRecord;
@@ -63,7 +62,7 @@ export function R_LogRecord(props: LogRecordProps) {
         className={`log-record ${props.record.errorMessage ? "failed" : ""}`}
       >
         <R_Icon iconId={iconId} />
-        <div>
+        <div className="content">
           <div className="comment">
             <a role="button" onClick={props.onCommentClick}>
               {props.record.comment}
@@ -87,7 +86,7 @@ export function R_LogRecord(props: LogRecordProps) {
               return (
                 <div key={index}>
                   <hr />
-                  {renderMultiLineString(detail)}
+                  <div className="detail">{renderMultiLineString(detail)}</div>
                 </div>
               );
             })}

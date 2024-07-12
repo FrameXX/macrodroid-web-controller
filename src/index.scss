@@ -45,7 +45,9 @@ dialog {
   font-size: inherit;
 }
 
-textarea {
+textarea,
+pre,
+code {
   font-family: "Jetbrains Mono", "monospace";
 }
 

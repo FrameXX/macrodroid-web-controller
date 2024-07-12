@@ -1,0 +1,23 @@
+@use "../../partials/mixins" as *;
+
+.splash-box {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  box-sizing: border-box;
+  margin: auto;
+  max-width: var(--tab-items-max-width);
+
+  .button {
+    margin: auto;
+  }
+
+  .splash {
+    .icon,
+    img {
+      width: 200px;
+      height: 200px;
+    }
+  }
+}

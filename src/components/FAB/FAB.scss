@@ -9,6 +9,7 @@
   padding: 14px;
   box-shadow: var(--box-shadow);
   bottom: 25px;
+  z-index: var(--z-index-top);
 
   .icon {
     color: var(--color-item-negative);

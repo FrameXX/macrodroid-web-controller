@@ -9,4 +9,5 @@
   margin: auto;
   padding: 8px;
   pointer-events: none;
+  z-index: var(--z-index-toast);
 }

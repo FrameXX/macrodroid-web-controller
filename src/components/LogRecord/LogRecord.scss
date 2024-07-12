@@ -9,6 +9,10 @@
   gap: 8px;
   overflow-y: hidden;
 
+  .content {
+    overflow: hidden;
+  }
+
   > div {
     width: 100%;
     // display: flex;
@@ -48,6 +52,10 @@
   .details {
     font-family: "Jetbrains Mono";
     font-size: 0.8rem;
+  }
+
+  .detail {
+    overflow-x: auto;
   }
 
   button {

@@ -24,6 +24,7 @@ import { R_Connections } from "./components/Connections/Connections";
 import { useLocalStorage } from "./modules/use_local_storage";
 import { R_Actions } from "./components/Actions/Actions";
 import { enums } from "superstruct";
+import { R_WelcomeWizard } from "./components/WelcomeWizard/WelcomeWizard";
 
 let initiated = false;
 
@@ -296,6 +297,7 @@ export function R_App() {
           }
         />
       </motion.main>
+      <R_WelcomeWizard bakeToast={bakeToast} />
       <R_ConfirmDialog
         open={confirmDialogOpen}
         onConfirm={() => confirmDialog.current.resolve(true)}

@@ -1,4 +1,3 @@
-import { ReactNode } from "react";
 import "./Wizard.scss";
 import { Target, motion } from "framer-motion";
 import { R_WizardNavigator } from "../WizardNavigator/WizardNavigator";
@@ -7,16 +6,18 @@ import { useDefaultProps } from "../../modules/use_default_props";
 
 interface WizardProps {
   open: boolean;
-  pages: ReactNode[];
+  pages: React.ReactNode[];
   activePageIndex: number;
-  leftButton: ReactNode;
-  rightButton: ReactNode;
+  leftButton: React.ReactNode;
+  rightButton: React.ReactNode;
   id?: string;
   hideNavigatorIndicator?: boolean;
+  hideNavigatorPlaceholder?: boolean;
 }
 
 const defaultProps: Partial<WizardProps> = {
   hideNavigatorIndicator: false,
+  hideNavigatorPlaceholder: false,
 };
 
 export function R_Wizard(requiredProps: WizardProps) {
@@ -53,7 +54,10 @@ export function R_Wizard(requiredProps: WizardProps) {
       {props.pages.map((page, index) => (
         <motion.div key={index} className="page" animate={animatePage(index)}>
           {page}
-          <div className="navigator-placeholder" />
+          <div
+            hidden={props.hideNavigatorPlaceholder}
+            className="navigator-placeholder"
+          />
         </motion.div>
       ))}
       <R_WizardNavigator

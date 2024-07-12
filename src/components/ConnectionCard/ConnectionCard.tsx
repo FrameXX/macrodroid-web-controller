@@ -29,10 +29,11 @@ export function R_Connection(props: ConnectionProps) {
     >
       <div className="info">
         <div className="name">{props.connection.name}</div>
-        <div className="last-activity">
+        <div className="detail">{props.connection.id}</div>
+        <div className="detail">
           {generateReadableTimestamp(props.connection.lastActivityTimestamp)}
         </div>
-        <div className="last-activity-difference">
+        <div className="detail">
           {generateReadableTimeDifference(
             Date.now() - props.connection.lastActivityTimestamp,
           )}{" "}
