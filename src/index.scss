@@ -1,6 +1,5 @@
 @use "./partials/mixins" as *;
 @use "./partials/splashscreen";
-@use "./partials/fonts";
 @use "./partials/colors";
 @use "./partials/shadows";
 @use "./partials/transition_durations";
@@ -66,11 +65,6 @@ button {
   border: none;
   outline-color: transparent;
 }
-
-// h1,
-// h2 {
-//   font-family: "Helvetica", "Roboto", "system-ui", "Arial";
-// }
 
 h3 {
   margin: 0;
