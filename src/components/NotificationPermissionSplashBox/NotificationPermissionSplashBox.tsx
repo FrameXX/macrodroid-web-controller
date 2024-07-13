@@ -67,7 +67,7 @@ export function R_NotificationPermissionSplashBox(
       splash={<R_Icon iconId="bell-ring" />}
     >
       <h2>Notification permission</h2>
-      <R_GenericCard fitContent className="status" iconId={iconId}>
+      <R_GenericCard className="status" iconId={iconId}>
         {status}
       </R_GenericCard>
       The notification permission is used to notify you about action responses
