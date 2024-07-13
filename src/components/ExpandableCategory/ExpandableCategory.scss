@@ -1,4 +1,4 @@
-.category {
+.expandable-category {
   margin-bottom: 12px;
 
   .head {
@@ -15,9 +15,11 @@
     box-shadow: var(--box-shadow);
     border-radius: var(--border-radius);
     z-index: var(--z-index-top);
+    padding: 0 14px;
 
     h2 {
       width: 100%;
+      font-size: 1.3rem;
     }
   }
 }

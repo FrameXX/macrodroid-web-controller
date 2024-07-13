@@ -8,8 +8,8 @@ interface WizardProps {
   open: boolean;
   pages: React.ReactNode[];
   activePageIndex: number;
-  leftButton: React.ReactNode;
-  rightButton: React.ReactNode;
+  leftButton?: React.ReactNode;
+  rightButton?: React.ReactNode;
   id?: string;
   hideNavigatorIndicator?: boolean;
   hideNavigatorPlaceholder?: boolean;

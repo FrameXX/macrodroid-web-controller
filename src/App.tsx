@@ -25,6 +25,7 @@ import { useLocalStorage } from "./modules/use_local_storage";
 import { R_Actions } from "./components/Actions/Actions";
 import { enums } from "superstruct";
 import { R_WelcomeWizard } from "./components/WelcomeWizard/WelcomeWizard";
+import { R_Extras } from "./components/Extras/Extras";
 
 let initiated = false;
 
@@ -288,6 +289,9 @@ export function R_App() {
               clearLog={logger.current.clear}
               confirm={confirm}
             />
+          </R_Tab>
+          <R_Tab active={activeNavTabId === NavTabId.Extras}>
+            <R_Extras bakeToast={bakeToast} />
           </R_Tab>
         </div>
         <R_Nav

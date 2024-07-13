@@ -1,12 +1,16 @@
 @use "../../partials/mixins" as *;
 
-.text-card {
+.generic-card {
   @include card;
   display: flex;
   align-items: center;
-  width: fit-content;
   text-align: left;
   background-color: var(--color-surface-top);
+
+  .main {
+    width: 100%;
+    box-sizing: border-box;
+  }
 
   > .icon {
     margin: 0;

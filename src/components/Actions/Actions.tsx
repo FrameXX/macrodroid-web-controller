@@ -1,5 +1,5 @@
 import { useImmer } from "use-immer";
-import { R_Category } from "../Category/Category";
+import { R_ExpandableCategory } from "../ExpandableCategory/ExpandableCategory";
 import { R_FAB } from "../FAB/FAB";
 import { R_IconNotice } from "../IconNotice/IconNotice";
 import { R_ConfigActionWizard } from "../ConfigActionWizard/ConfigActionWizard";
@@ -110,7 +110,7 @@ export function R_Actions(props: ActionsProps) {
 
   return (
     <>
-      <R_Category defaultOpen name="Saved" iconId="star">
+      <R_ExpandableCategory defaultOpen name="Saved" iconId="star">
         <R_IconNotice hidden={savedActions.length > 0}>
           No actions saved
         </R_IconNotice>
@@ -128,8 +128,8 @@ export function R_Actions(props: ActionsProps) {
             ))}
           </AnimatePresence>
         </div>
-      </R_Category>
-      <R_Category defaultOpen name="Recently run" iconId="history">
+      </R_ExpandableCategory>
+      <R_ExpandableCategory defaultOpen name="Recently run" iconId="history">
         <R_IconNotice hidden={recentActions.length > 0}>
           No actions run
         </R_IconNotice>
@@ -146,7 +146,7 @@ export function R_Actions(props: ActionsProps) {
             ))}
           </AnimatePresence>
         </div>
-      </R_Category>
+      </R_ExpandableCategory>
       <R_FAB
         onClick={() => setConfigActionWizardOpen(true)}
         title="Configure new action"
