@@ -3,6 +3,7 @@ import { array, assert, number, object, string } from "superstruct";
 export enum IncomingRequestType {
   Response,
   Notification,
+  Clipboard,
 }
 
 const RequestStruct = object({

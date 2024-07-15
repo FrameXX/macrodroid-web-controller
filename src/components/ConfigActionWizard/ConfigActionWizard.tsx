@@ -37,7 +37,9 @@ export function R_ConfigActionWizard(props: ConfigActionWizardProps) {
   const filteredActions = useMemo(() => {
     const filter = filterValue.toLowerCase();
     return ACTIONS.filter((action) =>
-      action.name.toLowerCase().includes(filter),
+      `${action.name}${action.keywords.join("")}`
+        .toLowerCase()
+        .includes(filter),
     );
   }, [filterValue]);
 

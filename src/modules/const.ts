@@ -146,4 +146,18 @@ export const ACTIONS: Action[] = [
     ],
     keywords: ["alert", "notification"],
   },
+  {
+    id: "fill_clipboard",
+    name: "Fill clipboard",
+    iconId: "clipboard-text",
+    args: [
+      {
+        name: "Text",
+        value: "",
+        type: ActionArgType.MultiLineString,
+        id: "text",
+      },
+    ],
+    keywords: ["clipboard", "copy", "fill", "paste", "write"],
+  },
 ];
