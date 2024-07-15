@@ -4,6 +4,7 @@ import { R_StringOption } from "../StringOption/StringOption";
 import screenshot1Src from "../../assets/img/screenshot_1.webp";
 import { R_Wizard } from "../Wizard/Wizard";
 import {
+  CONFIRM_CONNECTION_REQUEST_COMMENT,
   MACRODROID_APP_URL,
   SPLASHSCREEN_TIMEOUT_MS,
 } from "../../modules/const";
@@ -23,6 +24,11 @@ interface AddConnectionWizardProps {
   onConnectionConfirm: (connection: Connection) => void;
   log: Log;
   reportConnectionActivity: (connection: Connection) => void;
+  handleIncomingFailedRequest: (
+    errorMessage: string,
+    connection: Connection,
+  ) => void;
+  handleListenFailed: (connection: Connection) => void;
 }
 
 export function R_CreateConnectionWizard(props: AddConnectionWizardProps) {
@@ -59,9 +65,9 @@ export function R_CreateConnectionWizard(props: AddConnectionWizardProps) {
   }
 
   function onSuccess(connection: Connection) {
-    connection.stopListeningRequests();
+    connection.lastActivityTimestamp = Date.now();
+    connection.removeRequestListeners();
     props.onConnectionConfirm(connection);
-    props.reportConnectionActivity(connection);
     props.bakeToast(
       new Toast(
         "Connection was confirmed and added.",
@@ -74,7 +80,8 @@ export function R_CreateConnectionWizard(props: AddConnectionWizardProps) {
 
   function cancelNewConnection() {
     if (!lastConnection) return;
-    if (lastConnection?.listening) lastConnection.stopListeningRequests();
+    lastConnection.closeReceiver();
+    lastConnection.removeRequestListeners();
     props.bakeToast(new Toast("Connection initialization canceled.", "cancel"));
   }
 
@@ -118,36 +125,14 @@ export function R_CreateConnectionWizard(props: AddConnectionWizardProps) {
       );
     }
 
+    connection.openReceiver();
     connection.listenRequests(
       (request) => handleIncomingRequest(request, connection, request.id),
       (errorMessage) => {
-        handleIncomingFailedRequest(errorMessage, connection);
+        props.handleIncomingFailedRequest(errorMessage, connection);
       },
-      () => handleListenFailed(connection),
+      () => props.handleListenFailed(connection),
     );
-  }
-
-  function handleListenFailed(connection: Connection) {
-    const errorMessage = "Failed to listen for incoming requests.";
-    props.bakeToast(new Toast(errorMessage, "alert", ToastSeverity.Error));
-    props.log({
-      connectionName: connection.name,
-      response: false,
-      type: LogRecordType.Technicality,
-      errorMessage,
-    });
-  }
-
-  function handleIncomingFailedRequest(
-    errorMessage: string,
-    connection: Connection,
-  ) {
-    props.log({
-      connectionName: connection.name,
-      response: false,
-      type: LogRecordType.IncomingRequest,
-      errorMessage,
-    });
   }
 
   function handleIncomingRequest(
@@ -169,6 +154,7 @@ export function R_CreateConnectionWizard(props: AddConnectionWizardProps) {
       return;
     }
     props.log({
+      comment: CONFIRM_CONNECTION_REQUEST_COMMENT,
       connectionName: connection.name,
       requestId: request.id,
       response: true,

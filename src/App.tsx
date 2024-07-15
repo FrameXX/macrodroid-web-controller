@@ -8,7 +8,10 @@ import { useInnerSize } from "./modules/use_inner_size";
 import { Target, motion } from "framer-motion";
 import { Connection, ConnectionsStruct } from "./modules/connection";
 import { R_Log } from "./components/Log/Log";
-import { IncomingRequest } from "./modules/incoming_request";
+import {
+  IncomingRequest,
+  IncomingRequestType,
+} from "./modules/incoming_request";
 import { R_Tab } from "./components/Tab/Tab";
 import { useImmer } from "use-immer";
 import { R_ConfirmDialog } from "./components/ConfirmDialog/ConfirmDialog";
@@ -27,8 +30,6 @@ import { enums } from "superstruct";
 import { R_WelcomeWizard } from "./components/WelcomeWizard/WelcomeWizard";
 import { R_Extras } from "./components/Extras/Extras";
 
-let initiated = false;
-
 export function R_App() {
   const [toasts, setToasts] = useImmer<Toast[]>([]);
   const [activeNavTabId, setActiveNavTabId] = useImmer<NavTabId>(
@@ -39,6 +40,13 @@ export function R_App() {
   const [confirmDialogOpen, setConfirmDialogOpen] = useImmer(false);
   const [confirmDialogText, setConfirmDialogText] = useImmer("");
   const [logScrolledDown, setLogScrolledDown] = useImmer(false);
+
+  const toaster = useRef(new Toaster(setToasts));
+  const logger = useRef(new Logger(setLogRecords));
+  const confirmDialog = useRef(
+    new ConfirmDialog(setConfirmDialogOpen, setConfirmDialogText),
+  );
+  const logScrollableContainer = useRef<HTMLDivElement>(null);
 
   useLocalStorage(logRecords, setLogRecords, {
     storageKey: "logRecords",
@@ -53,6 +61,7 @@ export function R_App() {
       return logRecords;
     },
   });
+
   const saveConnections = useLocalStorage(
     connections,
     (connections) => connections.forEach(addConnection),
@@ -77,6 +86,7 @@ export function R_App() {
         ),
     },
   );
+
   useLocalStorage(activeNavTabId, setActiveNavTabId, {
     storageKey: "activeNavTabId",
     struct: enums([
@@ -92,13 +102,6 @@ export function R_App() {
     },
   });
 
-  const toaster = useRef(new Toaster(setToasts));
-  const logger = useRef(new Logger(setLogRecords));
-  const confirmDialog = useRef(
-    new ConfirmDialog(setConfirmDialogOpen, setConfirmDialogText),
-  );
-  const logScrollableContainer = useRef<HTMLDivElement>(null);
-  const currentConnections = useRef<Connection[]>([]);
   useEffect(() => {
     if (!logScrollableContainer.current) {
       console.warn("Logs scrollable container not found.");
@@ -115,6 +118,27 @@ export function R_App() {
       container.removeEventListener("scroll", onScroll);
     };
   }, []);
+
+  useEffect(() => {
+    connections.forEach((connection) => {
+      connection.listenRequests(
+        (request) => {
+          handleIncomingRequest(request, connection);
+        },
+        (errorMessage) => {
+          handleIncomingFailedRequest(errorMessage, connection);
+        },
+        () => {
+          handleListenFailed(connection);
+        },
+      );
+    });
+    return () => {
+      connections.forEach((connection) => {
+        connection.removeRequestListeners();
+      });
+    };
+  }, [connections, logRecords]);
 
   function scrollLogTop() {
     const logsContainer = document.getElementById("logs");
@@ -139,38 +163,34 @@ export function R_App() {
       prevConnections.push(connection);
       return prevConnections;
     });
-    currentConnections.current.push(connection);
-    connection.listenRequests(
-      (request) => {
-        handleIncomingRequest(request, connection);
-      },
-      (errorMessage) => {
-        handleIncomingFailedRequest(errorMessage, connection);
-      },
-      () => {
-        handleListenFailed(connection);
-      },
-    );
+    if (!connection.receiverOpened) connection.openReceiver();
   }
 
   function reportConnectionActivity(activeConnection: Connection) {
-    const activeConnectionIndex = currentConnections.current.findIndex(
+    const activeConnectionIndex = connections.findIndex(
       (connection) => connection.id === activeConnection.id,
     );
-    if (activeConnectionIndex === -1) {
-      console.warn(
-        "Connection that was reported to be active could not be found in connections list.",
+    if (activeConnectionIndex === -1)
+      throw new Error(
+        "Connection that was reported to be active could not be found in the connections list.",
       );
-      return;
-    }
-
     setConnections((prevConnections) => {
       prevConnections[activeConnectionIndex].lastActivityTimestamp = Date.now();
       return prevConnections;
     });
-    currentConnections.current[activeConnectionIndex].lastActivityTimestamp =
-      Date.now();
-    saveConnections(currentConnections.current);
+    saveConnections();
+  }
+
+  function commentIncomingRequest(request: IncomingRequest) {
+    if (request.type === IncomingRequestType.Notification)
+      return "Notification";
+    const mathcingOutgoingLogRecords = logRecords.filter(
+      (logRecord) =>
+        logRecord.type === LogRecordType.OutgoingRequest &&
+        logRecord.requestId === request.id,
+    );
+    if (mathcingOutgoingLogRecords.length === 0) return "Unknown request";
+    return mathcingOutgoingLogRecords[0].comment!;
   }
 
   function handleIncomingRequest(
@@ -178,12 +198,37 @@ export function R_App() {
     connection: Connection,
   ) {
     reportConnectionActivity(connection);
+
+    const comment = commentIncomingRequest(request);
     log({
+      comment,
       connectionName: connection.name,
       requestId: request.id,
       response: true,
       type: LogRecordType.IncomingRequest,
       details: request.details,
+    });
+
+    if (
+      activeNavTabId === NavTabId.Log ||
+      Notification.permission !== "granted"
+    )
+      return;
+
+    let notification: Notification;
+    if (request.type === IncomingRequestType.Notification) {
+      notification = new Notification(request.details[0], {
+        body: request.details.slice(1).join("\n\n"),
+      });
+    } else {
+      notification = new Notification(comment, {
+        body: request.details.join("\n\n"),
+      });
+    }
+
+    notification.addEventListener("click", () => {
+      window.focus();
+      setActiveNavTabId(NavTabId.Log);
     });
   }
 
@@ -191,6 +236,13 @@ export function R_App() {
     errorMessage: string,
     connection: Connection,
   ) {
+    bakeToast(
+      new Toast(
+        `An incoming request with invalid strcuture was received. ${errorMessage}`,
+        "alert",
+        ToastSeverity.Error,
+      ),
+    );
     log({
       connectionName: connection.name,
       response: false,
@@ -200,6 +252,7 @@ export function R_App() {
   }
 
   function handleListenFailed(connection: Connection) {
+    if (document.visibilityState === "hidden") return;
     const errorMessage = "Failed to listen for incoming requests.";
     log({
       connectionName: connection.name,
@@ -217,14 +270,12 @@ export function R_App() {
       ))
     )
       return;
-    if (connection.listening) connection.stopListeningRequests();
-    setConnections((prevConnections) => {
-      const index = prevConnections.indexOf(connection);
-      prevConnections.splice(index, 1);
-      return prevConnections;
-    });
-    currentConnections.current = currentConnections.current.filter(
-      (currentConnection) => currentConnection.id !== connection.id,
+    if (connection.listening) connection.removeRequestListeners();
+    if (connection.receiverOpened) connection.closeReceiver();
+    setConnections(
+      connections.filter(
+        (currentConnection) => currentConnection.id !== connection.id,
+      ),
     );
   }
 
@@ -239,14 +290,6 @@ export function R_App() {
   async function confirm(text: string) {
     return await confirmDialog.current.confirm(text);
   }
-
-  function init() {}
-
-  useEffect(() => {
-    if (initiated) return;
-    initiated = true;
-    init();
-  }, []);
 
   const wideScreen = useInnerSize(
     () => innerWidth > innerHeight && innerHeight > 500,
@@ -268,6 +311,8 @@ export function R_App() {
               onConnectionDelete={deleteConnection}
               bakeToast={bakeToast}
               log={log}
+              handleIncomingFailedRequest={handleIncomingFailedRequest}
+              handleListenFailed={handleListenFailed}
             />
           </R_Tab>
           <R_Tab active={activeNavTabId === NavTabId.Actions}>

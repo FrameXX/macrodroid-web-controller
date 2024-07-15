@@ -1,4 +1,5 @@
 import { Action, ActionArg, ActionArgType } from "./action";
+import { CONFIRM_CONNECTION_REQUEST_COMMENT } from "./const";
 import { Random } from "./random";
 
 export enum OutgoingRequestType {
@@ -65,7 +66,7 @@ export class OutgoingRequest {
     return new OutgoingRequest(
       OutgoingRequestType.Add,
       [],
-      "Connection creation confirmation",
+      CONFIRM_CONNECTION_REQUEST_COMMENT,
     );
   }
 

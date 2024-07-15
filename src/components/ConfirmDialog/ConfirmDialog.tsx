@@ -4,7 +4,7 @@ import "./ConfirmDialog.scss";
 import { R_Button } from "../Button/Button";
 import {
   DEFAULT_TRANSITION_DURATION_S,
-  DEFAULT_TRANSITION_OFFSET,
+  DEFAULT_TRANSITION_OFFSET_PX,
 } from "../../modules/const";
 import { useEffect, useRef } from "react";
 
@@ -18,7 +18,7 @@ interface ConfirmDialogProps {
 export function R_ConfirmDialog(props: ConfirmDialogProps) {
   const animateDialog: Target = props.open
     ? { opacity: 1, y: 0 }
-    : { display: "none", opacity: 0, y: -DEFAULT_TRANSITION_OFFSET };
+    : { display: "none", opacity: 0, y: -DEFAULT_TRANSITION_OFFSET_PX };
   const animateBackdrop: Target = props.open
     ? { opacity: 0.7 }
     : { display: "none", opacity: 0 };

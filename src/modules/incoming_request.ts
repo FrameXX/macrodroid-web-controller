@@ -1,10 +1,20 @@
-import { array, assert, object, string } from "superstruct";
+import { array, assert, number, object, string } from "superstruct";
 
-const RequestStruct = object({ id: string(), details: array(string()) });
+export enum IncomingRequestType {
+  Response,
+  Notification,
+}
+
+const RequestStruct = object({
+  id: string(),
+  type: number(),
+  details: array(string()),
+});
 
 export class IncomingRequest {
   constructor(
     public readonly id: string,
+    public readonly type: IncomingRequestType,
     public readonly details: string[],
   ) {}
 
@@ -14,6 +24,10 @@ export class IncomingRequest {
       throw new Error("Parsed response is missing the message property.");
     const parsedRequest = JSON.parse(parsedResponse.message);
     assert(parsedRequest, RequestStruct);
-    return new IncomingRequest(parsedRequest.id, parsedRequest.details);
+    return new IncomingRequest(
+      parsedRequest.id,
+      IncomingRequestType.Response,
+      parsedRequest.details,
+    );
   }
 }

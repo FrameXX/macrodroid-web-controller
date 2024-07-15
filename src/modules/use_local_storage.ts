@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { Struct, assert } from "superstruct";
 
-type ManualSave<T> = (state: T) => void;
+type ManualSave<T> = (customState?: T) => void;
 
 export interface StoreConfig<T> {
   struct: Struct<any>;
@@ -35,7 +35,7 @@ export function useLocalStorage<T>(
     save(state, storeConfig.stringify, storeConfig.storageKey);
   }, [state]);
 
-  return (state) => save(state, storeConfig.stringify, storeConfig.storageKey);
+  return (customState?: T) => save(customState ? customState : state, storeConfig.stringify, storeConfig.storageKey);
 }
 
 function save<T>(

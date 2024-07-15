@@ -26,9 +26,11 @@ export const ConnectionsStruct = array(
 );
 
 export class Connection {
+  public receiverOpened = false;
   public listening = false;
   public lastActivityTimestamp = 0;
   private eventSource?: EventSource;
+  private _removeListeners?: () => void;
 
   constructor(
     public readonly name: string,
@@ -70,35 +72,73 @@ export class Connection {
     };
   }
 
+  public openReceiver() {
+    if (this.receiverOpened) throw Error("This connection is already open.");
+    this.eventSource = new EventSource(this.ntfyTopicURL);
+    this.receiverOpened = true;
+  }
+
+  public closeReceiver() {
+    if (!this.receiverOpened) throw Error("This connection is already closed.");
+    this.eventSource?.close();
+    this.receiverOpened = false;
+  }
+
+  private handleIncomingRequest(
+    event: MessageEvent<any>,
+    onRequest: (request: IncomingRequest) => void,
+    onFailedRequest?: (errorMessage: string) => void,
+  ) {
+    let request: IncomingRequest | null = null;
+    try {
+      request = IncomingRequest.fromNtfyRequest(event.data);
+    } catch (error) {
+      if (onFailedRequest)
+        error instanceof Error
+          ? onFailedRequest(error.message)
+          : onFailedRequest("Unknown error.");
+    }
+    if (request) onRequest(request);
+  }
+
   public listenRequests(
     onRequest: (request: IncomingRequest) => void,
     onFailedRequest?: (errorMessage: string) => void,
     onListenFailed?: () => void,
   ) {
-    if (this.listening)
-      throw Error("This connection is already listening to new messages.");
-    this.eventSource = new EventSource(this.ntfyTopicURL);
-    this.eventSource.addEventListener("message", (event) => {
-      let request: IncomingRequest | null = null;
-      try {
-        request = IncomingRequest.fromNtfyRequest(event.data);
-      } catch (error) {
-        if (onFailedRequest)
-          error instanceof Error
-            ? onFailedRequest(error.message)
-            : onFailedRequest("Unknown error.");
-      }
-      if (request) onRequest(request);
-    });
+    if (!this.eventSource)
+      throw new Error(
+        "This connection does not have eventSource defined. It has probably not been opened.",
+      );
+
+    const handleMessage = (event: MessageEvent<any>) => {
+      this.handleIncomingRequest(event, onRequest, onFailedRequest);
+    };
+
+    this.eventSource.addEventListener("message", handleMessage);
     if (onListenFailed)
       this.eventSource.addEventListener("error", onListenFailed);
+
+    this._removeListeners = () => {
+      if (!this.eventSource)
+        throw new Error(
+          "This connection does not have eventSource defined. It has probably not been opened.",
+        );
+      this.eventSource.removeEventListener("message", handleMessage);
+      if (onListenFailed)
+        this.eventSource.removeEventListener("error", onListenFailed);
+    };
+
     this.listening = true;
   }
 
-  public stopListeningRequests() {
-    if (!this.listening)
-      throw Error("This connection is not listening to messages.");
-    this.eventSource?.close();
+  public removeRequestListeners() {
+    if (!this._removeListeners) {
+      throw new Error(
+        "The method to remove listeners has not been defined. Event listeners probably have not been added.",
+      );
+    }
+    this._removeListeners();
     this.listening = false;
   }
 

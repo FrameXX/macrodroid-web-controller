@@ -9,10 +9,12 @@ export const CONNECTION_ID_PARAM_NAME = "connectionId";
 export const REQUEST_ID_PARAM_NAME = "requestId";
 export const NTFY_DOMAIN = "ntfy.sh";
 export const NTFY_TOPIC_PREFIX = "macrodroid-wc";
+export const CONFIRM_CONNECTION_REQUEST_COMMENT =
+  "Connection creation confirmation";
 
 // UI
 export const SPLASHSCREEN_TIMEOUT_MS = 350;
-export const DEFAULT_TRANSITION_OFFSET = 40;
+export const DEFAULT_TRANSITION_OFFSET_PX = 40;
 export const DEFAULT_TRANSITION_UNMOUNTED_SCALE = 0.8;
 export const DEFAULT_TRANSITION_DURATION_S = 0.35;
 const PREFERS_REDUCED_MOTION = matchMedia(

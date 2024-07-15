@@ -18,6 +18,11 @@ interface ConnectionsProps {
   bakeToast: BakeToast;
   log: (record: LogRecordInitializer) => void;
   reportConnectionActivity: (connection: Connection) => void;
+  handleIncomingFailedRequest: (
+    errorMessage: string,
+    connection: Connection,
+  ) => void;
+  handleListenFailed: (connection: Connection) => void;
 }
 
 export function R_Connections(props: ConnectionsProps) {
@@ -96,6 +101,8 @@ export function R_Connections(props: ConnectionsProps) {
         bakeToast={props.bakeToast}
         onClose={() => setAddConnectionWizardOpen(false)}
         open={addConnectionWizardOpen}
+        handleIncomingFailedRequest={props.handleIncomingFailedRequest}
+        handleListenFailed={props.handleListenFailed}
       />
     </>
   );
