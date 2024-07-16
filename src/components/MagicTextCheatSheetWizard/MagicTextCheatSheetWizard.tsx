@@ -10,10 +10,12 @@ import { motion } from "framer-motion";
 import { R_SearchInput } from "../SearchInput/SearchInput";
 import { useImmer } from "use-immer";
 import { R_Icon } from "../Icon/Icon";
+import { BakeToast, Toast } from "../../modules/toaster";
 
 interface MagicTextCheatSheetWizardProps {
   open: boolean;
   onClose: () => void;
+  bakeToast: BakeToast;
 }
 
 export function R_MagicTextCheatSheetWizard(
@@ -49,7 +51,7 @@ export function R_MagicTextCheatSheetWizard(
             />
           </div>
           <R_GenericCard id="copy-magic-text-notice" iconId="information">
-            Click on a magic text entry to copy.
+            Click on a magic text entry to copy it to clipboard.
           </R_GenericCard>
           <motion.div
             animate={{ columns: entriesColumns }}
@@ -57,6 +59,11 @@ export function R_MagicTextCheatSheetWizard(
           >
             {filteredEntries.map((entry) => (
               <R_MagicTextEntry
+                onCopy={() =>
+                  props.bakeToast(
+                    new Toast("Copied to clipboard.", "content-copy"),
+                  )
+                }
                 title={entry.title}
                 magicText={entry.magicText}
                 key={entry.magicText}

@@ -39,6 +39,7 @@ export function R_Extras(props: ExtrasProps) {
         name="Companion macro"
       />
       <R_MagicTextCheatSheetWizard
+        bakeToast={props.bakeToast}
         open={magicTextCheatSheetWizardOpen}
         onClose={() => setMagicTextCheatSheetWizardOpen(false)}
       />
