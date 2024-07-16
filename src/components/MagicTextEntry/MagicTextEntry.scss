@@ -1,0 +1,13 @@
+.magic-text-entry {
+  max-width: var(--tab-items-max-width);
+  width: 100%;
+  box-sizing: border-box;
+
+  .title {
+    font-size: 0.9rem;
+  }
+
+  pre {
+    margin: 2px 0;
+  }
+}

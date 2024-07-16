@@ -5,7 +5,7 @@ import "./OpenableCategory.scss";
 interface OpenableCategoryProps {
   name: string;
   iconId: string;
-  onCLick: () => void;
+  onClick: () => void;
 }
 
 export function R_OpenableCategory(props: OpenableCategoryProps) {
@@ -14,7 +14,7 @@ export function R_OpenableCategory(props: OpenableCategoryProps) {
       title={props.name}
       iconId={props.iconId}
       button
-      onClick={props.onCLick}
+      onClick={props.onClick}
       className="openable-category"
       leftBox={<R_Icon iconId="arrow-right-thick" />}
     >

@@ -1,0 +1,26 @@
+@use "../../partials/mixins" as *;
+
+#copy-magic-text-notice {
+  width: fit-content;
+}
+
+#magic-text-entries-filter {
+  @include card;
+  text-align: left;
+  gap: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: var(--color-surface-top);
+  z-index: var(--z-index-top);
+  width: 100%;
+  max-width: var(--tab-items-max-width);
+
+  input {
+    width: 100%;
+  }
+}

@@ -3,4 +3,7 @@
 }
 
 #wizard-create-connection {
+  .prerequisite {
+    max-width: var(--tab-items-max-width);
+  }
 }

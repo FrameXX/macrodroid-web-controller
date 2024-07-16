@@ -22,6 +22,7 @@ export const ActionsStruct = array(
       }),
     ),
     keywords: array(string()),
+    JSONstring: optional(string()),
   }),
 );
 
@@ -55,4 +56,5 @@ export interface Action {
   iconId: string;
   args: ActionArg<any>[];
   keywords: string[];
+  JSONstring?: string;
 }

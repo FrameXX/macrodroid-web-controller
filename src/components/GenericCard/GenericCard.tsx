@@ -12,6 +12,7 @@ interface ItemCardProps extends PropsWithChildren {
   onClick?: () => void;
   leftBox?: React.ReactNode;
   title?: string;
+  id?: string;
 }
 
 const defaultProps: Partial<ItemCardProps> = {
@@ -34,6 +35,7 @@ export function R_GenericCard(requiredProps: ItemCardProps) {
 
   const card = props.button ? (
     <button
+      id={props.id}
       type="button"
       title={props.title}
       onClick={props.onClick}
@@ -42,7 +44,7 @@ export function R_GenericCard(requiredProps: ItemCardProps) {
       {content}
     </button>
   ) : (
-    <div title={props.title} className={cardClassName}>
+    <div id={props.id} title={props.title} className={cardClassName}>
       {content}
     </div>
   );

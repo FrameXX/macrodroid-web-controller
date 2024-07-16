@@ -4,7 +4,7 @@ import { R_FAB } from "../FAB/FAB";
 import { R_IconNotice } from "../IconNotice/IconNotice";
 import { R_ConfigActionWizard } from "../ConfigActionWizard/ConfigActionWizard";
 import { Action, ActionsStruct } from "../../modules/action";
-import { BakeToast } from "../../modules/toaster";
+import { BakeToast, Toast, ToastSeverity } from "../../modules/toaster";
 import { AnimatePresence } from "framer-motion";
 import { R_ConfiguredActionCard } from "../ConfiguredActionCard/ConfiguredActionCard";
 import "./Actions.scss";
@@ -50,6 +50,8 @@ export function R_Actions(props: ActionsProps) {
   });
 
   function onActionConfigure(action: Action, save: boolean) {
+    if (typeof action.JSONstring === "undefined")
+      action.JSONstring = JSON.stringify(action);
     if (save) {
       addSavedAction(action);
       setConfigActionWizardOpen(false);
@@ -91,10 +93,24 @@ export function R_Actions(props: ActionsProps) {
   }
 
   function addSavedAction(action: Action) {
+    const sameActions = savedActions.filter((savedAction) => {
+      return savedAction.JSONstring === action.JSONstring;
+    });
+    if (sameActions.length > 0) {
+      props.bakeToast(
+        new Toast(
+          "Saving cancelled. You already have the same action with the same configuration saved.",
+          "cancel",
+          ToastSeverity.Error,
+        ),
+      );
+      return;
+    }
     setSavedActions((savedActions) => {
       savedActions.push(action);
       return savedActions;
     });
+    props.bakeToast(new Toast("Action saved.", "star", ToastSeverity.Success));
   }
 
   function unsaveAction(index: number) {
@@ -120,7 +136,7 @@ export function R_Actions(props: ActionsProps) {
               <R_ConfiguredActionCard
                 saved
                 onToggleSave={() => unsaveAction(index)}
-                key={`${action.id}-${index}`}
+                key={action.JSONstring}
                 name={action.name}
                 iconId={action.iconId}
                 onRun={() => runRunActionWizard(action, false)}
@@ -138,7 +154,7 @@ export function R_Actions(props: ActionsProps) {
             {recentActions.map((action, index) => (
               <R_ConfiguredActionCard
                 onToggleSave={() => saveActionFromRecentActions(index)}
-                key={`${action.id}-${index}`}
+                key={action.JSONstring}
                 name={action.name}
                 iconId={action.iconId}
                 onRun={() => runRunActionWizard(action, false)}
@@ -153,7 +169,6 @@ export function R_Actions(props: ActionsProps) {
         iconId="cog-play"
       />
       <R_ConfigActionWizard
-        bakeToast={props.bakeToast}
         open={configActionWizardOpen}
         onCancel={() => setConfigActionWizardOpen(false)}
         onActionConfigure={onActionConfigure}

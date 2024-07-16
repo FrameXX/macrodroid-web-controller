@@ -111,6 +111,11 @@ export class Connection {
         "This connection does not have eventSource defined. It has probably not been opened.",
       );
 
+    if (this.listening)
+      throw new Error(
+        "This connection already has listeners added. Remove old listeners before adding new.",
+      );
+
     const handleMessage = (event: MessageEvent<any>) => {
       this.handleIncomingRequest(event, onRequest, onFailedRequest);
     };
@@ -133,11 +138,10 @@ export class Connection {
   }
 
   public removeRequestListeners() {
-    if (!this._removeListeners) {
+    if (!this._removeListeners)
       throw new Error(
         "The method to remove listeners has not been defined. Event listeners probably have not been added.",
       );
-    }
     this._removeListeners();
     this.listening = false;
   }

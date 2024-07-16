@@ -10,6 +10,7 @@ import { R_NotificationPermissionSplashBox } from "../NotificationPermissionSpla
 import { BakeToast } from "../../modules/toaster";
 import { useLocalStorage } from "../../modules/use_local_storage";
 import { boolean } from "superstruct";
+import { R_CompanionMacroSplashBox } from "../CompanionMacroSplashBox/CompanionMacroSplashBox";
 
 interface WelcomeWizardProps {
   bakeToast: BakeToast;
@@ -30,7 +31,7 @@ export function R_WelcomeWizard(props: WelcomeWizardProps) {
   Notification.permission;
 
   function nextPage() {
-    if (activePageIndex === 5) {
+    if (activePageIndex === 6) {
       setOpen(false);
       return;
     }
@@ -90,6 +91,7 @@ export function R_WelcomeWizard(props: WelcomeWizardProps) {
           />
         </R_SplashBox>,
         <R_NotificationPermissionSplashBox bakeToast={props.bakeToast} />,
+        <R_CompanionMacroSplashBox />,
       ]}
       leftButton={
         <>

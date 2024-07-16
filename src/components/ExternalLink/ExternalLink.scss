@@ -4,8 +4,11 @@
   width: var(--tab-items-max-width);
   max-width: var(--tab-items-max-width);
   width: 100%;
+  background-color: var(--color-primary);
+  box-sizing: border-box;
 
   .generic-card {
     margin-top: 12px;
+    padding: 12px;
   }
 }

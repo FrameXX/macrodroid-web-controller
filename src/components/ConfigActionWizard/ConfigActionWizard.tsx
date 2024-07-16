@@ -11,7 +11,6 @@ import { R_SearchInput } from "../SearchInput/SearchInput";
 import { R_IconNotice } from "../IconNotice/IconNotice";
 import { Action } from "../../modules/action";
 import { useColumnDeterminator } from "../../modules/use_column_determinator";
-import { BakeToast, Toast, ToastSeverity } from "../../modules/toaster";
 import { R_StringOption } from "../StringOption/StringOption";
 import { R_BooleanOption } from "../BooleanOption/BooleanOption";
 import { R_ActionArgInputList } from "../ActionArgInputList/ActionArgInputList";
@@ -20,7 +19,6 @@ interface ConfigActionWizardProps {
   open: boolean;
   onCancel: () => void;
   onActionConfigure: (action: Action, save: boolean) => void;
-  bakeToast: BakeToast;
 }
 
 export function R_ConfigActionWizard(props: ConfigActionWizardProps) {
@@ -65,10 +63,6 @@ export function R_ConfigActionWizard(props: ConfigActionWizardProps) {
   function onActionConfigurationConfirm() {
     configuredAction.current!.name = actionName;
     props.onActionConfigure(configuredAction.current!, saveWithoutRunning);
-    if (saveWithoutRunning)
-      props.bakeToast(
-        new Toast("Action saved.", "star", ToastSeverity.Success),
-      );
   }
 
   function reset() {

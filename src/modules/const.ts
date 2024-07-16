@@ -1,5 +1,6 @@
 import { Target } from "framer-motion";
 import { Action, ActionArgType } from "./action";
+import { MagicTextEntryProps } from "../components/MagicTextEntry/MagicTextEntry";
 
 // URL
 export const MACRODROID_WEBHOOK_DOMAIN = "trigger.macrodroid.com";
@@ -160,4 +161,26 @@ export const ACTIONS: Action[] = [
     ],
     keywords: ["clipboard", "copy", "fill", "paste", "write"],
   },
+];
+
+export const MAGIC_TEXT_ENTRIES: MagicTextEntryProps[] = [
+  { title: "MacroDroid Mode", magicText: "mode" },
+  { title: "Foreground app name", magicText: "fg_app_name" },
+  { title: "Foreground app package", magicText: "fg_app_package" },
+  { title: "Current brightness", magicText: "current_brightness" },
+  {
+    title: "Current brightness (Android 9+ alternative)",
+    magicText: "current_brightness_alternative",
+  },
+  { title: "Screen timeout (seconds)", magicText: "screen_timeout" },
+  { title: "Current battery (%)", magicText: "battery" },
+  { title: "Battery temperature (°C)", magicText: "battery_temp" },
+  { title: "Battery current now (mA)", magicText: "battery_current_now" },
+  { title: "Power (On/Off)", magicText: "power" },
+  { title: "Clipboard text", magicText: "clipboard" },
+  { title: "Current IP address", magicText: "ip" },
+  { title: "Current IP address (V6)", magicText: "ip6" },
+  { title: "Wi-Fi SSID", magicText: "ssid" },
+  { title: "Wi-Fi signal strength", magicText: "wifi_strength" },
+  { title: "Cell tower signal strength", magicText: "cell_signal_strength" },
 ];
