@@ -78,7 +78,6 @@ export function R_CreateArgumentWizard(props: AddArgumentWizardProps) {
             hidden={type !== 1 && type !== 5}
             title="Default value"
           />
-          {console.log(type)}
           <R_StringOption
             onChange={setValue}
             hidden={type !== 3}

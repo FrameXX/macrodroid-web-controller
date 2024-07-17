@@ -23,7 +23,6 @@ function searchParamNameFromActionArgument(
   argType: ActionArgType,
   argId: string,
 ) {
-  console.log(argType, ActionArgType.Selection);
   switch (argType) {
     case ActionArgType.Boolean:
       return `booleanArgs(${argId})`;
