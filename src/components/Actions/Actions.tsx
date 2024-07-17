@@ -14,6 +14,8 @@ import { Connection } from "../../modules/connection";
 import { R_RunActionWizard } from "../RunActionWizard/RunActionWizard";
 import { useLocalStorage } from "../../modules/use_local_storage";
 import { RECENT_ACTIONS_LIMIT } from "../../modules/const";
+import { R_CreateActionWizard } from "../CreateActionWizard/CreateActionWizard";
+import { R_CreateArgumentWizard } from "../CreateArgumentWizard/CreateArgumentWizard";
 
 interface ActionsProps {
   bakeToast: BakeToast;
@@ -25,6 +27,8 @@ interface ActionsProps {
 export function R_Actions(props: ActionsProps) {
   const [configActionWizardOpen, setConfigActionWizardOpen] = useImmer(false);
   const [runActionWizardOpen, setRunActionWizardOpen] = useImmer(false);
+  const [createActionWizardOpen, setCreateActionWizardOpen] = useImmer(false);
+  const [addArgumentWizardOpen, setAddArgumentWizardOpen] = useImmer(false);
   const [recentActions, setRecentActions] = useImmer<Action[]>([]);
   const [savedActions, setSavedActions] = useImmer<Action[]>([]);
   const [runAction, setRunAction] = useImmer<Action | null>(null);
@@ -172,6 +176,7 @@ export function R_Actions(props: ActionsProps) {
         open={configActionWizardOpen}
         onCancel={() => setConfigActionWizardOpen(false)}
         onActionConfigure={onActionConfigure}
+        onStartActionCreation={() => setCreateActionWizardOpen(true)}
       />
       <R_RunActionWizard
         bakeToast={props.bakeToast}
@@ -181,6 +186,16 @@ export function R_Actions(props: ActionsProps) {
         onCancel={() => setRunActionWizardOpen(false)}
         onActionRunConfirm={dispatchAction}
         runAction={runAction}
+      />
+      <R_CreateActionWizard
+        open={createActionWizardOpen}
+        onCancel={() => setCreateActionWizardOpen(false)}
+        onStartArgumentCreation={() => setAddArgumentWizardOpen(true)}
+      />
+      <R_CreateArgumentWizard
+        open={addArgumentWizardOpen}
+        onCancel={() => setAddArgumentWizardOpen(false)}
+        onAdd={() => {}}
       />
     </>
   );

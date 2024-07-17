@@ -70,7 +70,7 @@ export const ACTIONS: Action[] = [
       {
         name: "Value",
         value: 0,
-        type: ActionArgType.Int,
+        type: ActionArgType.Integer,
         useCondition: { argumentIndex: 1, argumentValue: 1 },
         id: "value",
       },

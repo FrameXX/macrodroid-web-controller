@@ -1,7 +1,8 @@
-import { ReactNode, forwardRef } from "react";
+import { ReactNode, forwardRef, useMemo } from "react";
 import { Random } from "../../modules/random";
 import "./StringOption.scss";
 import { R_Icon } from "../Icon/Icon";
+import { useDefaultProps } from "../../modules/use_default_props";
 
 interface DescribedInputProps {
   iconId?: string;
@@ -12,18 +13,29 @@ interface DescribedInputProps {
   maxLength?: number;
   placeholder?: string;
   autoCapitalize?: string;
-  onChange?: (newValue: string, validity: boolean) => void;
+  onChange: (newValue: string, validity: boolean) => void;
   value?: string;
   onKeyUp?: React.KeyboardEventHandler<HTMLInputElement>;
   description?: ReactNode;
   title: string;
+  hidden?: boolean;
 }
 
+const defaultProps: Partial<DescribedInputProps> = {
+  hidden: false,
+};
+
 export const R_StringOption = forwardRef<HTMLInputElement, DescribedInputProps>(
-  (props, ref) => {
-    const id = Random.id();
+  (requiredProps, ref) => {
+    const props = useDefaultProps(requiredProps, defaultProps);
+
+    const id = useMemo(() => Random.id(), []);
     return (
-      <label title={props.title} className="string-option">
+      <label
+        hidden={props.hidden}
+        title={props.title}
+        className="string-option"
+      >
         <h3>{props.title}</h3>
         <div className="input-container">
           {props.iconId && <R_Icon iconId={props.iconId} />}
@@ -33,8 +45,7 @@ export const R_StringOption = forwardRef<HTMLInputElement, DescribedInputProps>(
             onKeyUp={props.onKeyUp}
             value={props.value}
             onChange={(event) => {
-              if (props.onChange)
-                props.onChange(event.target.value, event.target.validity.valid);
+              props.onChange(event.target.value, event.target.validity.valid);
             }}
             pattern={props.pattern}
             maxLength={props.maxLength}

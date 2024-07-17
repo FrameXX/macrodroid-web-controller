@@ -19,6 +19,7 @@ interface ConfigActionWizardProps {
   open: boolean;
   onCancel: () => void;
   onActionConfigure: (action: Action, save: boolean) => void;
+  onStartActionCreation: () => void;
 }
 
 export function R_ConfigActionWizard(props: ConfigActionWizardProps) {
@@ -163,7 +164,7 @@ export function R_ConfigActionWizard(props: ConfigActionWizardProps) {
             hidden={activePageIndex !== 0}
             title="Create custom action"
             iconId="plus"
-            onClick={() => {}}
+            onClick={props.onStartActionCreation}
           />
           <R_FAB
             hidden={activePageIndex !== 1}

@@ -1,3 +1,4 @@
+import { useDefaultProps } from "../../modules/use_default_props";
 import { R_Icon } from "../Icon/Icon";
 import "./NumberOption.scss";
 
@@ -7,11 +8,18 @@ interface BooleanOptionProps {
   iconId?: string;
   step?: React.InputHTMLAttributes<HTMLInputElement>["step"];
   value?: number;
+  hidden?: boolean;
 }
 
-export function R_NumberOption(props: BooleanOptionProps) {
+const defaultProps: Partial<BooleanOptionProps> = {
+  hidden: false,
+};
+
+export function R_NumberOption(requiredProps: BooleanOptionProps) {
+  const props = useDefaultProps(requiredProps, defaultProps);
+
   return (
-    <label title={props.title} className="integer-option">
+    <label hidden={props.hidden} title={props.title} className="integer-option">
       {props.iconId && <R_Icon iconId={props.iconId} />}
       <h3>{props.title}</h3>
       <input

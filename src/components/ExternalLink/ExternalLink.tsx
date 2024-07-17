@@ -11,11 +11,13 @@ interface ExternalLinkProps extends PropsWithChildren {
 }
 
 export function R_ExternalLink(props: ExternalLinkProps) {
+  const target = props.download ? undefined : "_blank";
+
   return (
     <a
       className="external-link"
       href={props.href}
-      target="_blank"
+      target={target}
       download={props.download}
     >
       <R_GenericCard

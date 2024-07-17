@@ -2,6 +2,7 @@ import { ReactNode, forwardRef } from "react";
 import { Random } from "../../modules/random";
 import "./MultiLineStringOption.scss";
 import { R_Icon } from "../Icon/Icon";
+import { useDefaultProps } from "../../modules/use_default_props";
 
 interface DescribedInputProps {
   iconId?: string;
@@ -10,20 +11,31 @@ interface DescribedInputProps {
   maxLength?: number;
   placeholder?: string;
   autoCapitalize?: string;
-  onChange?: (newValue: string) => void;
+  onChange: (newValue: string) => void;
   value?: string;
   onKeyUp?: React.KeyboardEventHandler<HTMLTextAreaElement>;
   description?: ReactNode;
   title: string;
+  hidden?: boolean;
 }
+
+const defaultProps: Partial<DescribedInputProps> = {
+  hidden: false,
+};
 
 export const R_MultiLineStringOption = forwardRef<
   HTMLTextAreaElement,
   DescribedInputProps
->((props, ref) => {
+>((requiredProps, ref) => {
+  const props = useDefaultProps(requiredProps, defaultProps);
+
   const id = Random.id();
   return (
-    <label title={props.title} className="multi-line-string-option">
+    <label
+      hidden={props.hidden}
+      title={props.title}
+      className="multi-line-string-option"
+    >
       <h3>{props.title}</h3>
       <div className="input-container">
         {props.iconId && <R_Icon iconId={props.iconId} />}
@@ -34,7 +46,7 @@ export const R_MultiLineStringOption = forwardRef<
           onKeyUp={props.onKeyUp}
           value={props.value}
           onChange={(event) => {
-            if (props.onChange) props.onChange(event.target.value);
+            props.onChange(event.target.value);
           }}
           maxLength={props.maxLength}
           required={props.required}

@@ -1,0 +1,10 @@
+@use "../../partials/mixins" as *;
+
+.argument-card {
+  @include card;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  max-width: 400px;
+  box-sizing: border-box;
+}

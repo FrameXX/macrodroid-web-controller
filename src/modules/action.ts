@@ -27,12 +27,12 @@ export const ActionsStruct = array(
 );
 
 export enum ActionArgType {
+  Boolean,
+  Integer,
+  Selection,
   String,
   MultiLineString,
-  Int,
   Decimal,
-  Boolean,
-  Selection,
 }
 
 export interface ActionArgUseCondition {

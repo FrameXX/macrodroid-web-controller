@@ -223,55 +223,53 @@ export function R_CreateConnectionWizard(props: AddConnectionWizardProps) {
         </>,
         <>
           <h2>Enter info</h2>
-          <form id="connection-info">
-            <R_StringOption
-              iconId="rename"
-              ref={connectionNameInput}
-              onChange={(newValue, validity) => {
-                setConnectionName(newValue);
-                setConnectionNameValid(validity);
-              }}
-              onKeyUp={(event) => {
-                if (event.key === "Enter" && webhookIdInput.current)
-                  webhookIdInput.current.focus();
-              }}
-              value={connectionName}
-              required
-              type="text"
-              maxLength={40}
-              placeholder="Enter connection name"
-              title="Connection name"
-              description="This is your custom name, so that you can differentiate the connection from other."
-            />
-            <R_StringOption
-              iconId="webhook"
-              ref={webhookIdInput}
-              onChange={(newValue, validity) => {
-                setWebhookId(newValue);
-                setWebhookIdValid(validity);
-              }}
-              onKeyUp={(event) => {
-                if (event.key === "Enter" && !cantNextPage()) nextPage();
-              }}
-              value={webhookId}
-              required
-              pattern="(?:[a-z]|\d|-){25,50}"
-              type="text"
-              autoCapitalize="none"
-              placeholder="Enter webhook ID"
-              title="Webhook ID"
-              description={
-                <>
-                  <div>
-                    You can find webhook URL of your connection by going to New
-                    macro &gt; Add trigger &gt; Connectivity &gt; Webhook (Url).
-                    Enter just the ID (between last 2 forward slashes).
-                  </div>
-                  <img src={screenshot1Src} />
-                </>
-              }
-            />
-          </form>
+          <R_StringOption
+            iconId="rename"
+            ref={connectionNameInput}
+            onChange={(newValue, validity) => {
+              setConnectionName(newValue);
+              setConnectionNameValid(validity);
+            }}
+            onKeyUp={(event) => {
+              if (event.key === "Enter" && webhookIdInput.current)
+                webhookIdInput.current.focus();
+            }}
+            value={connectionName}
+            required
+            type="text"
+            maxLength={40}
+            placeholder="Enter connection name"
+            title="Connection name"
+            description="This is your custom name, so that you can differentiate the connection from other."
+          />
+          <R_StringOption
+            iconId="webhook"
+            ref={webhookIdInput}
+            onChange={(newValue, validity) => {
+              setWebhookId(newValue);
+              setWebhookIdValid(validity);
+            }}
+            onKeyUp={(event) => {
+              if (event.key === "Enter" && !cantNextPage()) nextPage();
+            }}
+            value={webhookId}
+            required
+            pattern="(?:[a-z]|\d|-){25,50}"
+            type="text"
+            autoCapitalize="none"
+            placeholder="Enter webhook ID"
+            title="Webhook ID"
+            description={
+              <>
+                <div>
+                  You can find webhook URL of your connection by going to New
+                  macro &gt; Add trigger &gt; Connectivity &gt; Webhook (Url).
+                  Enter just the ID (between last 2 forward slashes).
+                </div>
+                <img src={screenshot1Src} />
+              </>
+            }
+          />
         </>,
         <>
           <h2>Confirm the connection</h2>

@@ -49,7 +49,7 @@ export function R_ActionArgInput(props: ActionArgumentInputProps) {
             value={props.value}
           />
         );
-      case ActionArgType.Int:
+      case ActionArgType.Integer:
         return (
           <R_NumberOption
             value={props.value}

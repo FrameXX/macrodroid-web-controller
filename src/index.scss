@@ -52,12 +52,13 @@ code {
 
 button,
 [role="button"],
-select {
+a,
+select,
+label {
   cursor: pointer;
 }
 
 label {
-  cursor: pointer;
   display: block;
 }
 
@@ -73,10 +74,6 @@ h3 {
 
 a {
   color: var(--color-accent);
-}
-
-a[role="button"]:not([href]) {
-  cursor: pointer;
 }
 
 hr {

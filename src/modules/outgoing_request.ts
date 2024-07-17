@@ -27,7 +27,7 @@ function searchParamNameFromActionArgument(
   switch (argType) {
     case ActionArgType.Boolean:
       return `booleanArgs(${argId})`;
-    case ActionArgType.Int:
+    case ActionArgType.Integer:
     case ActionArgType.Selection:
       return `integerArgs(${argId})`;
     case ActionArgType.Decimal:
