@@ -3,6 +3,7 @@ import { Action, ActionArgType } from "./action";
 import { MagicTextEntryProps } from "../components/MagicTextEntry/MagicTextEntry";
 
 // URL
+export const COMPANION_MACRO_FILENAME = "companion.macro";
 export const MACRODROID_WEBHOOK_DOMAIN = "trigger.macrodroid.com";
 export const WEBHOOK_REQUEST_ID_PREFIX = "mdwc";
 export const WEBHOOK_ADD_REQUEST_ID = "add";
@@ -197,4 +198,12 @@ export const MAGIC_TEXT_ENTRIES: MagicTextEntryProps[] = [
   { title: "am/pm", magicText: "am_pm" },
   { title: "System time", magicText: "system_time" },
   { title: "System time (ms)", magicText: "system_time_ms" },
+  { title: "Webhook base URL", magicText: "webhook_url" },
+  { title: "Language code", magicText: "language_code" },
+  { title: "Country code", magicText: "country_code" },
+  { title: "Cell connection type", magicText: "cell_connection_type" },
+  { title: "Mobile country code", magicText: "mcc" },
+  { title: "Mobile network code", magicText: "mnc" },
+  { title: "Location area code", magicText: "lac" },
+  { title: "Cell tower ID", magicText: "cell_id" },
 ];

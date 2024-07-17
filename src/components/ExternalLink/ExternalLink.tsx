@@ -7,7 +7,7 @@ interface ExternalLinkProps extends PropsWithChildren {
   href: string;
   iconId: string;
   title: string;
-  download?: boolean;
+  download?: string | boolean;
 }
 
 export function R_ExternalLink(props: ExternalLinkProps) {

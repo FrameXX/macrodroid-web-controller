@@ -2,6 +2,7 @@ import { R_ExternalLink } from "../ExternalLink/ExternalLink";
 import { R_Icon } from "../Icon/Icon";
 import { R_SplashBox } from "../SplashBox/SplashBox";
 import companionMacroPath from "../../assets/other/companion.macro?url";
+import { COMPANION_MACRO_FILENAME } from "../../modules/const";
 
 export function R_CompanionMacroSplashBox() {
   return (
@@ -12,7 +13,7 @@ export function R_CompanionMacroSplashBox() {
       <br />
       <br />
       <R_ExternalLink
-        download
+        download={COMPANION_MACRO_FILENAME}
         iconId="download"
         href={companionMacroPath}
         title="Download companion macro"

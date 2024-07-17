@@ -3,6 +3,7 @@ import { R_StringOption } from "../StringOption/StringOption";
 import screenshot1Src from "../../assets/img/screenshot_1.webp";
 import { R_Wizard } from "../Wizard/Wizard";
 import {
+  COMPANION_MACRO_FILENAME,
   CONFIRM_CONNECTION_REQUEST_COMMENT,
   MACRODROID_APP_URL,
   SPLASHSCREEN_TIMEOUT_MS,
@@ -213,7 +214,7 @@ export function R_CreateConnectionWizard(props: AddConnectionWizardProps) {
           <R_GenericCard className="prerequisite" iconId="import">
             <h3>
               You have the{" "}
-              <a href={companionMacroPath} download>
+              <a href={companionMacroPath} download={COMPANION_MACRO_FILENAME}>
                 companion macro
               </a>{" "}
               imported into MacroDroid

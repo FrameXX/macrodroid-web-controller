@@ -15,4 +15,5 @@ export default defineConfig({
   server: {
     open: "./src/index.html",
   },
+  publicDir: "./src/assets/public",
 });
