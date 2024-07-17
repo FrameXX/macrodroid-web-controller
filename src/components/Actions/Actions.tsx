@@ -76,7 +76,6 @@ export function R_Actions(props: ActionsProps) {
     setRunActionWizardOpen(false);
     setRunActionWizardSkipArgs(false);
     const request = OutgoingRequest.runAction(action);
-    console.log(connections);
     for (const connection of connections) {
       const logRecord = await connection.makeRequest(request);
       props.log(logRecord);
