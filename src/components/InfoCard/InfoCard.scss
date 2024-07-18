@@ -1,0 +1,10 @@
+@use "../../partials/mixins" as *;
+
+.info-card {
+  @include card;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  max-width: var(--tab-items-max-width);
+  background-color: var(--color-surface-top);
+}

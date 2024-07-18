@@ -1,18 +1,9 @@
 @use "../../partials/mixins" as *;
 
-.generic-card {
+.simple-card {
   @include card;
   display: flex;
   align-items: center;
-  text-align: left;
+  max-width: var(--tab-items-max-width);
   background-color: var(--color-surface-top);
-
-  .main {
-    width: 100%;
-    box-sizing: border-box;
-  }
-
-  > .icon {
-    margin: 0;
-  }
 }

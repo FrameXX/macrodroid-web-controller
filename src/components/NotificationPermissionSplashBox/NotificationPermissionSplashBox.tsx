@@ -4,8 +4,8 @@ import { R_Icon } from "../Icon/Icon";
 import { R_SplashBox } from "../SplashBox/SplashBox";
 import "./NotificationPermissionSplashBox.scss";
 import { BakeToast, Toast, ToastSeverity } from "../../modules/toaster";
-import { R_GenericCard } from "../GenericCard/GenericCard";
 import { R_WarningCard } from "../WarningCard/WarningCard";
+import { R_SimpleCard } from "../SimpleCard/SimpleCard";
 
 type PermissionStatus = "Granted" | "Denied" | "Not granted";
 
@@ -67,9 +67,9 @@ export function R_NotificationPermissionSplashBox(
       splash={<R_Icon iconId="bell-ring" />}
     >
       <h2>Notification permission</h2>
-      <R_GenericCard className="status" iconId={iconId}>
+      <R_SimpleCard className="status" iconId={iconId}>
         {status}
-      </R_GenericCard>
+      </R_SimpleCard>
       The notification permission is used to notify you about action responses
       from connections and other incoming requests. It is not required.
       <br />

@@ -1,4 +1,9 @@
+@use "../../partials/mixins" as *;
+
 .warning-card {
+  @include card;
+  display: flex;
   border: var(--border-width) solid var(--color-accent-trigger);
   color: var(--color-accent-trigger);
+  background: var(--color-surface-top);
 }

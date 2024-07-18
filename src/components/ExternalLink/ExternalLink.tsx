@@ -1,5 +1,4 @@
 import { PropsWithChildren } from "react";
-import { R_GenericCard } from "../GenericCard/GenericCard";
 import { R_Icon } from "../Icon/Icon";
 import "./ExternalLink.scss";
 
@@ -15,19 +14,15 @@ export function R_ExternalLink(props: ExternalLinkProps) {
 
   return (
     <a
+      title={props.title}
       className="external-link"
       href={props.href}
       target={target}
       download={props.download}
     >
-      <R_GenericCard
-        title={props.title}
-        className="external-link"
-        iconId={props.iconId}
-        leftBox={<R_Icon iconId="open-in-new" />}
-      >
-        {props.children}
-      </R_GenericCard>
+      <R_Icon iconId={props.iconId} />
+      <div className="content">{props.children}</div>
+      <R_Icon iconId="open-in-new" />
     </a>
   );
 }

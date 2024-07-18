@@ -16,8 +16,8 @@ import { OutgoingRequest } from "../../modules/outgoing_request";
 import { Log, LogRecordType } from "../../modules/logger";
 import "./CreateConnectionWizard.scss";
 import { useRef } from "react";
-import { R_GenericCard } from "../GenericCard/GenericCard";
 import companionMacroPath from "../../assets/other/companion.macro?url";
+import { R_SimpleCard } from "../SimpleCard/SimpleCard";
 
 interface AddConnectionWizardProps {
   open: boolean;
@@ -199,10 +199,10 @@ export function R_CreateConnectionWizard(props: AddConnectionWizardProps) {
       pages={[
         <>
           <h2>Meet the prerequisites</h2>
-          <R_GenericCard className="prerequisite" iconId="wifi-check">
+          <R_SimpleCard className="prerequisite" iconId="wifi-check">
             <h3>Your target device is connected to internet</h3>
-          </R_GenericCard>
-          <R_GenericCard className="prerequisite" iconId="package-down">
+          </R_SimpleCard>
+          <R_SimpleCard className="prerequisite" iconId="package-down">
             <h3>
               You have{" "}
               <a href={MACRODROID_APP_URL} target="_blank">
@@ -210,8 +210,8 @@ export function R_CreateConnectionWizard(props: AddConnectionWizardProps) {
               </a>{" "}
               installed and running on your target device
             </h3>
-          </R_GenericCard>
-          <R_GenericCard className="prerequisite" iconId="import">
+          </R_SimpleCard>
+          <R_SimpleCard className="prerequisite" iconId="import">
             <h3>
               You have the{" "}
               <a href={companionMacroPath} download={COMPANION_MACRO_FILENAME}>
@@ -219,7 +219,7 @@ export function R_CreateConnectionWizard(props: AddConnectionWizardProps) {
               </a>{" "}
               imported into MacroDroid
             </h3>
-          </R_GenericCard>
+          </R_SimpleCard>
         </>,
         <>
           <h2>Enter info</h2>

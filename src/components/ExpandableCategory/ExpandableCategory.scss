@@ -1,25 +1,22 @@
-.expandable-category {
-  margin-bottom: 12px;
+@use "../../partials/mixins" as *;
 
+.expandable-category {
   .head {
-    position: relative;
+    @include card;
+
     text-align: left;
     display: flex;
     align-items: center;
     color: var(--color-primary-item);
-    gap: 8px;
     background-color: var(--color-primary);
     width: 100%;
     max-width: var(--tab-items-max-width);
-    margin: auto;
-    box-shadow: var(--box-shadow);
-    border-radius: var(--border-radius);
     z-index: var(--z-index-top);
-    padding: 2px 14px;
 
     h2 {
       width: 100%;
       font-size: 1.3rem;
+      margin: 10px 0;
     }
   }
 }

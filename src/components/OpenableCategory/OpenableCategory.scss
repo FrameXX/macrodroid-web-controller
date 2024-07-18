@@ -1,11 +1,18 @@
+@use "../../partials/mixins" as *;
+
 .openable-category {
+  @include card;
+  display: flex;
   background: var(--color-primary);
-  padding: 2px 14px;
   max-width: var(--tab-items-max-width);
   width: 100%;
   box-sizing: border-box;
+  align-items: center;
 
   h2 {
     font-size: 1.3rem;
+    width: 100%;
+    text-align: left;
+    margin: 10px 0;
   }
 }

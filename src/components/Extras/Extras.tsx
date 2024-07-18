@@ -54,6 +54,8 @@ export function R_Extras(props: ExtrasProps) {
       />
       <footer>
         Made with ❤️ by Jiří Král.
+        <br />
+        <br />
         <R_ExternalLink
           iconId="github"
           href="https://github.com/FrameXX/macrodroid-web-controller"

@@ -1,14 +1,18 @@
+@use "../../partials/mixins" as *;
+
 .external-link {
+  @include card;
   color: inherit;
   text-decoration: none;
-  width: var(--tab-items-max-width);
   max-width: var(--tab-items-max-width);
   width: 100%;
   background-color: var(--color-primary);
   box-sizing: border-box;
+  display: flex;
+  align-items: center;
 
-  .generic-card {
-    margin-top: 12px;
-    padding: 12px;
+  .content {
+    width: 100%;
+    text-align: left;
   }
 }

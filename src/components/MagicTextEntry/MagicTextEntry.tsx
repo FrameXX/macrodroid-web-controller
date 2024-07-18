@@ -1,5 +1,9 @@
-import { R_GenericCard } from "../GenericCard/GenericCard";
+import { motion } from "framer-motion";
 import "./MagicTextEntry.scss";
+import {
+  ANIMATE_SCALE_MOUNTED,
+  ANIMATE_SCALE_UNMOUNTED,
+} from "../../modules/const";
 
 export interface MagicTextEntryProps {
   title: string;
@@ -14,14 +18,17 @@ export function R_MagicTextEntry(props: MagicTextEntryProps) {
   }
 
   return (
-    <R_GenericCard
+    <motion.button
+      layout
+      initial={ANIMATE_SCALE_UNMOUNTED}
+      animate={ANIMATE_SCALE_MOUNTED}
+      exit={ANIMATE_SCALE_UNMOUNTED}
       onClick={copyToClipboard}
       title={props.title}
       className="magic-text-entry"
-      button
     >
       <div className="title">{props.title}</div>
       <pre>{props.magicText}</pre>
-    </R_GenericCard>
+    </motion.button>
   );
 }

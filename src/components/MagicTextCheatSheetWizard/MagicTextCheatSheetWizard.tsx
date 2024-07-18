@@ -2,15 +2,15 @@ import { useMemo, useRef } from "react";
 import { MAGIC_TEXT_ENTRIES } from "../../modules/const";
 import { useColumnDeterminator } from "../../modules/use_column_determinator";
 import { R_FAB } from "../FAB/FAB";
-import { R_GenericCard } from "../GenericCard/GenericCard";
 import { R_MagicTextEntry } from "../MagicTextEntry/MagicTextEntry";
 import { R_Wizard } from "../Wizard/Wizard";
 import "./MagicTextCheatSheetWizard.scss";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { R_SearchInput } from "../SearchInput/SearchInput";
 import { useImmer } from "use-immer";
 import { R_Icon } from "../Icon/Icon";
 import { BakeToast, Toast } from "../../modules/toaster";
+import { R_InfoCard } from "../InfoCard/InfoCard";
 
 interface MagicTextCheatSheetWizardProps {
   open: boolean;
@@ -50,25 +50,27 @@ export function R_MagicTextCheatSheetWizard(
               onSearch={setFilterValue}
             />
           </div>
-          <R_GenericCard id="copy-magic-text-notice" iconId="information">
+          <R_InfoCard id="copy-magic-text-notice">
             Click on a magic text entry to copy it to clipboard.
-          </R_GenericCard>
+          </R_InfoCard>
           <motion.div
             animate={{ columns: entriesColumns }}
             ref={entriesContainer}
           >
-            {filteredEntries.map((entry) => (
-              <R_MagicTextEntry
-                onCopy={() =>
-                  props.bakeToast(
-                    new Toast("Copied to clipboard.", "content-copy"),
-                  )
-                }
-                title={entry.title}
-                magicText={entry.magicText}
-                key={entry.magicText}
-              />
-            ))}
+            <AnimatePresence>
+              {filteredEntries.map((entry) => (
+                <R_MagicTextEntry
+                  onCopy={() =>
+                    props.bakeToast(
+                      new Toast("Copied to clipboard.", "content-copy"),
+                    )
+                  }
+                  title={entry.title}
+                  magicText={entry.magicText}
+                  key={entry.magicText}
+                />
+              ))}
+            </AnimatePresence>
           </motion.div>
         </>,
       ]}
