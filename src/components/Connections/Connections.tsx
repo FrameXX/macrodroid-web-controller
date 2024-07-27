@@ -23,6 +23,7 @@ interface ConnectionsProps {
     connection: Connection,
   ) => void;
   handleListenFailed: (connection: Connection) => void;
+  onClickCompanionMacro: () => void;
 }
 
 export function R_Connections(props: ConnectionsProps) {
@@ -100,6 +101,7 @@ export function R_Connections(props: ConnectionsProps) {
         iconId="plus"
       />
       <R_CreateConnectionWizard
+        onClickCompanionMacro={props.onClickCompanionMacro}
         reportConnectionActivity={props.reportConnectionActivity}
         log={props.log}
         onConnectionConfirm={(connection) => {

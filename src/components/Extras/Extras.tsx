@@ -9,6 +9,9 @@ import { R_MagicTextCheatSheetWizard } from "../MagicTextCheatSheetWizard/MagicT
 
 interface ExtrasProps {
   bakeToast: BakeToast;
+  companionMacroWizardOpen: boolean;
+  onCloseCompanionMacroWizard: () => void;
+  onClickOpenCompanionMacroWizard: () => void;
 }
 
 export function R_Extras(props: ExtrasProps) {
@@ -18,8 +21,6 @@ export function R_Extras(props: ExtrasProps) {
     notificationPermissionWizardOpen,
     setNotificationPermissionWizardOpen,
   ] = useImmer(false);
-  const [companionMacroWizardOpen, setCompanionMacroWizardOpen] =
-    useImmer(false);
 
   return (
     <>
@@ -34,7 +35,7 @@ export function R_Extras(props: ExtrasProps) {
         name="Notification permission"
       />
       <R_OpenableCategory
-        onClick={() => setCompanionMacroWizardOpen(true)}
+        onClick={() => props.onClickOpenCompanionMacroWizard()}
         iconId="cogs"
         name="Companion macro"
       />
@@ -49,8 +50,8 @@ export function R_Extras(props: ExtrasProps) {
         bakeToast={props.bakeToast}
       />
       <R_CompanionMacroWizard
-        open={companionMacroWizardOpen}
-        onClose={() => setCompanionMacroWizardOpen(false)}
+        open={props.companionMacroWizardOpen}
+        onClose={() => props.onCloseCompanionMacroWizard()}
       />
       <footer>
         Made with ❤️ by Jiří Král.

@@ -8,7 +8,7 @@ export function R_CompanionMacroSplashBox() {
   return (
     <R_SplashBox splash={<R_Icon iconId="cogs" />}>
       <h2>Companion macro</h2>
-      Companion macro enables this websites request to be received and
+      Companion macro enables this websites requests to be received and
       interpreted on your connected devices.
       <br />
       <br />

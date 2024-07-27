@@ -40,6 +40,8 @@ export function R_App() {
   const [confirmDialogOpen, setConfirmDialogOpen] = useImmer(false);
   const [confirmDialogText, setConfirmDialogText] = useImmer("");
   const [logScrolledDown, setLogScrolledDown] = useImmer(false);
+  const [companionMacroWizardOpen, setCompanionMacroWizardOpen] =
+    useImmer(false);
 
   const toaster = useRef(new Toaster(setToasts));
   const logger = useRef(new Logger(setLogRecords));
@@ -128,9 +130,7 @@ export function R_App() {
         (errorMessage) => {
           handleIncomingFailedRequest(errorMessage, connection);
         },
-        () => {
-          handleListenFailed(connection);
-        },
+        handleListenFailed,
       );
     });
     return () => {
@@ -251,7 +251,7 @@ export function R_App() {
     });
   }
 
-  function handleListenFailed(connection: Connection) {
+  function handleListenFailed() {
     if (document.visibilityState === "hidden") return;
     const errorMessage = "Failed to listen for incoming requests.";
     // log({
@@ -277,6 +277,11 @@ export function R_App() {
         (currentConnection) => currentConnection.id !== connection.id,
       ),
     );
+  }
+
+  function redirectToCompanionMacroWizard() {
+    setActiveNavTabId(NavTabId.Extras);
+    setCompanionMacroWizardOpen(true);
   }
 
   function bakeToast(toast: Toast) {
@@ -305,6 +310,7 @@ export function R_App() {
         <div id="tab-content">
           <R_Tab active={activeNavTabId === NavTabId.Connections}>
             <R_Connections
+              onClickCompanionMacro={redirectToCompanionMacroWizard}
               reportConnectionActivity={reportConnectionActivity}
               connections={connections}
               onConnectionConfirm={addConnection}
@@ -336,7 +342,16 @@ export function R_App() {
             />
           </R_Tab>
           <R_Tab active={activeNavTabId === NavTabId.Extras}>
-            <R_Extras bakeToast={bakeToast} />
+            <R_Extras
+              bakeToast={bakeToast}
+              companionMacroWizardOpen={companionMacroWizardOpen}
+              onCloseCompanionMacroWizard={() =>
+                setCompanionMacroWizardOpen(false)
+              }
+              onClickOpenCompanionMacroWizard={() =>
+                setCompanionMacroWizardOpen(true)
+              }
+            />
           </R_Tab>
         </div>
         <R_Nav

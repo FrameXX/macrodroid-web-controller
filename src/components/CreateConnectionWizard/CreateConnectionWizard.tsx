@@ -3,7 +3,6 @@ import { R_StringOption } from "../StringOption/StringOption";
 import screenshot1Src from "../../assets/img/screenshot_1.webp";
 import { R_Wizard } from "../Wizard/Wizard";
 import {
-  COMPANION_MACRO_FILENAME,
   CONFIRM_CONNECTION_REQUEST_COMMENT,
   MACRODROID_APP_URL,
   SPLASHSCREEN_TIMEOUT_MS,
@@ -16,7 +15,6 @@ import { OutgoingRequest } from "../../modules/outgoing_request";
 import { Log, LogRecordType } from "../../modules/logger";
 import "./CreateConnectionWizard.scss";
 import { useRef } from "react";
-import companionMacroPath from "../../assets/other/companion.macro?url";
 import { R_SimpleCard } from "../SimpleCard/SimpleCard";
 import { useKey } from "../../modules/use_key";
 
@@ -32,6 +30,7 @@ interface AddConnectionWizardProps {
     connection: Connection,
   ) => void;
   handleListenFailed: (connection: Connection) => void;
+  onClickCompanionMacro: () => void;
 }
 
 export function R_CreateConnectionWizard(props: AddConnectionWizardProps) {
@@ -225,7 +224,10 @@ export function R_CreateConnectionWizard(props: AddConnectionWizardProps) {
           <R_SimpleCard className="prerequisite" iconId="import">
             <h3>
               You have the{" "}
-              <a href={companionMacroPath} download={COMPANION_MACRO_FILENAME}>
+              <a
+                title="Download companion macro"
+                onClick={props.onClickCompanionMacro}
+              >
                 companion macro
               </a>{" "}
               imported into MacroDroid
