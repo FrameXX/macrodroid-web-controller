@@ -26,6 +26,7 @@ export function R_ActionArgInput(props: ActionArgumentInputProps) {
             title={props.argument.name}
             onChange={props.onChange}
             value={props.value}
+            description={props.argument.description}
           />
         );
       case ActionArgType.String:
@@ -55,6 +56,7 @@ export function R_ActionArgInput(props: ActionArgumentInputProps) {
             value={props.value}
             title={props.argument.name}
             onChange={props.onChange}
+            description={props.argument.description}
           />
         );
       case ActionArgType.Decimal:
@@ -64,6 +66,7 @@ export function R_ActionArgInput(props: ActionArgumentInputProps) {
             title={props.argument.name}
             onChange={props.onChange}
             step={0.01}
+            description={props.argument.description}
           />
         );
       case ActionArgType.Selection:
@@ -73,6 +76,7 @@ export function R_ActionArgInput(props: ActionArgumentInputProps) {
             onChange={props.onChange}
             options={props.argument.options as string[]}
             title={props.argument.name}
+            description={props.argument.description}
           />
         );
       default:

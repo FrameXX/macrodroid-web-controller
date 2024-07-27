@@ -1,8 +1,7 @@
-import { PropsWithChildren } from "react";
 import { R_Icon } from "../Icon/Icon";
 import "./ExternalLink.scss";
 
-interface ExternalLinkProps extends PropsWithChildren {
+interface ExternalLinkProps extends React.PropsWithChildren {
   href: string;
   iconId: string;
   title: string;

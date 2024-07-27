@@ -1,7 +1,7 @@
 import { useImmer } from "use-immer";
 import { R_Wizard } from "../Wizard/Wizard";
 import { R_FAB } from "../FAB/FAB";
-import { Action } from "../../modules/action";
+import { Action, updateJSONString } from "../../modules/action";
 import { Connection } from "../../modules/connection";
 import { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
@@ -10,12 +10,13 @@ import { useColumnDeterminator } from "../../modules/use_column_determinator";
 import { R_ActionArgInputList } from "../ActionArgInputList/ActionArgInputList";
 import { useForceUpdate } from "../../modules/use_force_update";
 import { BakeToast, Toast, ToastSeverity } from "../../modules/toaster";
+import { useKey } from "../../modules/use_key";
 
 interface RunActionWizardProps {
   open: boolean;
   runAction: Action | null;
   onCancel: () => void;
-  onActionRunConfirm: (action: Action, connections: Connection[]) => void;
+  onConfirmRunAction: (action: Action, connections: Connection[]) => void;
   bakeToast: BakeToast;
   connections: Connection[];
   skipArgs: boolean;
@@ -67,6 +68,21 @@ export function R_RunActionWizard(props: RunActionWizardProps) {
         return selectedConnections;
       });
     }
+  }
+
+  useKey("Escape", () => {
+    if (activePageIndex === 0) {
+      props.onCancel();
+    } else {
+      setActivePageIndex(0);
+    }
+  });
+
+  function confirmRunAction() {
+    if (!runAction.current) throw Error("Run action is not defined.");
+    updateJSONString(runAction.current);
+    props.onConfirmRunAction(runAction.current, selectedConnections);
+    reset();
   }
 
   function reset() {
@@ -147,10 +163,7 @@ export function R_RunActionWizard(props: RunActionWizardProps) {
             }
             title="Run action"
             iconId="play"
-            onClick={() => {
-              props.onActionRunConfirm(runAction.current!, selectedConnections);
-              reset();
-            }}
+            onClick={confirmRunAction}
           />
         </>
       }

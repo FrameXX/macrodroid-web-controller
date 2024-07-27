@@ -18,11 +18,12 @@ import "./CreateConnectionWizard.scss";
 import { useRef } from "react";
 import companionMacroPath from "../../assets/other/companion.macro?url";
 import { R_SimpleCard } from "../SimpleCard/SimpleCard";
+import { useKey } from "../../modules/use_key";
 
 interface AddConnectionWizardProps {
   open: boolean;
   bakeToast: BakeToast;
-  onClose: () => void;
+  onCancel: () => void;
   onConnectionConfirm: (connection: Connection) => void;
   log: Log;
   reportConnectionActivity: (connection: Connection) => void;
@@ -44,6 +45,14 @@ export function R_CreateConnectionWizard(props: AddConnectionWizardProps) {
 
   const connectionNameInput = useRef<HTMLInputElement>(null);
   const webhookIdInput = useRef<HTMLInputElement>(null);
+
+  useKey("Escape", () => {
+    if (activePageIndex === 0) {
+      props.onCancel();
+    } else {
+      previousPage();
+    }
+  });
 
   function nextPage() {
     if (activePageIndex === 0 && connectionNameInput.current)
@@ -176,7 +185,7 @@ export function R_CreateConnectionWizard(props: AddConnectionWizardProps) {
             hidden={activePageIndex !== 0}
             left
             title="Cancel creation of new connection"
-            onClick={props.onClose}
+            onClick={props.onCancel}
             iconId="close"
           />
           <R_FAB
@@ -193,7 +202,9 @@ export function R_CreateConnectionWizard(props: AddConnectionWizardProps) {
           hidden={cantNextPage()}
           title="Next page"
           iconId="chevron-right"
-          onClick={nextPage}
+          onClick={() => {
+            nextPage();
+          }}
         />
       }
       pages={[

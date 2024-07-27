@@ -29,11 +29,6 @@ main {
   background: var(--color-surface);
 }
 
-input,
-textarea {
-  box-shadow: inset var(--box-shadow);
-}
-
 button,
 input,
 select,
@@ -90,11 +85,12 @@ textarea {
   background-color: var(--color-surface);
   outline: none;
   border: none;
-  border-bottom: var(--border-width) solid var(--color-accent);
+  border-bottom: var(--border-width) solid var(--color-text);
   color: inherit;
   max-width: var(--tab-items-max-width);
   width: 100%;
   box-sizing: border-box;
+  box-shadow: inset var(--box-shadow);
 
   &:active {
     outline: none;
@@ -107,6 +103,10 @@ textarea {
 
   &:invalid {
     border-color: var(--color-trigger);
+  }
+
+  &:focus {
+    border-color: var(--color-accent);
   }
 }
 

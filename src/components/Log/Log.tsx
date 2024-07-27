@@ -10,7 +10,7 @@ import { R_FAB } from "../FAB/FAB";
 import { useImmer } from "use-immer";
 import { LogRecord } from "../../modules/logger";
 import { R_Button } from "../Button/Button";
-import { Confirm } from "../../modules/confirmDialog";
+import { Confirm } from "../../modules/confirm_dialog";
 import { R_SearchInput } from "../SearchInput/SearchInput";
 
 interface LogProps {

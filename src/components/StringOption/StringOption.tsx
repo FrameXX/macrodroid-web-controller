@@ -1,8 +1,9 @@
-import { ReactNode, forwardRef, useMemo } from "react";
+import { forwardRef } from "react";
 import { Random } from "../../modules/random";
 import "./StringOption.scss";
 import { R_Icon } from "../Icon/Icon";
 import { useDefaultProps } from "../../modules/use_default_props";
+import { useRandomNumber } from "../../modules/use_random_number";
 
 interface DescribedInputProps {
   iconId?: string;
@@ -16,7 +17,7 @@ interface DescribedInputProps {
   onChange: (newValue: string, validity: boolean) => void;
   value?: string;
   onKeyUp?: React.KeyboardEventHandler<HTMLInputElement>;
-  description?: ReactNode;
+  description?: React.ReactNode;
   title: string;
   hidden?: boolean;
 }
@@ -29,16 +30,17 @@ export const R_StringOption = forwardRef<HTMLInputElement, DescribedInputProps>(
   (requiredProps, ref) => {
     const props = useDefaultProps(requiredProps, defaultProps);
 
-    const id = useMemo(() => Random.id(), []);
+    const id = useRandomNumber(Random.id);
+
     return (
       <label
         hidden={props.hidden}
         title={props.title}
         className="string-option"
       >
-        <h3>{props.title}</h3>
-        <div className="input-container">
-          {props.iconId && <R_Icon iconId={props.iconId} />}
+        {props.iconId && <R_Icon iconId={props.iconId} />}
+        <div>
+          <h3>{props.title}</h3>
           <input
             title={props.title}
             ref={ref}
@@ -55,12 +57,12 @@ export const R_StringOption = forwardRef<HTMLInputElement, DescribedInputProps>(
             autoCapitalize={props.autoCapitalize}
             aria-describedby={`input-description-${id}`}
           />
+          {props.description && (
+            <div id={`input-description-${id}`} className="description">
+              {props.description}
+            </div>
+          )}
         </div>
-        {props.description && (
-          <div id={`input-description-${id}`} className="description">
-            {props.description}
-          </div>
-        )}
       </label>
     );
   },

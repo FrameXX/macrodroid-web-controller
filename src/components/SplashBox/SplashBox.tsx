@@ -1,7 +1,6 @@
-import { PropsWithChildren } from "react";
 import "./SplashBox.scss";
 
-interface SplashBoxProps extends PropsWithChildren {
+interface SplashBoxProps extends React.PropsWithChildren {
   splash: React.ReactNode;
   className?: string;
 }

@@ -14,12 +14,14 @@ import { useColumnDeterminator } from "../../modules/use_column_determinator";
 import { R_StringOption } from "../StringOption/StringOption";
 import { R_BooleanOption } from "../BooleanOption/BooleanOption";
 import { R_ActionArgInputList } from "../ActionArgInputList/ActionArgInputList";
+import { useKey } from "../../modules/use_key";
 
 interface ConfigActionWizardProps {
   open: boolean;
   onCancel: () => void;
   onActionConfigure: (action: Action, save: boolean) => void;
   onStartActionCreation: () => void;
+  runActionWizardOpen: boolean;
 }
 
 export function R_ConfigActionWizard(props: ConfigActionWizardProps) {
@@ -46,6 +48,15 @@ export function R_ConfigActionWizard(props: ConfigActionWizardProps) {
     if (props.open) reset();
   }, [props.open]);
 
+  useKey("Escape", () => {
+    if (props.runActionWizardOpen) return;
+    if (activePageIndex === 0) {
+      props.onCancel();
+    } else {
+      previousPage();
+    }
+  });
+
   function selectAction(action: Action) {
     configuredAction.current = structuredClone(action);
     setActionName(configuredAction.current.name);
@@ -53,6 +64,7 @@ export function R_ConfigActionWizard(props: ConfigActionWizardProps) {
   }
 
   function clearActionSelection() {
+    console.log("clearActionSelection");
     configuredAction.current = null;
   }
 
@@ -153,7 +165,9 @@ export function R_ConfigActionWizard(props: ConfigActionWizardProps) {
             hidden={activePageIndex === 0}
             left
             title="Previous page"
-            onClick={previousPage}
+            onClick={() => {
+              previousPage();
+            }}
             iconId="chevron-left"
           />
         </>
@@ -170,7 +184,9 @@ export function R_ConfigActionWizard(props: ConfigActionWizardProps) {
             hidden={activePageIndex !== 1}
             title="Next page"
             iconId="chevron-right"
-            onClick={() => setActivePageIndex(2)}
+            onClick={() => {
+              setActivePageIndex(2);
+            }}
           />
           <R_FAB
             hidden={activePageIndex !== 2}

@@ -1,4 +1,6 @@
+import { Random } from "../../modules/random";
 import { useDefaultProps } from "../../modules/use_default_props";
+import { useRandomNumber } from "../../modules/use_random_number";
 import { R_Checkbox } from "../Checkbox/Checkbox";
 import { R_Icon } from "../Icon/Icon";
 import "./BooleanOption.scss";
@@ -9,6 +11,7 @@ interface BooleanOptionProps {
   iconId?: string;
   value?: boolean;
   hidden?: boolean;
+  description?: React.ReactNode;
 }
 
 const defaultProps: Partial<BooleanOptionProps> = {
@@ -17,6 +20,8 @@ const defaultProps: Partial<BooleanOptionProps> = {
 
 export function R_BooleanOption(requiredProps: BooleanOptionProps) {
   const props = useDefaultProps(requiredProps, defaultProps);
+
+  const id = useRandomNumber(Random.id);
 
   return (
     <label hidden={props.hidden} title={props.title} className="boolean-option">
@@ -27,6 +32,11 @@ export function R_BooleanOption(requiredProps: BooleanOptionProps) {
         value={props.value}
         onChange={props.onChange}
       />
+      {props.description && (
+        <div id={`input-description-${id}`} className="description">
+          {props.description}
+        </div>
+      )}
     </label>
   );
 }

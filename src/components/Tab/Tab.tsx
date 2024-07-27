@@ -1,9 +1,9 @@
 import { Target, motion } from "framer-motion";
-import { PropsWithChildren, forwardRef } from "react";
+import { forwardRef } from "react";
 import { DEFAULT_TRANSITION_OFFSET_PX } from "../../modules/const";
 import "./Tab.scss";
 
-interface TabProps extends PropsWithChildren {
+interface TabProps extends React.PropsWithChildren {
   active: boolean;
 }
 

@@ -1,10 +1,9 @@
-import { PropsWithChildren } from "react";
 import "./ExpandableCategory.scss";
 import { R_Accordion } from "../Accordion/Accordion";
 import { R_Icon } from "../Icon/Icon";
 import { useImmer } from "use-immer";
 
-interface CategoryProps extends PropsWithChildren {
+interface CategoryProps extends React.PropsWithChildren {
   name: string;
   iconId: string;
   defaultOpen?: boolean;

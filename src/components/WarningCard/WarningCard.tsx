@@ -1,10 +1,9 @@
-import { PropsWithChildren } from "react";
 import { useDefaultProps } from "../../modules/use_default_props";
 import "./WarningCard.scss";
 import { R_Accordion } from "../Accordion/Accordion";
 import { R_Icon } from "../Icon/Icon";
 
-interface WarningCardProps extends PropsWithChildren {
+interface WarningCardProps extends React.PropsWithChildren {
   hidden?: boolean;
 }
 

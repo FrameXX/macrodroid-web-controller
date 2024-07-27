@@ -1,8 +1,9 @@
-import { ReactNode, forwardRef } from "react";
+import { forwardRef } from "react";
 import { Random } from "../../modules/random";
 import "./MultiLineStringOption.scss";
 import { R_Icon } from "../Icon/Icon";
 import { useDefaultProps } from "../../modules/use_default_props";
+import { useRandomNumber } from "../../modules/use_random_number";
 
 interface DescribedInputProps {
   iconId?: string;
@@ -14,7 +15,7 @@ interface DescribedInputProps {
   onChange: (newValue: string) => void;
   value?: string;
   onKeyUp?: React.KeyboardEventHandler<HTMLTextAreaElement>;
-  description?: ReactNode;
+  description?: React.ReactNode;
   title: string;
   hidden?: boolean;
 }
@@ -29,7 +30,8 @@ export const R_MultiLineStringOption = forwardRef<
 >((requiredProps, ref) => {
   const props = useDefaultProps(requiredProps, defaultProps);
 
-  const id = Random.id();
+  const id = useRandomNumber(Random.id);
+
   return (
     <label
       hidden={props.hidden}

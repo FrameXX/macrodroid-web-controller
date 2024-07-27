@@ -104,7 +104,7 @@ export class Connection {
   public listenRequests(
     onRequest: (request: IncomingRequest) => void,
     onFailedRequest?: (errorMessage: string) => void,
-    onListenFailed?: () => void,
+    onListenFailed?: (event: Event) => void,
   ) {
     if (!this.eventSource)
       throw new Error(

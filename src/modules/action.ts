@@ -1,5 +1,10 @@
 import { any, array, number, object, optional, string } from "superstruct";
 
+export function updateJSONString(action: Action) {
+  action.JSONstring = undefined;
+  action.JSONstring = JSON.stringify(action);
+}
+
 export const ActionsStruct = array(
   object({
     id: string(),

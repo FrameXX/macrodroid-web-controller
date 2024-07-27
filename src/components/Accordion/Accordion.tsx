@@ -1,10 +1,9 @@
 import { TargetAndTransition, motion } from "framer-motion";
-import { PropsWithChildren } from "react";
 import { useDefaultProps } from "../../modules/use_default_props";
 import "./Accordion.scss";
 import { DEFAULT_TRANSITION_OFFSET_PX, TRANSITIONS } from "../../modules/const";
 
-interface AccordionProps extends PropsWithChildren {
+interface AccordionProps extends React.PropsWithChildren {
   open: boolean;
   className?: string;
   closedHeight?: number | string;

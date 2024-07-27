@@ -1,10 +1,9 @@
-import { PropsWithChildren } from "react";
 import { R_Icon } from "../Icon/Icon";
 import "./IconNotice.scss";
 import { useDefaultProps } from "../../modules/use_default_props";
 import { R_Accordion } from "../Accordion/Accordion";
 
-interface IconNoticeProps extends PropsWithChildren {
+interface IconNoticeProps extends React.PropsWithChildren {
   hidden?: boolean;
   iconId?: string;
 }

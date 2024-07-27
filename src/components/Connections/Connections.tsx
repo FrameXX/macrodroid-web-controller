@@ -29,6 +29,14 @@ export function R_Connections(props: ConnectionsProps) {
   const [addConnectionWizardOpen, setAddConnectionWizardOpen] = useImmer(false);
   const connectionsContainer = useRef(null);
 
+  function openAddConnectionWizard() {
+    setAddConnectionWizardOpen(true);
+  }
+
+  function closeAddConnectionWizard() {
+    setAddConnectionWizardOpen(false);
+  }
+
   async function pokeConnection(connection: Connection) {
     const request = OutgoingRequest.poke();
     props.bakeToast(new Toast("Making poke request.", "message-arrow-right"));
@@ -88,7 +96,7 @@ export function R_Connections(props: ConnectionsProps) {
       </motion.div>
       <R_FAB
         title="Create new connection"
-        onClick={() => setAddConnectionWizardOpen(true)}
+        onClick={openAddConnectionWizard}
         iconId="plus"
       />
       <R_CreateConnectionWizard
@@ -96,10 +104,10 @@ export function R_Connections(props: ConnectionsProps) {
         log={props.log}
         onConnectionConfirm={(connection) => {
           props.onConnectionConfirm(connection);
-          setAddConnectionWizardOpen(false);
+          closeAddConnectionWizard();
         }}
         bakeToast={props.bakeToast}
-        onClose={() => setAddConnectionWizardOpen(false)}
+        onCancel={closeAddConnectionWizard}
         open={addConnectionWizardOpen}
         handleIncomingFailedRequest={props.handleIncomingFailedRequest}
         handleListenFailed={props.handleListenFailed}

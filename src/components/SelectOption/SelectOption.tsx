@@ -1,3 +1,5 @@
+import { Random } from "../../modules/random";
+import { useRandomNumber } from "../../modules/use_random_number";
 import { R_Icon } from "../Icon/Icon";
 import "./SelectOption.scss";
 
@@ -7,9 +9,12 @@ interface SelectOptionProps {
   iconId?: string;
   options: string[];
   value?: number;
+  description?: React.ReactNode;
 }
 
 export function R_SelectOption(props: SelectOptionProps) {
+  const id = useRandomNumber(Random.id);
+
   return (
     <label title={props.title} className="boolean-option">
       {props.iconId && <R_Icon iconId={props.iconId} />}
@@ -24,6 +29,11 @@ export function R_SelectOption(props: SelectOptionProps) {
           </option>
         ))}
       </select>
+      {props.description && (
+        <div id={`input-description-${id}`} className="description">
+          {props.description}
+        </div>
+      )}
     </label>
   );
 }

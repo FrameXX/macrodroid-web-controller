@@ -1,4 +1,6 @@
+import { Random } from "../../modules/random";
 import { useDefaultProps } from "../../modules/use_default_props";
+import { useRandomNumber } from "../../modules/use_random_number";
 import { R_Icon } from "../Icon/Icon";
 import "./NumberOption.scss";
 
@@ -9,6 +11,7 @@ interface BooleanOptionProps {
   step?: React.InputHTMLAttributes<HTMLInputElement>["step"];
   value?: number;
   hidden?: boolean;
+  description?: React.ReactNode;
 }
 
 const defaultProps: Partial<BooleanOptionProps> = {
@@ -17,6 +20,8 @@ const defaultProps: Partial<BooleanOptionProps> = {
 
 export function R_NumberOption(requiredProps: BooleanOptionProps) {
   const props = useDefaultProps(requiredProps, defaultProps);
+
+  const id = useRandomNumber(Random.id);
 
   return (
     <label hidden={props.hidden} title={props.title} className="integer-option">
@@ -30,6 +35,11 @@ export function R_NumberOption(requiredProps: BooleanOptionProps) {
         type="number"
         step={props.step}
       />
+      {props.description && (
+        <div id={`input-description-${id}`} className="description">
+          {props.description}
+        </div>
+      )}
     </label>
   );
 }

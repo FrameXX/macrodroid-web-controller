@@ -4,15 +4,19 @@
   @include card;
   background-color: var(--color-surface-top);
   max-width: var(--tab-items-max-width);
+  display: flex;
+  align-items: top;
+
+  h3 {
+    margin-top: 0.4rem;
+  }
 
   img {
     width: 100%;
     max-width: 250px;
   }
 
-  .input-container {
-    display: flex;
-    justify-content: center;
-    gap: 8px;
+  > div {
+    width: 100%;
   }
 }

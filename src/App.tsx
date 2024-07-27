@@ -22,7 +22,7 @@ import {
   LogRecordType,
   Logger,
 } from "./modules/logger";
-import { ConfirmDialog } from "./modules/confirmDialog";
+import { ConfirmDialog } from "./modules/confirm_dialog";
 import { R_Connections } from "./components/Connections/Connections";
 import { useLocalStorage } from "./modules/use_local_storage";
 import { R_Actions } from "./components/Actions/Actions";
@@ -254,12 +254,12 @@ export function R_App() {
   function handleListenFailed(connection: Connection) {
     if (document.visibilityState === "hidden") return;
     const errorMessage = "Failed to listen for incoming requests.";
-    log({
-      connectionName: connection.name,
-      response: false,
-      type: LogRecordType.Technicality,
-      errorMessage: "Failed to listen for incoming requests.",
-    });
+    // log({
+    //   connectionName: connection.name,
+    //   response: false,
+    //   type: LogRecordType.Technicality,
+    //   errorMessage: "Failed to listen for incoming requests.",
+    // });
     bakeToast(new Toast(errorMessage, "alert", ToastSeverity.Error));
   }
 

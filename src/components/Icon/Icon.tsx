@@ -1,9 +1,8 @@
-import { PropsWithChildren } from "react";
 import defaultSourceFilePath from "../../assets/img/icons.svg";
 import { useDefaultProps } from "../../modules/use_default_props";
 import { Target, motion } from "framer-motion";
 
-interface IconProps extends PropsWithChildren {
+interface IconProps extends React.PropsWithChildren {
   iconId: string;
   side?: boolean;
   sourceFilePath?: string;
@@ -28,12 +27,13 @@ export function R_Icon(requiredProps: IconProps) {
   };
   return (
     <motion.svg
+      aria-hidden
       animate={animate}
       onClick={props.onClick}
       role="img"
       className={`icon ${props.side ? "side" : ""} ${props.hidden ? "hidden" : ""} ${props.className || ""}`}
     >
-      <use aria-hidden href={href} />
+      <use href={href} />
     </motion.svg>
   );
 }

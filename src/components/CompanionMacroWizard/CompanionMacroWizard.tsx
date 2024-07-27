@@ -1,3 +1,4 @@
+import { useKey } from "../../modules/use_key";
 import { R_CompanionMacroSplashBox } from "../CompanionMacroSplashBox/CompanionMacroSplashBox";
 import { R_FAB } from "../FAB/FAB";
 import { R_Wizard } from "../Wizard/Wizard";
@@ -8,6 +9,8 @@ interface CompanionMacroWizardProps {
 }
 
 export function R_CompanionMacroWizard(props: CompanionMacroWizardProps) {
+  useKey("Escape", props.onClose);
+
   return (
     <R_Wizard
       activePageIndex={0}

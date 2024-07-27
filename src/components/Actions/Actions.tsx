@@ -3,7 +3,7 @@ import { R_ExpandableCategory } from "../ExpandableCategory/ExpandableCategory";
 import { R_FAB } from "../FAB/FAB";
 import { R_IconNotice } from "../IconNotice/IconNotice";
 import { R_ConfigActionWizard } from "../ConfigActionWizard/ConfigActionWizard";
-import { Action, ActionsStruct } from "../../modules/action";
+import { Action, ActionsStruct, updateJSONString } from "../../modules/action";
 import { BakeToast, Toast, ToastSeverity } from "../../modules/toaster";
 import { AnimatePresence } from "framer-motion";
 import { R_ConfiguredActionCard } from "../ConfiguredActionCard/ConfiguredActionCard";
@@ -16,6 +16,7 @@ import { useLocalStorage } from "../../modules/use_local_storage";
 import { RECENT_ACTIONS_LIMIT } from "../../modules/const";
 import { R_CreateActionWizard } from "../CreateActionWizard/CreateActionWizard";
 import { R_CreateArgumentWizard } from "../CreateArgumentWizard/CreateArgumentWizard";
+import { moveElement } from "../../modules/misc";
 
 interface ActionsProps {
   bakeToast: BakeToast;
@@ -53,9 +54,40 @@ export function R_Actions(props: ActionsProps) {
     },
   });
 
+  function openConfigActionWizard() {
+    setConfigActionWizardOpen(true);
+  }
+
+  function closeConfigActionWizard() {
+    setConfigActionWizardOpen(false);
+  }
+
+  function openCreateActionWizard() {
+    setCreateActionWizardOpen(true);
+  }
+
+  function closeCreateActionWizard() {
+    setCreateActionWizardOpen(false);
+  }
+
+  function openAddArgumentWizard() {
+    setAddArgumentWizardOpen(true);
+  }
+
+  function closeAddArgumentWizard() {
+    setAddArgumentWizardOpen(false);
+  }
+
+  function openRunActionWizard() {
+    setRunActionWizardOpen(true);
+  }
+
+  function closeRunActionWizard() {
+    setRunActionWizardOpen(false);
+  }
+
   function onActionConfigure(action: Action, save: boolean) {
-    if (typeof action.JSONstring === "undefined")
-      action.JSONstring = JSON.stringify(action);
+    updateJSONString(action);
     if (save) {
       addSavedAction(action);
       setConfigActionWizardOpen(false);
@@ -68,12 +100,10 @@ export function R_Actions(props: ActionsProps) {
     // Action has to be copyed so that the ConfigActionWizard can still modify its version.
     setRunAction(structuredClone(action));
     setRunActionWizardSkipArgs(skipArgs);
-    setRunActionWizardOpen(true);
+    openRunActionWizard();
   }
 
   async function dispatchAction(action: Action, connections: Connection[]) {
-    setConfigActionWizardOpen(false);
-    setRunActionWizardOpen(false);
     setRunActionWizardSkipArgs(false);
     const request = OutgoingRequest.runAction(action);
     for (const connection of connections) {
@@ -89,6 +119,18 @@ export function R_Actions(props: ActionsProps) {
         recentActions.pop();
         return recentActions;
       });
+
+    const sameActionIndex = recentActions.findIndex((recentAction) => {
+      return recentAction.JSONstring === action.JSONstring;
+    });
+    if (sameActionIndex !== -1) {
+      setRecentActions((draft) => {
+        moveElement(draft, sameActionIndex, 0);
+        return draft;
+      });
+      return;
+    }
+
     setRecentActions((recentActions) => {
       recentActions.unshift(action);
       return recentActions;
@@ -167,33 +209,38 @@ export function R_Actions(props: ActionsProps) {
         </div>
       </R_ExpandableCategory>
       <R_FAB
-        onClick={() => setConfigActionWizardOpen(true)}
+        onClick={openConfigActionWizard}
         title="Configure new action"
         iconId="cog-play"
       />
       <R_ConfigActionWizard
+        runActionWizardOpen={runActionWizardOpen}
         open={configActionWizardOpen}
-        onCancel={() => setConfigActionWizardOpen(false)}
+        onCancel={closeConfigActionWizard}
         onActionConfigure={onActionConfigure}
-        onStartActionCreation={() => setCreateActionWizardOpen(true)}
+        onStartActionCreation={openCreateActionWizard}
       />
       <R_RunActionWizard
         bakeToast={props.bakeToast}
         skipArgs={runActionWizardSkipArgs}
         open={runActionWizardOpen}
         connections={props.connections}
-        onCancel={() => setRunActionWizardOpen(false)}
-        onActionRunConfirm={dispatchAction}
+        onCancel={closeRunActionWizard}
+        onConfirmRunAction={(action, connections) => {
+          closeConfigActionWizard();
+          closeRunActionWizard();
+          dispatchAction(action, connections);
+        }}
         runAction={runAction}
       />
       <R_CreateActionWizard
         open={createActionWizardOpen}
-        onCancel={() => setCreateActionWizardOpen(false)}
-        onStartArgumentCreation={() => setAddArgumentWizardOpen(true)}
+        onCancel={closeCreateActionWizard}
+        onStartArgumentCreation={openAddArgumentWizard}
       />
       <R_CreateArgumentWizard
         open={addArgumentWizardOpen}
-        onCancel={() => setAddArgumentWizardOpen(false)}
+        onCancel={closeAddArgumentWizard}
         onAdd={() => {}}
       />
     </>

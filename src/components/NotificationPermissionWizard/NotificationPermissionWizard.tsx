@@ -1,4 +1,5 @@
 import { BakeToast } from "../../modules/toaster";
+import { useKey } from "../../modules/use_key";
 import { R_FAB } from "../FAB/FAB";
 import { R_NotificationPermissionSplashBox } from "../NotificationPermissionSplashBox/NotificationPermissionSplashBox";
 import { R_Wizard } from "../Wizard/Wizard";
@@ -12,6 +13,8 @@ interface NotificationPermissionWizardProps {
 export function R_NotificationPermissionWizard(
   props: NotificationPermissionWizardProps,
 ) {
+  useKey("Escape", props.onClose);
+
   return (
     <R_Wizard
       activePageIndex={0}

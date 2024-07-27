@@ -11,6 +11,7 @@ import { useImmer } from "use-immer";
 import { R_Icon } from "../Icon/Icon";
 import { BakeToast, Toast } from "../../modules/toaster";
 import { R_InfoCard } from "../InfoCard/InfoCard";
+import { useKey } from "../../modules/use_key";
 
 interface MagicTextCheatSheetWizardProps {
   open: boolean;
@@ -35,6 +36,8 @@ export function R_MagicTextCheatSheetWizard(
       `${entry.title}${entry.magicText}`.toLowerCase().includes(filter),
     );
   }, [filterValue]);
+
+  useKey("Escape", props.onClose);
 
   return (
     <R_Wizard
