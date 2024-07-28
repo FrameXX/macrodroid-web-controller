@@ -130,7 +130,7 @@ export function R_App() {
         (errorMessage) => {
           handleIncomingFailedRequest(errorMessage, connection);
         },
-        handleListenFailed,
+        () => handleListenFailed(connection),
       );
     });
     return () => {
@@ -251,9 +251,9 @@ export function R_App() {
     });
   }
 
-  function handleListenFailed() {
+  function handleListenFailed(connection: Connection) {
     if (document.visibilityState === "hidden") return;
-    const errorMessage = "Failed to listen for incoming requests.";
+    const errorMessage = `Failed to listen for incoming requests for connection ${connection.name}.`;
     // log({
     //   connectionName: connection.name,
     //   response: false,

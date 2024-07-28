@@ -22,6 +22,7 @@ interface ConfigActionWizardProps {
   onActionConfigure: (action: Action, save: boolean) => void;
   onStartActionCreation: () => void;
   runActionWizardOpen: boolean;
+  createActionWizardOpen: boolean;
 }
 
 export function R_ConfigActionWizard(props: ConfigActionWizardProps) {
@@ -49,7 +50,7 @@ export function R_ConfigActionWizard(props: ConfigActionWizardProps) {
   }, [props.open]);
 
   useKey("Escape", () => {
-    if (props.runActionWizardOpen) return;
+    if (props.runActionWizardOpen || props.createActionWizardOpen) return;
     if (activePageIndex === 0) {
       props.onCancel();
     } else {

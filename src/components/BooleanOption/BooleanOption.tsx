@@ -24,9 +24,13 @@ export function R_BooleanOption(requiredProps: BooleanOptionProps) {
   const id = useRandomNumber(Random.id);
 
   return (
-    <label hidden={props.hidden} title={props.title} className="boolean-option">
+    <label
+      hidden={props.hidden}
+      title={props.title}
+      className="option boolean-option"
+    >
       {props.iconId && <R_Icon iconId={props.iconId} />}
-      <h3>{props.title}</h3>
+      <div className="title">{props.title}</div>
       <R_Checkbox
         title={props.title}
         value={props.value}

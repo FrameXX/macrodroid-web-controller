@@ -168,7 +168,7 @@ export function R_Log(props: LogProps) {
         hidden={!props.scrolledDown}
         title="Scroll up"
         onClick={props.onScrollUp}
-        iconId="arrow-up"
+        iconId="arrow-up-thick"
       />
     </>
   );

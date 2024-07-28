@@ -29,7 +29,8 @@ export function R_Actions(props: ActionsProps) {
   const [configActionWizardOpen, setConfigActionWizardOpen] = useImmer(false);
   const [runActionWizardOpen, setRunActionWizardOpen] = useImmer(false);
   const [createActionWizardOpen, setCreateActionWizardOpen] = useImmer(false);
-  const [addArgumentWizardOpen, setAddArgumentWizardOpen] = useImmer(false);
+  const [createArgumentWizardOpen, setCreateArgumentWizardOpen] =
+    useImmer(false);
   const [recentActions, setRecentActions] = useImmer<Action[]>([]);
   const [savedActions, setSavedActions] = useImmer<Action[]>([]);
   const [runAction, setRunAction] = useImmer<Action | null>(null);
@@ -71,11 +72,11 @@ export function R_Actions(props: ActionsProps) {
   }
 
   function openAddArgumentWizard() {
-    setAddArgumentWizardOpen(true);
+    setCreateArgumentWizardOpen(true);
   }
 
   function closeAddArgumentWizard() {
-    setAddArgumentWizardOpen(false);
+    setCreateArgumentWizardOpen(false);
   }
 
   function openRunActionWizard() {
@@ -214,6 +215,7 @@ export function R_Actions(props: ActionsProps) {
         iconId="cog-play"
       />
       <R_ConfigActionWizard
+        createActionWizardOpen={createActionWizardOpen}
         runActionWizardOpen={runActionWizardOpen}
         open={configActionWizardOpen}
         onCancel={closeConfigActionWizard}
@@ -234,12 +236,13 @@ export function R_Actions(props: ActionsProps) {
         runAction={runAction}
       />
       <R_CreateActionWizard
+        createArgumentWizardOpen={createArgumentWizardOpen}
         open={createActionWizardOpen}
         onCancel={closeCreateActionWizard}
         onStartArgumentCreation={openAddArgumentWizard}
       />
       <R_CreateArgumentWizard
-        open={addArgumentWizardOpen}
+        open={createArgumentWizardOpen}
         onCancel={closeAddArgumentWizard}
         onAdd={() => {}}
       />

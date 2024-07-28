@@ -6,11 +6,13 @@ import { ActionArg } from "../../modules/action";
 import { AnimatePresence } from "framer-motion";
 import { R_ArgumentCard } from "../ArgumentCard/ArgumentCard";
 import { R_Button } from "../Button/Button";
+import { useKey } from "../../modules/use_key";
 
 interface CreateActionWizardProps {
   open: boolean;
   onCancel: () => void;
   onStartArgumentCreation: () => void;
+  createArgumentWizardOpen: boolean;
 }
 
 export function R_CreateActionWizard(props: CreateActionWizardProps) {
@@ -23,6 +25,12 @@ export function R_CreateActionWizard(props: CreateActionWizardProps) {
   const [idValid, setIdValid] = useImmer(false);
   // @ts-ignore
   const [args, setArgs] = useImmer<ActionArg<any>[]>([]);
+
+  useKey("Escape", () => {
+    if (props.createArgumentWizardOpen) return;
+    if (activePageIndex === 0) props.onCancel();
+    else setActivePageIndex(0);
+  });
 
   return (
     <R_Wizard

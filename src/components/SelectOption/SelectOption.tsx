@@ -16,9 +16,9 @@ export function R_SelectOption(props: SelectOptionProps) {
   const id = useRandomNumber(Random.id);
 
   return (
-    <label title={props.title} className="boolean-option">
+    <label title={props.title} className="option boolean-option">
       {props.iconId && <R_Icon iconId={props.iconId} />}
-      <h3>{props.title}</h3>
+      <div className="title">{props.title}</div>
       <select
         value={props.value}
         onChange={(event) => props.onChange(+event.target.value)}

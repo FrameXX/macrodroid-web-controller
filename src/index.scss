@@ -67,6 +67,10 @@ h3 {
   width: fit-content;
 }
 
+div {
+  column-gap: 12px;
+}
+
 a {
   color: var(--color-accent);
 }
@@ -101,12 +105,26 @@ textarea {
     opacity: 0.5;
   }
 
-  &:invalid {
+  &:focus {
+    border-color: var(--color-accent);
+  }
+
+  &:invalid:focus {
     border-color: var(--color-trigger);
   }
 
-  &:focus {
-    border-color: var(--color-accent);
+  &:invalid {
+    border-color: var(--color-accent-trigger);
+  }
+}
+
+.option {
+  break-inside: avoid;
+
+  .title {
+    font-weight: bold;
+    width: 100%;
+    text-align: left;
   }
 }
 

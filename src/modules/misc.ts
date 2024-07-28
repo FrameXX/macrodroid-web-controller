@@ -1,12 +1,24 @@
-export function moveElement(arr: Array<any>, a: number, b: number) {
-  if (a < 0 || a >= arr.length || b < 0 || b > arr.length) {
-    throw new RangeError("Invalid indices");
-  }
+export function moveElement(
+  arr: Array<any>,
+  originIndex: number,
+  targetIndex: number,
+) {
+  if (originIndex === targetIndex)
+    throw TypeError("Origin index cannot be the same as target index.");
 
-  const value = arr[a];
+  originIndex =
+    originIndex >= 0
+      ? originIndex % arr.length
+      : Math.abs(arr.length + originIndex);
+  targetIndex =
+    targetIndex >= 0
+      ? targetIndex % arr.length
+      : Math.abs(arr.length + targetIndex);
 
-  arr.splice(a, 1);
-  arr.splice(b, 0, value);
+  const value = arr[originIndex];
+
+  arr.splice(originIndex, 1);
+  arr.splice(targetIndex, 0, value);
 
   return arr;
 }

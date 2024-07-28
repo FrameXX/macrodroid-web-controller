@@ -206,4 +206,22 @@ export const MAGIC_TEXT_ENTRIES: MagicTextEntryProps[] = [
   { title: "Mobile network code", magicText: "mnc" },
   { title: "Location area code", magicText: "lac" },
   { title: "Cell tower ID", magicText: "cell_id" },
+  { title: "Last known location (lat, lon)", magicText: "last_loc_latlong" },
+  { title: "Last known location (lat)", magicText: "last_loc_lat" },
+  { title: "Last known location (lon)", magicText: "last_loc_lon" },
+  { title: "Last known location (altitude)", magicText: "last_loc_alt" },
+  { title: "Last known location (accuracy)", magicText: "last_loc_accuracy" },
+  {
+    title: "Last known location (google maps link)",
+    magicText: "last_loc_link",
+  },
+  { title: "Last known location (time)", magicText: "last_loc_age_timestamp" },
+  {
+    title: "Last known location (speed km/h)",
+    magicText: "last_loc_speed_kmh",
+  },
+  {
+    title: "Last known location (speed mph)",
+    magicText: "last_loc_speed_mph",
+  },
 ];

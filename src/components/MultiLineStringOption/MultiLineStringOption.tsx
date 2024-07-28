@@ -1,6 +1,5 @@
 import { forwardRef } from "react";
 import { Random } from "../../modules/random";
-import "./MultiLineStringOption.scss";
 import { R_Icon } from "../Icon/Icon";
 import { useDefaultProps } from "../../modules/use_default_props";
 import { useRandomNumber } from "../../modules/use_random_number";
@@ -36,11 +35,11 @@ export const R_MultiLineStringOption = forwardRef<
     <label
       hidden={props.hidden}
       title={props.title}
-      className="multi-line-string-option"
+      className="option string-option"
     >
-      <h3>{props.title}</h3>
+      {props.iconId && <R_Icon iconId={props.iconId} />}
       <div className="input-container">
-        {props.iconId && <R_Icon iconId={props.iconId} />}
+        <div className="title">{props.title}</div>
         <textarea
           rows={4}
           title={props.title}

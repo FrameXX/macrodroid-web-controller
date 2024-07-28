@@ -36,11 +36,11 @@ export const R_StringOption = forwardRef<HTMLInputElement, DescribedInputProps>(
       <label
         hidden={props.hidden}
         title={props.title}
-        className="string-option"
+        className="option string-option"
       >
         {props.iconId && <R_Icon iconId={props.iconId} />}
         <div>
-          <h3>{props.title}</h3>
+          <div className="title">{props.title}</div>
           <input
             title={props.title}
             ref={ref}
