@@ -7,6 +7,6 @@
   align-items: center;
   gap: 8px;
   width: 100%;
-  max-width: 400px;
+  max-width: var(--tab-items-max-width);
   color: var(--color-primary-item);
 }

@@ -46,7 +46,7 @@ export function R_MagicTextCheatSheetWizard(
       pages={[
         <>
           <h2>Magic text cheat sheet</h2>
-          <div id="magic-text-entries-filter">
+          <div className="sticky-filter">
             <R_Icon iconId="magnify" />
             <R_SearchInput
               placeholder="Filter magic text entries"

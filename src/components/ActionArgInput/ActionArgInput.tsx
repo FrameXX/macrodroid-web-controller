@@ -65,7 +65,7 @@ export function R_ActionArgInput(props: ActionArgumentInputProps) {
             value={props.value}
             title={props.argument.name}
             onChange={props.onChange}
-            step={0.01}
+            decimal
             description={props.argument.description}
           />
         );

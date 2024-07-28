@@ -101,7 +101,7 @@ export function R_Log(props: LogProps) {
 
   return (
     <>
-      <div id="log-filter">
+      <div className="sticky-filter">
         <R_Icon side hidden={!wideEnoughScreenForFilterIcon} iconId="filter" />
         <R_SearchInput
           ref={filterValueInput}

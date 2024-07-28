@@ -91,7 +91,7 @@ export function R_ConfigActionWizard(props: ConfigActionWizardProps) {
       pages={[
         <>
           <h2>Choose action or create a custom one</h2>
-          <div id="actions-filter">
+          <div className="sticky-filter">
             <R_Icon iconId="magnify" />
             <R_SearchInput
               placeholder="Filter actions"

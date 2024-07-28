@@ -5,7 +5,9 @@
 @use "./partials/transition_durations";
 @use "./partials/constants";
 @use "./partials/z_index";
-@import url("./components/Icon/Icon.scss");
+@use "./partials/sticky_filter";
+@use "./partials/option";
+@use "./partials/icon";
 
 [hidden] {
   display: none !important;
@@ -115,16 +117,6 @@ textarea {
 
   &:invalid {
     border-color: var(--color-accent-trigger);
-  }
-}
-
-.option {
-  break-inside: avoid;
-
-  .title {
-    font-weight: bold;
-    width: 100%;
-    text-align: left;
   }
 }
 

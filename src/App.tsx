@@ -227,7 +227,7 @@ export function R_App() {
     }
 
     notification.addEventListener("click", () => {
-      window.focus();
+      focus();
       setActiveNavTabId(NavTabId.Log);
     });
   }
