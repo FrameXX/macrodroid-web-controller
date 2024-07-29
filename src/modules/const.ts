@@ -28,7 +28,7 @@ export const TRANSITIONS = {
   type: "spring",
 } as const;
 export const TOASTER_MAX_TOASTS = 3;
-export const TOAST_START_DELAY_MS = 3000;
+export const TOAST_START_DELAY_MS = 1400;
 export const TOAST_MS_PER_CHAR = 70;
 export const ANIMATE_SCALE_UNMOUNTED: Target = {
   opacity: 0,
