@@ -53,7 +53,7 @@ export function R_MagicTextCheatSheetWizard(
               onSearch={setFilterValue}
             />
           </div>
-          <R_InfoCard id="copy-magic-text-notice">
+          <R_InfoCard id="copy-magic-text-info">
             Click on a magic text entry to copy it to clipboard.
           </R_InfoCard>
           <motion.div

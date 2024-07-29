@@ -17,6 +17,7 @@ import "./CreateConnectionWizard.scss";
 import { useRef } from "react";
 import { R_SimpleCard } from "../SimpleCard/SimpleCard";
 import { useKey } from "../../modules/use_key";
+import { R_InfoCard } from "../InfoCard/InfoCard";
 
 interface AddConnectionWizardProps {
   open: boolean;
@@ -255,6 +256,10 @@ export function R_CreateConnectionWizard(props: AddConnectionWizardProps) {
             title="Connection name"
             description="This is your custom name, so that you can differentiate the connection from other."
           />
+          <R_InfoCard id="webhook-id-disclosure-info">
+            The provided webhook ID is not ever send as a part of any request
+            and stays only on this device.
+          </R_InfoCard>
           <R_StringOption
             iconId="webhook"
             ref={webhookIdInput}

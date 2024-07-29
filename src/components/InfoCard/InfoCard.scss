@@ -7,4 +7,9 @@
   width: 100%;
   max-width: var(--tab-items-max-width);
   background-color: var(--color-surface-top);
+
+  .content {
+    text-align: left;
+    width: 100%;
+  }
 }
