@@ -22,7 +22,7 @@ import { useKey } from "../../modules/use_key";
 interface AddArgumentWizardProps {
   open: boolean;
   onCancel: () => void;
-  onAdd: (arg: ActionArg<any>) => void;
+  onCreate: (arg: ActionArg<any>) => void;
 }
 
 const defaultValueInputIconId = "help";
@@ -131,7 +131,7 @@ export function R_CreateArgumentWizard(props: AddArgumentWizardProps) {
 
   function handleAddArgument() {
     const value = getRelevantValue();
-    props.onAdd({ name, id, type, value });
+    props.onCreate({ name, id, type, value });
   }
 
   const columns = useColumnDeterminator(container, new Array(5), 350);

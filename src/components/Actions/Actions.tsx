@@ -3,7 +3,12 @@ import { R_ExpandableCategory } from "../ExpandableCategory/ExpandableCategory";
 import { R_FAB } from "../FAB/FAB";
 import { R_IconNotice } from "../IconNotice/IconNotice";
 import { R_ConfigActionWizard } from "../ConfigActionWizard/ConfigActionWizard";
-import { Action, ActionsStruct, updateJSONString } from "../../modules/action";
+import {
+  Action,
+  ActionArg,
+  ActionsStruct,
+  updateJSONString,
+} from "../../modules/action";
 import { BakeToast, Toast, ToastSeverity } from "../../modules/toaster";
 import { AnimatePresence } from "framer-motion";
 import { R_ConfiguredActionCard } from "../ConfiguredActionCard/ConfiguredActionCard";
@@ -35,6 +40,7 @@ export function R_Actions(props: ActionsProps) {
   const [savedActions, setSavedActions] = useImmer<Action[]>([]);
   const [runAction, setRunAction] = useImmer<Action | null>(null);
   const [runActionWizardSkipArgs, setRunActionWizardSkipArgs] = useImmer(false);
+  const [newActionArgs, setNewActionArgs] = useImmer<ActionArg<any>[]>([]);
 
   useLocalStorage(savedActions, setSavedActions, {
     storageKey: "savedActions",
@@ -170,6 +176,18 @@ export function R_Actions(props: ActionsProps) {
     addSavedAction(recentActions[index]);
   }
 
+  function addNewActionArg(arg: ActionArg<any>) {
+    setNewActionArgs((draft) => {
+      draft.push(arg);
+      return draft;
+    });
+  }
+
+  function handleArgCreation(arg: ActionArg<any>) {
+    addNewActionArg(arg);
+    closeAddArgumentWizard();
+  }
+
   return (
     <>
       <R_ExpandableCategory defaultOpen name="Saved" iconId="star">
@@ -236,6 +254,7 @@ export function R_Actions(props: ActionsProps) {
         runAction={runAction}
       />
       <R_CreateActionWizard
+        args={newActionArgs}
         createArgumentWizardOpen={createArgumentWizardOpen}
         open={createActionWizardOpen}
         onCancel={closeCreateActionWizard}
@@ -244,7 +263,7 @@ export function R_Actions(props: ActionsProps) {
       <R_CreateArgumentWizard
         open={createArgumentWizardOpen}
         onCancel={closeAddArgumentWizard}
-        onAdd={() => {}}
+        onCreate={handleArgCreation}
       />
     </>
   );

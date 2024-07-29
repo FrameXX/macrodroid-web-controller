@@ -5,7 +5,6 @@ import { R_Wizard } from "../Wizard/Wizard";
 import {
   CONFIRM_CONNECTION_REQUEST_COMMENT,
   MACRODROID_APP_URL,
-  SPLASHSCREEN_TIMEOUT_MS,
 } from "../../modules/const";
 import { BakeToast, Toast, ToastSeverity } from "../../modules/toaster";
 import { Connection } from "../../modules/connection";
@@ -55,11 +54,6 @@ export function R_CreateConnectionWizard(props: AddConnectionWizardProps) {
   });
 
   function nextPage() {
-    if (activePageIndex === 0 && connectionNameInput.current)
-      setTimeout(
-        () => connectionNameInput.current?.focus(),
-        SPLASHSCREEN_TIMEOUT_MS,
-      );
     if (activePageIndex === 1) initNewConnection();
     setActivePageIndex((prevActivePageIndex) => prevActivePageIndex + 1);
   }
@@ -245,8 +239,7 @@ export function R_CreateConnectionWizard(props: AddConnectionWizardProps) {
               setConnectionNameValid(validity);
             }}
             onKeyUp={(event) => {
-              if (event.key === "Enter" && webhookIdInput.current)
-                webhookIdInput.current.focus();
+              if (event.key === "Enter") webhookIdInput.current?.focus();
             }}
             value={connectionName}
             required

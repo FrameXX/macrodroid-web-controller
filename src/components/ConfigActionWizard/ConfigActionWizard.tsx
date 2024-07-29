@@ -65,7 +65,6 @@ export function R_ConfigActionWizard(props: ConfigActionWizardProps) {
   }
 
   function clearActionSelection() {
-    console.log("clearActionSelection");
     configuredAction.current = null;
   }
 

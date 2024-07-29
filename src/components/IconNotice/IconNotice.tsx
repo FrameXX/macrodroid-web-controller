@@ -20,7 +20,7 @@ export function R_IconNotice(requiredProps: IconNoticeProps) {
     <R_Accordion open={!props.hidden}>
       <div className="icon-notice">
         <R_Icon iconId={props.iconId} />
-        {requiredProps.children}
+        <div>{requiredProps.children}</div>
       </div>
     </R_Accordion>
   );

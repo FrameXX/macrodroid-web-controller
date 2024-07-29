@@ -44,8 +44,8 @@ export function R_ArgumentCard(props: ArgumentCardProps) {
     >
       <R_Icon iconId={iconId} />
       <div>
-        <div>{props.name}</div>
-        <div>{props.id}</div>
+        <div className="name">{props.name}</div>
+        <div className="id">{props.id}</div>
       </div>
     </motion.div>
   );
