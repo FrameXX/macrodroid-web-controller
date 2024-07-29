@@ -118,6 +118,12 @@ export const ACTIONS: Action[] = [
         type: ActionArgType.MultiLineString,
         id: "text",
       },
+      {
+        name: "High priority",
+        value: false,
+        type: ActionArgType.Boolean,
+        id: "high_priority",
+      },
     ],
     keywords: ["alert", "notification"],
   },
@@ -161,6 +167,46 @@ export const ACTIONS: Action[] = [
       },
     ],
     keywords: ["clipboard", "copy", "fill", "paste", "write"],
+  },
+  {
+    id: "system_settings",
+    name: "System settings",
+    iconId: "cellphone-cog",
+    args: [
+      {
+        name: "Table",
+        value: 0,
+        type: ActionArgType.Selection,
+        options: ["System", "Secure", "Global"],
+        id: "table",
+      },
+      {
+        name: "Use helper app",
+        value: true,
+        type: ActionArgType.Boolean,
+        id: "use_helper_app",
+      },
+      {
+        name: "Key",
+        value: "",
+        type: ActionArgType.String,
+        id: "key",
+      },
+      {
+        name: "Value",
+        value: "",
+        type: ActionArgType.String,
+        id: "value",
+      },
+      {
+        name: "Value type",
+        value: 0,
+        type: ActionArgType.Selection,
+        options: ["Integer", "Float", "Long", "String"],
+        id: "value_type",
+      },
+    ],
+    keywords: ["system", "settings"],
   },
 ];
 

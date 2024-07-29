@@ -105,23 +105,18 @@ export function R_App() {
   });
 
   useEffect(() => {
-    if (!logScrollableContainer.current) {
-      console.warn("Logs scrollable container not found.");
-      return;
-    }
-    const container = logScrollableContainer.current;
-
-    function onScroll() {
-      setLogScrolledDown(container.scrollTop > innerHeight * 0.5);
-    }
-
-    container.addEventListener("scroll", onScroll);
-    return () => {
-      container.removeEventListener("scroll", onScroll);
-    };
+    if (companionURLArgPresent()) redirectToCompanionMacroWizard();
+    addLogScrollableContainerListener();
   }, []);
 
   useEffect(() => {
+    addListenerToAllConnections();
+    return () => {
+      removeListenerOfAllConnections();
+    };
+  }, [connections, logRecords]);
+
+  function addListenerToAllConnections() {
     connections.forEach((connection) => {
       connection.listenRequests(
         (request) => {
@@ -133,12 +128,33 @@ export function R_App() {
         () => handleListenFailed(connection),
       );
     });
-    return () => {
-      connections.forEach((connection) => {
-        connection.removeRequestListeners();
-      });
-    };
-  }, [connections, logRecords]);
+  }
+
+  function removeListenerOfAllConnections() {
+    connections.forEach((connection) => {
+      connection.removeRequestListeners();
+    });
+  }
+
+  function companionURLArgPresent() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const companionArg = urlParams.get("companion");
+    return companionArg !== null;
+  }
+
+  function addLogScrollableContainerListener() {
+    if (!logScrollableContainer.current) {
+      console.warn("Logs scrollable container not found.");
+      return;
+    }
+    const container = logScrollableContainer.current;
+
+    function onScroll() {
+      setLogScrolledDown(container.scrollTop > innerHeight * 0.5);
+    }
+
+    container.addEventListener("scroll", onScroll);
+  }
 
   function scrollLogTop() {
     const logsContainer = document.getElementById("logs");
