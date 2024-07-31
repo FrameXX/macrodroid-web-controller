@@ -2,7 +2,7 @@ import { Toast } from "../../modules/toaster";
 import { R_Icon } from "../Icon/Icon";
 import { Target, motion } from "framer-motion";
 import "./Toast.scss";
-import { DEFAULT_TRANSITION_OFFSET_PX } from "../../modules/const";
+import { DEFAULT_TRANSITION_TRANSLATE_PX } from "../../modules/const";
 import { useImmer } from "use-immer";
 
 interface ToastProps {
@@ -22,11 +22,11 @@ export function R_Toast(props: ToastProps) {
   const [hovering, setHovering] = useImmer(false);
   const overlayAnimate: Target = hovering
     ? {}
-    : { opacity: 0, y: -DEFAULT_TRANSITION_OFFSET_PX };
+    : { opacity: 0, y: -DEFAULT_TRANSITION_TRANSLATE_PX };
 
   const animateUnmounted: Target = {
     opacity: 0,
-    y: -DEFAULT_TRANSITION_OFFSET_PX,
+    y: -DEFAULT_TRANSITION_TRANSLATE_PX,
   };
   const animateMounted: Target = {
     opacity: 1,

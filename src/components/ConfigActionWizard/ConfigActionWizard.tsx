@@ -20,9 +20,9 @@ interface ConfigActionWizardProps {
   actions: Action[];
   onCancel: () => void;
   onActionConfigure: (action: Action, save: boolean) => void;
-  onStartActionCreation: () => void;
+  onConfigCustomActions: () => void;
   runActionWizardOpen: boolean;
-  createActionWizardOpen: boolean;
+  customActionsWizardOpen: boolean;
 }
 
 export function R_ConfigActionWizard(props: ConfigActionWizardProps) {
@@ -54,7 +54,7 @@ export function R_ConfigActionWizard(props: ConfigActionWizardProps) {
   }, [props.open]);
 
   useKey("Escape", () => {
-    if (props.runActionWizardOpen || props.createActionWizardOpen) return;
+    if (props.runActionWizardOpen || props.customActionsWizardOpen) return;
     if (activePageIndex === 0) {
       props.onCancel();
     } else {
@@ -186,9 +186,9 @@ export function R_ConfigActionWizard(props: ConfigActionWizardProps) {
         <>
           <R_FAB
             hidden={activePageIndex !== 0}
-            title="Create custom action"
-            iconId="plus"
-            onClick={props.onStartActionCreation}
+            title="Config custom actions"
+            iconId="pencil"
+            onClick={props.onConfigCustomActions}
           />
           <R_FAB
             hidden={activePageIndex !== 1}

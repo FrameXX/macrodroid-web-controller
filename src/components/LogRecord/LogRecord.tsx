@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import { R_Icon } from "../Icon/Icon";
 import "./LogRecord.scss";
 import { generateReadableTimestamp } from "../../modules/readable_timestamp";
-import { DEFAULT_TRANSITION_OFFSET_PX } from "../../modules/const";
+import { DEFAULT_TRANSITION_TRANSLATE_PX } from "../../modules/const";
 import { R_Button } from "../Button/Button";
 import { R_Accordion } from "../Accordion/Accordion";
 import { useImmer } from "use-immer";
@@ -40,9 +40,9 @@ export function R_LogRecord(props: LogRecordProps) {
   return (
     <motion.div
       layout
-      initial={{ opacity: 0, x: DEFAULT_TRANSITION_OFFSET_PX }}
+      initial={{ opacity: 0, x: DEFAULT_TRANSITION_TRANSLATE_PX }}
       animate={{ opacity: 1, x: 0 }}
-      exit={{ opacity: 0, x: DEFAULT_TRANSITION_OFFSET_PX }}
+      exit={{ opacity: 0, x: DEFAULT_TRANSITION_TRANSLATE_PX }}
       className="log-record-container"
     >
       <div hidden={!props.record.response} className="response">

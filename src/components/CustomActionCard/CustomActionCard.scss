@@ -1,0 +1,19 @@
+@use "../../partials/mixins" as *;
+
+.custom-action-card {
+  @include card;
+  display: flex;
+  align-items: center;
+  background-color: var(--color-surface-top);
+  max-width: var(--tab-items-max-width);
+  text-align: left;
+
+  .name {
+    font-weight: bold;
+    font-size: 1.1rem;
+  }
+
+  > div {
+    width: 100%;
+  }
+}

@@ -4,6 +4,9 @@ https://pictogrammers.com/docs/general/license/ -->
 <!-- https://github.com/Templarian/MaterialDesign/tree/master -->
 <svg width="0" height="0" class="hidden">
   <defs>
+    <symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" id="pencil">
+      <path d="M20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18,2.9 17.35,2.9 16.96,3.29L15.12,5.12L18.87,8.87M3,17.25V21H6.75L17.81,9.93L14.06,6.18L3,17.25Z" />
+    </symbol>
     <symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" id="play-circle">
       <path d="M10,16.5V7.5L16,12M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z" />
     </symbol>

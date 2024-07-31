@@ -1,7 +1,7 @@
 import "./Wizard.scss";
 import { Target, motion } from "framer-motion";
 import { R_WizardNavigator } from "../WizardNavigator/WizardNavigator";
-import { DEFAULT_TRANSITION_OFFSET_PX } from "../../modules/const";
+import { DEFAULT_TRANSITION_TRANSLATE_PX } from "../../modules/const";
 import { useDefaultProps } from "../../modules/use_default_props";
 
 interface WizardProps {
@@ -31,19 +31,19 @@ export function R_Wizard(requiredProps: WizardProps) {
 
   const animate: Target = props.open
     ? {}
-    : { x: DEFAULT_TRANSITION_OFFSET_PX, opacity: 0, display: "none" };
+    : { x: DEFAULT_TRANSITION_TRANSLATE_PX, opacity: 0, display: "none" };
 
   function animatePage(index: number): Target {
     if (index < props.activePageIndex) {
       return {
         display: "none",
-        x: -DEFAULT_TRANSITION_OFFSET_PX,
+        x: -DEFAULT_TRANSITION_TRANSLATE_PX,
         opacity: 0,
       };
     } else if (index > props.activePageIndex) {
       return {
         display: "none",
-        x: DEFAULT_TRANSITION_OFFSET_PX,
+        x: DEFAULT_TRANSITION_TRANSLATE_PX,
         opacity: 0,
       };
     } else {

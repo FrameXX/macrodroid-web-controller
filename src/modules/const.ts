@@ -16,7 +16,7 @@ export const CONFIRM_CONNECTION_REQUEST_COMMENT =
 
 // UI
 export const SPLASHSCREEN_TIMEOUT_MS = 350;
-export const DEFAULT_TRANSITION_OFFSET_PX = 40;
+export const DEFAULT_TRANSITION_TRANSLATE_PX = 40;
 export const DEFAULT_TRANSITION_UNMOUNTED_SCALE = 0.8;
 export const DEFAULT_TRANSITION_DURATION_S = 0.35;
 const PREFERS_REDUCED_MOTION = matchMedia(
@@ -354,5 +354,33 @@ export const MAGIC_TEXT_ENTRIES: MagicTextEntryProps[] = [
   {
     title: "Last known location (speed mph)",
     magicText: "last_loc_speed_mph",
+  },
+  {
+    title: "Current volume (Alarm)",
+    magicText: "vol_alarm",
+  },
+  {
+    title: "Current volume (Media/Music)",
+    magicText: "vol_music",
+  },
+  {
+    title: "Current volume (Ringer)",
+    magicText: "vol_ring",
+  },
+  {
+    title: "Current volume (Notification)",
+    magicText: "vol_notif",
+  },
+  {
+    title: "Current volume (System)",
+    magicText: "vol_system",
+  },
+  {
+    title: "Current volume (Voice)",
+    magicText: "vol_call",
+  },
+  {
+    title: "Current volume (Bluetooth voice)",
+    magicText: "vol_bt_voice",
   },
 ];

@@ -24,6 +24,7 @@ import { R_CreateArgumentWizard } from "../CreateArgumentWizard/CreateArgumentWi
 import { moveElement } from "../../modules/misc";
 import { useMemo } from "react";
 import { Confirm } from "../../modules/confirm_dialog";
+import { R_CustomActionsWizard } from "../CustomActionsWizard/CustomActionsWizard";
 
 interface ActionsProps {
   confirm: Confirm;
@@ -39,6 +40,7 @@ export function R_Actions(props: ActionsProps) {
   const [createActionWizardOpen, setCreateActionWizardOpen] = useImmer(false);
   const [createArgumentWizardOpen, setCreateArgumentWizardOpen] =
     useImmer(false);
+  const [customActionsWizardOpen, setCustomActionsWizardOpen] = useImmer(false);
   const [recentActions, setRecentActions] = useImmer<Action[]>([]);
   const [savedActions, setSavedActions] = useImmer<Action[]>([]);
   const [runAction, setRunAction] = useImmer<Action | null>(null);
@@ -107,6 +109,14 @@ export function R_Actions(props: ActionsProps) {
 
   function closeRunActionWizard() {
     setRunActionWizardOpen(false);
+  }
+
+  function closeCustomActionsWizard() {
+    setCustomActionsWizardOpen(false);
+  }
+
+  function openCustomActionsWizard() {
+    setCustomActionsWizardOpen(true);
   }
 
   function onActionConfigure(action: Action, save: boolean) {
@@ -235,6 +245,13 @@ export function R_Actions(props: ActionsProps) {
     });
   }
 
+  function deleteCustomAction(index: number) {
+    setCustomActions((draft) => {
+      draft.splice(index, 1);
+      return draft;
+    });
+  }
+
   return (
     <>
       <R_ExpandableCategory defaultOpen name="Saved" iconId="star">
@@ -281,12 +298,12 @@ export function R_Actions(props: ActionsProps) {
       />
       <R_ConfigActionWizard
         actions={actions}
-        createActionWizardOpen={createActionWizardOpen}
+        customActionsWizardOpen={customActionsWizardOpen}
         runActionWizardOpen={runActionWizardOpen}
         open={configActionWizardOpen}
         onCancel={closeConfigActionWizard}
         onActionConfigure={onActionConfigure}
-        onStartActionCreation={openCreateActionWizard}
+        onConfigCustomActions={openCustomActionsWizard}
       />
       <R_RunActionWizard
         bakeToast={props.bakeToast}
@@ -300,6 +317,14 @@ export function R_Actions(props: ActionsProps) {
           dispatchAction(action, connections);
         }}
         runAction={runAction}
+      />
+      <R_CustomActionsWizard
+        onCustomActionDelete={deleteCustomAction}
+        createActionWizardOpen={createActionWizardOpen}
+        actions={customActions}
+        open={customActionsWizardOpen}
+        onClose={closeCustomActionsWizard}
+        onOpenCreateActionWizard={openCreateActionWizard}
       />
       <R_CreateActionWizard
         confirm={props.confirm}

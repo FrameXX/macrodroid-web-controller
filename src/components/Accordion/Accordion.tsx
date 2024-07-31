@@ -1,7 +1,10 @@
 import { TargetAndTransition, motion } from "framer-motion";
 import { useDefaultProps } from "../../modules/use_default_props";
 import "./Accordion.scss";
-import { DEFAULT_TRANSITION_OFFSET_PX, TRANSITIONS } from "../../modules/const";
+import {
+  DEFAULT_TRANSITION_TRANSLATE_PX,
+  TRANSITIONS,
+} from "../../modules/const";
 
 interface AccordionProps extends React.PropsWithChildren {
   open: boolean;
@@ -27,7 +30,7 @@ export function R_Accordion(requiredProps: AccordionProps) {
     height: props.open
       ? props.openHeight || defaultOpenHeight
       : props.closedHeight,
-    y: props.open || !fullSqueeze ? 0 : -DEFAULT_TRANSITION_OFFSET_PX,
+    y: props.open || !fullSqueeze ? 0 : -DEFAULT_TRANSITION_TRANSLATE_PX,
     opacity: props.open || !fullSqueeze ? 1 : 0,
     visibility: props.open || !fullSqueeze ? "visible" : "hidden",
     overflow: props.open || !fullSqueeze ? "visible" : "hidden",
