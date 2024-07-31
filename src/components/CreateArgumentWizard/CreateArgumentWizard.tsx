@@ -18,9 +18,12 @@ import { moveElement } from "../../modules/misc";
 import { useRef } from "react";
 import { useColumnDeterminator } from "../../modules/use_column_determinator";
 import { useKey } from "../../modules/use_key";
+import { Confirm } from "../../modules/confirm_dialog";
 
 interface AddArgumentWizardProps {
+  confirm: Confirm;
   open: boolean;
+  otherArgs: ActionArg<any>[];
   onCancel: () => void;
   onCreate: (arg: ActionArg<any>) => void;
 }
@@ -29,6 +32,7 @@ const defaultValueInputIconId = "help";
 
 export function R_CreateArgumentWizard(props: AddArgumentWizardProps) {
   const [name, setName] = useImmer("");
+  const [description, setDescription] = useImmer("");
   const [id, setId] = useImmer("");
   const [type, setType] = useImmer<ActionArgType>(0);
   const [booleanValue, setBooleanValue] = useImmer(false);
@@ -39,6 +43,8 @@ export function R_CreateArgumentWizard(props: AddArgumentWizardProps) {
   const [decimalValue, setDecimalValue] = useImmer(0);
   const [selectOptions, setSelectOptions] = useImmer<SelectOption[]>([]);
   const container = useRef(null);
+  const idInput = useRef<HTMLInputElement>(null);
+  const descriptionInput = useRef<HTMLInputElement>(null);
 
   interface SelectOption {
     id: number;
@@ -50,6 +56,7 @@ export function R_CreateArgumentWizard(props: AddArgumentWizardProps) {
   function reset() {
     setName("");
     setId("");
+    setDescription("");
     setType(0);
     setBooleanValue(false);
     setIntegerValue(0);
@@ -129,9 +136,20 @@ export function R_CreateArgumentWizard(props: AddArgumentWizardProps) {
     }
   }
 
-  function handleAddArgument() {
+  async function handleArgumentCreation() {
+    const sameIDArgIndex = props.otherArgs.findIndex((arg) => {
+      return arg.id === id;
+    });
+    if (sameIDArgIndex !== -1) {
+      const confirm = await props.confirm(
+        "Argument with the same ID already exists in this action. This will cause conflicts. Are you sure you want to proceed?",
+      );
+      if (!confirm) return;
+    }
     const value = getRelevantValue();
-    props.onCreate({ name, id, type, value });
+    const options = selectOptions.map((option) => option.title);
+    props.onCreate({ name, id, type, value, description, options });
+    reset();
   }
 
   const columns = useColumnDeterminator(container, new Array(5), 350);
@@ -148,20 +166,31 @@ export function R_CreateArgumentWizard(props: AddArgumentWizardProps) {
           <motion.div ref={container} animate={{ columnCount: columns }}>
             <R_StringOption
               onChange={setName}
+              value={name}
               required
               title="Name"
               iconId="rename"
               description="The name of the argument shown in the web UI"
+              onKeyUp={(event) => {
+                if (event.key === "Enter") idInput.current?.focus();
+              }}
             />
             <R_StringOption
+              ref={idInput}
               onChange={setId}
+              value={id}
               required
               title="ID"
               iconId="identifier"
               description="The ID of the argument that will be send to MacroDroid"
+              onKeyUp={(event) => {
+                if (event.key === "Enter") descriptionInput.current?.focus();
+              }}
             />
             <R_StringOption
-              onChange={setName}
+              ref={descriptionInput}
+              onChange={setDescription}
+              value={description}
               title="Description"
               iconId="rename"
               description="Describe what is the argument for. This is not required."
@@ -169,6 +198,7 @@ export function R_CreateArgumentWizard(props: AddArgumentWizardProps) {
             <R_SelectOption
               iconId="alpha-t-box"
               onChange={setType}
+              value={type}
               title="Type"
               options={[
                 "Boolean",
@@ -278,7 +308,7 @@ export function R_CreateArgumentWizard(props: AddArgumentWizardProps) {
         <R_FAB
           hidden={!argumentValid()}
           title="Add argument"
-          onClick={handleAddArgument}
+          onClick={handleArgumentCreation}
           iconId="check"
         />
       }

@@ -6,11 +6,15 @@ import {
   ANIMATE_SCALE_MOUNTED,
   ANIMATE_SCALE_UNMOUNTED,
 } from "../../modules/const";
+import { R_Button } from "../Button/Button";
 
 interface ArgumentCardProps {
   name: string;
   type: ActionArgType;
   id: string;
+  onDelete: () => void;
+  onMoveDown: () => void;
+  onMoveUp: () => void;
 }
 
 export function R_ArgumentCard(props: ArgumentCardProps) {
@@ -37,6 +41,7 @@ export function R_ArgumentCard(props: ArgumentCardProps) {
 
   return (
     <motion.div
+      layout
       initial={ANIMATE_SCALE_UNMOUNTED}
       animate={ANIMATE_SCALE_MOUNTED}
       exit={ANIMATE_SCALE_UNMOUNTED}
@@ -47,6 +52,17 @@ export function R_ArgumentCard(props: ArgumentCardProps) {
         <div className="name">{props.name}</div>
         <div className="id">{props.id}</div>
       </div>
+      <R_Button title="Delete" iconId="delete" onClick={props.onDelete} />
+      <R_Button
+        title="Move down"
+        iconId="arrow-down-thick"
+        onClick={props.onMoveDown}
+      />
+      <R_Button
+        title="Move up"
+        iconId="arrow-up-thick"
+        onClick={props.onMoveUp}
+      />
     </motion.div>
   );
 }

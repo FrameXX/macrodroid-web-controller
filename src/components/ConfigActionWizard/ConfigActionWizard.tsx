@@ -1,7 +1,6 @@
 import { useImmer } from "use-immer";
 import { R_Wizard } from "../Wizard/Wizard";
 import { R_FAB } from "../FAB/FAB";
-import { ACTIONS } from "../../modules/const";
 import { R_ActionCard } from "../ActionCard/ActionCard";
 import { AnimatePresence, motion } from "framer-motion";
 import "./ConfigActionWizard.scss";
@@ -18,6 +17,7 @@ import { useKey } from "../../modules/use_key";
 
 interface ConfigActionWizardProps {
   open: boolean;
+  actions: Action[];
   onCancel: () => void;
   onActionConfigure: (action: Action, save: boolean) => void;
   onStartActionCreation: () => void;
@@ -34,16 +34,20 @@ export function R_ConfigActionWizard(props: ConfigActionWizardProps) {
   const actionsContainer = useRef(null);
   const configuredAction = useRef<Action | null>(null);
 
-  const actionsColumns = useColumnDeterminator(actionsContainer, ACTIONS, 270);
+  const actionsColumns = useColumnDeterminator(
+    actionsContainer,
+    props.actions,
+    270,
+  );
 
   const filteredActions = useMemo(() => {
     const filter = filterValue.toLowerCase();
-    return ACTIONS.filter((action) =>
+    return props.actions.filter((action) =>
       `${action.name}${action.keywords.join("")}`
         .toLowerCase()
         .includes(filter),
     );
-  }, [filterValue]);
+  }, [filterValue, props.actions]);
 
   useEffect(() => {
     if (props.open) reset();
@@ -124,6 +128,12 @@ export function R_ConfigActionWizard(props: ConfigActionWizardProps) {
         </>,
         <>
           <h2>{`Enter action args: ${configuredAction.current?.name}`}</h2>
+          <R_IconNotice
+            hidden={configuredAction.current?.args.length !== 0}
+            iconId="emoticon-wink"
+          >
+            This action has no arguments to configure. You can skip adhead!
+          </R_IconNotice>
           <R_ActionArgInputList
             configuredAction={configuredAction.current}
             onArgChange={(index, newValue) =>

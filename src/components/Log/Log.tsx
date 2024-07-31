@@ -119,7 +119,7 @@ export function R_Log(props: LogProps) {
           <option value="request_id">Request ID</option>
           <option value="comment">Comment</option>
           <option value="details">Details</option>
-          <option value="error_message">Error message</option>
+          <option value="error_message">Error</option>
         </select>
       </div>
       <R_Button

@@ -2,18 +2,24 @@ import { useImmer } from "use-immer";
 import { R_FAB } from "../FAB/FAB";
 import { R_StringOption } from "../StringOption/StringOption";
 import { R_Wizard } from "../Wizard/Wizard";
-import { ActionArg } from "../../modules/action";
-import { AnimatePresence, motion } from "framer-motion";
+import { Action, ActionArg } from "../../modules/action";
+import { AnimatePresence } from "framer-motion";
 import { R_ArgumentCard } from "../ArgumentCard/ArgumentCard";
 import { R_Button } from "../Button/Button";
 import { useKey } from "../../modules/use_key";
 import { useRef } from "react";
 import { R_IconNotice } from "../IconNotice/IconNotice";
-import { useColumnDeterminator } from "../../modules/use_column_determinator";
+import { Confirm } from "../../modules/confirm_dialog";
 
 interface CreateActionWizardProps {
+  confirm: Confirm;
   open: boolean;
   args: ActionArg<any>[];
+  actions: Action[];
+  onArgDelete: (index: number) => void;
+  onArgMoveDown: (index: number) => void;
+  onArgMoveUp: (index: number) => void;
+  onCreate: (action: Action) => void;
   onCancel: () => void;
   onStartArgumentCreation: () => void;
   createArgumentWizardOpen: boolean;
@@ -21,17 +27,12 @@ interface CreateActionWizardProps {
 
 export function R_CreateActionWizard(props: CreateActionWizardProps) {
   const [activePageIndex, setActivePageIndex] = useImmer(0);
-  // @ts-ignore
   const [name, setName] = useImmer("");
   const [nameValid, setNameValid] = useImmer(false);
-  // @ts-ignore
   const [id, setId] = useImmer("");
   const [idValid, setIdValid] = useImmer(false);
-  // @ts-ignore
-  const [args, setArgs] = useImmer<ActionArg<any>[]>([]);
   const nameInput = useRef<HTMLInputElement>(null);
   const idInput = useRef<HTMLInputElement>(null);
-  const argsContainer = useRef<HTMLDivElement>(null);
 
   useKey("Escape", () => {
     if (props.createArgumentWizardOpen) return;
@@ -39,10 +40,45 @@ export function R_CreateActionWizard(props: CreateActionWizardProps) {
     else setActivePageIndex(0);
   });
 
-  const argsColumns = useColumnDeterminator(argsContainer, props.args, 300);
+  useKey("Enter", () => {
+    if (activePageIndex === 1) create();
+  });
 
   function canGoSecondPage() {
     return nameValid && idValid;
+  }
+
+  function create() {
+    const action: Action = {
+      id,
+      name,
+      iconId: "play",
+      args: props.args,
+      keywords: [],
+    };
+    props.onCreate(action);
+    reset();
+  }
+
+  function reset() {
+    setActivePageIndex(0);
+    setName("");
+    setNameValid(false);
+    setId("");
+    setIdValid(false);
+  }
+
+  async function handleNextPage() {
+    const sameIDActionIndex = props.actions.findIndex((action) => {
+      return action.id === id;
+    });
+    if (sameIDActionIndex !== -1) {
+      const confirm = await props.confirm(
+        "Action with the same ID already exists. This will cause conflicts. Are you sure you want to proceed?",
+      );
+      if (!confirm) return;
+    }
+    setActivePageIndex(1);
   }
 
   return (
@@ -57,6 +93,7 @@ export function R_CreateActionWizard(props: CreateActionWizardProps) {
               setName(newValue);
               setNameValid(valid);
             }}
+            value={name}
             required
             title="Action name"
             placeholder="Action name"
@@ -72,6 +109,7 @@ export function R_CreateActionWizard(props: CreateActionWizardProps) {
               setId(newValue);
               setIdValid(valid);
             }}
+            value={id}
             required
             title="Action ID"
             placeholder="Action ID"
@@ -79,8 +117,7 @@ export function R_CreateActionWizard(props: CreateActionWizardProps) {
             description="The ID of the action that will be send to MacroDroid"
             ref={idInput}
             onKeyUp={(event) => {
-              if (event.key === "Enter" && canGoSecondPage())
-                setActivePageIndex(1);
+              if (event.key === "Enter" && canGoSecondPage()) handleNextPage();
             }}
           />
         </>,
@@ -91,37 +128,27 @@ export function R_CreateActionWizard(props: CreateActionWizardProps) {
             <br />
             <small>Action does not have to have arguments.</small>
           </R_IconNotice>
-          <motion.div
-            animate={{ columnCount: argsColumns }}
-            ref={argsContainer}
-          >
-            {props.args.map((arg) => (
-              <R_ArgumentCard
-                key={arg.id}
-                name={arg.name}
-                type={arg.type}
-                id={arg.id}
-              />
-            ))}
-          </motion.div>
+          <div>
+            <AnimatePresence>
+              {props.args.map((arg, index) => (
+                <R_ArgumentCard
+                  key={arg.id}
+                  name={arg.name}
+                  type={arg.type}
+                  id={arg.id}
+                  onDelete={() => props.onArgDelete(index)}
+                  onMoveDown={() => props.onArgMoveDown(index)}
+                  onMoveUp={() => props.onArgMoveUp(index)}
+                />
+              ))}
+            </AnimatePresence>
+          </div>
           <R_Button
             text="Add argument"
             onClick={() => props.onStartArgumentCreation()}
             title="Add argument"
             iconId="plus"
           />
-          <div>
-            <AnimatePresence>
-              {args.map((arg) => (
-                <R_ArgumentCard
-                  name={arg.name}
-                  type={arg.type}
-                  id={arg.id}
-                  key={`${arg.type}-${arg.id}`}
-                />
-              ))}
-            </AnimatePresence>
-          </div>
         </>,
       ]}
       leftButton={
@@ -148,13 +175,13 @@ export function R_CreateActionWizard(props: CreateActionWizardProps) {
             hidden={activePageIndex === 1 || !canGoSecondPage()}
             iconId="chevron-right"
             title="Next page"
-            onClick={() => setActivePageIndex(1)}
+            onClick={handleNextPage}
           />
           <R_FAB
             hidden={activePageIndex === 0}
             iconId="check"
             title="Create custom action"
-            onClick={() => {}}
+            onClick={create}
           />
         </>
       }

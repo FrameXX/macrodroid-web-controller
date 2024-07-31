@@ -18,12 +18,15 @@ import { Log } from "../../modules/logger";
 import { Connection } from "../../modules/connection";
 import { R_RunActionWizard } from "../RunActionWizard/RunActionWizard";
 import { useLocalStorage } from "../../modules/use_local_storage";
-import { RECENT_ACTIONS_LIMIT } from "../../modules/const";
+import { ACTIONS, RECENT_ACTIONS_LIMIT } from "../../modules/const";
 import { R_CreateActionWizard } from "../CreateActionWizard/CreateActionWizard";
 import { R_CreateArgumentWizard } from "../CreateArgumentWizard/CreateArgumentWizard";
 import { moveElement } from "../../modules/misc";
+import { useMemo } from "react";
+import { Confirm } from "../../modules/confirm_dialog";
 
 interface ActionsProps {
+  confirm: Confirm;
   bakeToast: BakeToast;
   log: Log;
   connections: Connection[];
@@ -41,7 +44,21 @@ export function R_Actions(props: ActionsProps) {
   const [runAction, setRunAction] = useImmer<Action | null>(null);
   const [runActionWizardSkipArgs, setRunActionWizardSkipArgs] = useImmer(false);
   const [newActionArgs, setNewActionArgs] = useImmer<ActionArg<any>[]>([]);
+  const [customActions, setCustomActions] = useImmer<Action[]>([]);
+  const actions = useMemo(() => {
+    console.log(customActions);
+    return [...ACTIONS, ...customActions];
+  }, [customActions]);
 
+  useLocalStorage(customActions, setCustomActions, {
+    storageKey: "customActions",
+    struct: ActionsStruct,
+    stringify: JSON.stringify,
+    parse: JSON.parse,
+    onRecoverError: (errorMessage) => {
+      props.onRecoverError(errorMessage, "custom actions");
+    },
+  });
   useLocalStorage(savedActions, setSavedActions, {
     storageKey: "savedActions",
     struct: ActionsStruct,
@@ -188,6 +205,36 @@ export function R_Actions(props: ActionsProps) {
     closeAddArgumentWizard();
   }
 
+  function deleteNewActionArgs(index: number) {
+    setNewActionArgs((draft) => {
+      draft.splice(index, 1);
+      return draft;
+    });
+  }
+
+  function moveDownNewActionArg(index: number) {
+    setNewActionArgs((draft) => {
+      moveElement(draft, index, index + 1);
+      return draft;
+    });
+  }
+
+  function moveUpNewActionArg(index: number) {
+    setNewActionArgs((draft) => {
+      moveElement(draft, index, index - 1);
+      return draft;
+    });
+  }
+
+  function handleActionCreation(action: Action) {
+    setNewActionArgs([]);
+    closeCreateActionWizard();
+    setCustomActions((draft) => {
+      draft.push(action);
+      return draft;
+    });
+  }
+
   return (
     <>
       <R_ExpandableCategory defaultOpen name="Saved" iconId="star">
@@ -233,6 +280,7 @@ export function R_Actions(props: ActionsProps) {
         iconId="cog-play"
       />
       <R_ConfigActionWizard
+        actions={actions}
         createActionWizardOpen={createActionWizardOpen}
         runActionWizardOpen={runActionWizardOpen}
         open={configActionWizardOpen}
@@ -254,13 +302,21 @@ export function R_Actions(props: ActionsProps) {
         runAction={runAction}
       />
       <R_CreateActionWizard
+        confirm={props.confirm}
+        actions={actions}
         args={newActionArgs}
         createArgumentWizardOpen={createArgumentWizardOpen}
         open={createActionWizardOpen}
         onCancel={closeCreateActionWizard}
         onStartArgumentCreation={openAddArgumentWizard}
+        onCreate={handleActionCreation}
+        onArgDelete={deleteNewActionArgs}
+        onArgMoveDown={moveDownNewActionArg}
+        onArgMoveUp={moveUpNewActionArg}
       />
       <R_CreateArgumentWizard
+        confirm={props.confirm}
+        otherArgs={newActionArgs}
         open={createArgumentWizardOpen}
         onCancel={closeAddArgumentWizard}
         onCreate={handleArgCreation}

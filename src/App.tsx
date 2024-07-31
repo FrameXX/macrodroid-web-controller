@@ -343,6 +343,7 @@ export function R_App() {
               connections={connections}
               log={log}
               bakeToast={bakeToast}
+              confirm={confirm}
             />
           </R_Tab>
           <R_Tab
