@@ -46,7 +46,6 @@ export function R_Actions(props: ActionsProps) {
   const [newActionArgs, setNewActionArgs] = useImmer<ActionArg<any>[]>([]);
   const [customActions, setCustomActions] = useImmer<Action[]>([]);
   const actions = useMemo(() => {
-    console.log(customActions);
     return [...ACTIONS, ...customActions];
   }, [customActions]);
 

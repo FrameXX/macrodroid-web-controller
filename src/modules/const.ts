@@ -108,7 +108,7 @@ export const ACTIONS: Action[] = [
   },
   {
     id: "display_notification",
-    name: "Display notification",
+    name: "Post notification",
     iconId: "alert-circle-outline",
     args: [
       { name: "Title", value: "", type: ActionArgType.String, id: "title" },
@@ -129,7 +129,7 @@ export const ACTIONS: Action[] = [
   },
   {
     id: "shell_script",
-    name: "Shell script",
+    name: "Run shell script",
     iconId: "script-outline",
     args: [
       {
@@ -170,7 +170,7 @@ export const ACTIONS: Action[] = [
   },
   {
     id: "system_settings",
-    name: "System settings",
+    name: "Set system settings",
     iconId: "cellphone-cog",
     args: [
       {
@@ -207,6 +207,91 @@ export const ACTIONS: Action[] = [
       },
     ],
     keywords: ["system", "settings"],
+  },
+  {
+    id: "enable_wifi",
+    name: "Enable Wi-Fi",
+    iconId: "wifi",
+    args: [],
+    keywords: [
+      "wifi",
+      "wi-fi",
+      "enable",
+      "internet",
+      "network",
+      "connectivity",
+      "lan",
+    ],
+  },
+  {
+    id: "disable_wifi",
+    name: "Disable Wi-Fi",
+    iconId: "wifi-off",
+    args: [],
+    keywords: [
+      "wifi",
+      "wi-fi",
+      "disable",
+      "internet",
+      "network",
+      "connectivity",
+      "lan",
+    ],
+  },
+  {
+    id: "enable_bluetooth",
+    name: "Enable Bluetooth",
+    iconId: "bluetooth",
+    args: [],
+    keywords: ["bluetooth", "enable", "connectivity"],
+  },
+  {
+    id: "disable_bluetooth",
+    name: "Disable Bluetooth",
+    iconId: "bluetooth-off",
+    args: [],
+    keywords: ["bluetooth", "disable", "connectivity"],
+  },
+  {
+    id: "send_sms",
+    name: "Send SMS",
+    iconId: "message-processing",
+    args: [
+      {
+        name: "Phone number",
+        value: "",
+        type: ActionArgType.String,
+        id: "number",
+      },
+      {
+        name: "Text",
+        value: "",
+        type: ActionArgType.MultiLineString,
+        id: "text",
+      },
+      {
+        name: "Prepopulate (Don't send)",
+        value: false,
+        type: ActionArgType.Boolean,
+        id: "prepopulate",
+      },
+    ],
+    keywords: ["sms", "text", "send", "message", "texting"],
+  },
+  {
+    id: "simulate_audio_button",
+    name: "Simulate audio button",
+    iconId: "play-circle",
+    args: [
+      {
+        name: "Action",
+        value: 0,
+        type: ActionArgType.Selection,
+        options: ["Play/Pause", "Previous", "Next", "Play", "Pause", "Stop"],
+        id: "action",
+      },
+    ],
+    keywords: ["audio", "button", "media", "music", "player"],
   },
 ];
 
