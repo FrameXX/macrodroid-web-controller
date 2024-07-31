@@ -1,4 +1,3 @@
-import { Connection } from "../../modules/connection";
 import "./ConnectionCard.scss";
 import { generateReadableTimestamp } from "../../modules/readable_timestamp";
 import { generateReadableTimeDifference } from "../../modules/readable_time_difference";
@@ -11,7 +10,9 @@ import {
 } from "../../modules/const";
 
 interface ConnectionProps {
-  connection: Connection;
+  name: string;
+  id: string;
+  lastActivityTimestamp: number;
   onDelete: () => void;
   onPoke: () => void;
 }
@@ -28,20 +29,20 @@ export function R_Connection(props: ConnectionProps) {
       className="connection-card"
     >
       <div className="info">
-        <div className="name">{props.connection.name}</div>
-        <div className="detail">{props.connection.id}</div>
+        <div className="name">{props.name}</div>
+        <div className="detail">{props.id}</div>
         <div className="detail">
-          {generateReadableTimestamp(props.connection.lastActivityTimestamp)}
+          {generateReadableTimestamp(props.lastActivityTimestamp)}
         </div>
         <div className="detail">
           {generateReadableTimeDifference(
-            Date.now() - props.connection.lastActivityTimestamp,
+            Date.now() - props.lastActivityTimestamp,
           )}{" "}
           ago
         </div>
       </div>
       <R_Button
-        title={`Delete ${props.connection.name}`}
+        title={`Delete ${props.name}`}
         iconId="delete-forever"
         onClick={props.onDelete}
       />

@@ -89,8 +89,10 @@ export function R_Connections(props: ConnectionsProps) {
               onDelete={() => {
                 props.onConnectionDelete(connection);
               }}
-              connection={connection}
               key={connection.id}
+              name={connection.name}
+              id={connection.id}
+              lastActivityTimestamp={connection.lastActivityTimestamp}
             />
           ))}
         </AnimatePresence>
