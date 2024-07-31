@@ -147,10 +147,11 @@ export function R_Actions(props: ActionsProps) {
       return recentAction.JSONstring === action.JSONstring;
     });
     if (sameActionIndex !== -1) {
-      setRecentActions((draft) => {
-        moveElement(draft, sameActionIndex, 0);
-        return draft;
-      });
+      if (sameActionIndex !== 0)
+        setRecentActions((draft) => {
+          moveElement(draft, sameActionIndex, 0);
+          return draft;
+        });
       return;
     }
 
