@@ -1,4 +1,4 @@
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence } from "framer-motion";
 import { R_IconNotice } from "../IconNotice/IconNotice";
 import { R_Connection } from "../ConnectionCard/ConnectionCard";
 import { R_FAB } from "../FAB/FAB";
@@ -8,8 +8,7 @@ import { BakeToast, Toast, ToastSeverity } from "../../modules/toaster";
 import { LogRecordInitializer } from "../../modules/logger";
 import { OutgoingRequest } from "../../modules/outgoing_request";
 import { useImmer } from "use-immer";
-import { useRef } from "react";
-import { useColumnDeterminator } from "../../modules/use_column_determinator";
+import { R_MultiColList } from "../MultiColList/MultiColList";
 
 interface ConnectionsProps {
   connections: Connection[];
@@ -28,7 +27,6 @@ interface ConnectionsProps {
 
 export function R_Connections(props: ConnectionsProps) {
   const [addConnectionWizardOpen, setAddConnectionWizardOpen] = useImmer(false);
-  const connectionsContainer = useRef(null);
 
   function openAddConnectionWizard() {
     setAddConnectionWizardOpen(true);
@@ -64,21 +62,15 @@ export function R_Connections(props: ConnectionsProps) {
     }
   }
 
-  const connectionsColumns = useColumnDeterminator(
-    connectionsContainer,
-    props.connections,
-    400,
-  );
-
   return (
     <>
       <R_IconNotice hidden={props.connections.length > 0}>
         No connections configured
       </R_IconNotice>
-      <motion.div
-        ref={connectionsContainer}
-        animate={{ columns: connectionsColumns }}
+      <R_MultiColList
+        items={props.connections}
         id="connections"
+        minColWidthPx={400}
       >
         <AnimatePresence>
           {props.connections.map((connection) => (
@@ -96,7 +88,7 @@ export function R_Connections(props: ConnectionsProps) {
             />
           ))}
         </AnimatePresence>
-      </motion.div>
+      </R_MultiColList>
       <R_FAB
         title="Create new connection"
         onClick={openAddConnectionWizard}

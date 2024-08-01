@@ -1,12 +1,11 @@
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence } from "framer-motion";
 import { Action } from "../../modules/action";
 import { useKey } from "../../modules/use_key";
 import { R_FAB } from "../FAB/FAB";
 import { R_Wizard } from "../Wizard/Wizard";
-import { useColumnDeterminator } from "../../modules/use_column_determinator";
-import { useRef } from "react";
 import { R_CustomActionCard } from "../CustomActionCard/CustomActionCard";
 import { R_IconNotice } from "../IconNotice/IconNotice";
+import { R_MultiColList } from "../MultiColList/MultiColList";
 
 interface CustomActionsWizardProps {
   actions: Action[];
@@ -18,8 +17,6 @@ interface CustomActionsWizardProps {
 }
 
 export function R_CustomActionsWizard(props: CustomActionsWizardProps) {
-  const container = useRef<HTMLDivElement>(null);
-  const columnCount = useColumnDeterminator(container, props.actions, 350);
   useKey("Escape", () => {
     if (!props.createActionWizardOpen) props.onClose();
   });
@@ -34,7 +31,7 @@ export function R_CustomActionsWizard(props: CustomActionsWizardProps) {
           <R_IconNotice hidden={props.actions.length > 0}>
             No custom actions configured
           </R_IconNotice>
-          <motion.div animate={{ columnCount }}>
+          <R_MultiColList items={props.actions}>
             <AnimatePresence>
               {props.actions.map((action, index) => (
                 <R_CustomActionCard
@@ -45,7 +42,7 @@ export function R_CustomActionsWizard(props: CustomActionsWizardProps) {
                 />
               ))}
             </AnimatePresence>
-          </motion.div>
+          </R_MultiColList>
         </>,
       ]}
       rightButton={

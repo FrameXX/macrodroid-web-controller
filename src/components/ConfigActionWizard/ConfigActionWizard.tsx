@@ -2,18 +2,18 @@ import { useImmer } from "use-immer";
 import { R_Wizard } from "../Wizard/Wizard";
 import { R_FAB } from "../FAB/FAB";
 import { R_ActionCard } from "../ActionCard/ActionCard";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence } from "framer-motion";
 import "./ConfigActionWizard.scss";
 import { useEffect, useMemo, useRef } from "react";
 import { R_Icon } from "../Icon/Icon";
 import { R_SearchInput } from "../SearchInput/SearchInput";
 import { R_IconNotice } from "../IconNotice/IconNotice";
 import { Action } from "../../modules/action";
-import { useColumnDeterminator } from "../../modules/use_column_determinator";
 import { R_StringOption } from "../StringOption/StringOption";
 import { R_BooleanOption } from "../BooleanOption/BooleanOption";
 import { R_ActionArgInputList } from "../ActionArgInputList/ActionArgInputList";
 import { useKey } from "../../modules/use_key";
+import { R_MultiColList } from "../MultiColList/MultiColList";
 
 interface ConfigActionWizardProps {
   open: boolean;
@@ -31,14 +31,7 @@ export function R_ConfigActionWizard(props: ConfigActionWizardProps) {
   const [actionName, setActionName] = useImmer("");
   const [activePageIndex, setActivePageIndex] = useImmer(0);
   const [filterValue, setFilterValue] = useImmer("");
-  const actionsContainer = useRef(null);
   const configuredAction = useRef<Action | null>(null);
-
-  const actionsColumns = useColumnDeterminator(
-    actionsContainer,
-    props.actions,
-    270,
-  );
 
   const filteredActions = useMemo(() => {
     const filter = filterValue.toLowerCase();
@@ -107,11 +100,7 @@ export function R_ConfigActionWizard(props: ConfigActionWizardProps) {
           >
             All actions have been filtered out.
           </R_IconNotice>
-          <motion.div
-            ref={actionsContainer}
-            id="actions"
-            animate={{ columns: actionsColumns }}
-          >
+          <R_MultiColList items={props.actions} minColWidthPx={320}>
             <AnimatePresence>
               {filteredActions.map((action) => (
                 <R_ActionCard
@@ -124,7 +113,7 @@ export function R_ConfigActionWizard(props: ConfigActionWizardProps) {
                 />
               ))}
             </AnimatePresence>
-          </motion.div>
+          </R_MultiColList>
         </>,
         <>
           <h2>{`Enter action args: ${configuredAction.current?.name}`}</h2>

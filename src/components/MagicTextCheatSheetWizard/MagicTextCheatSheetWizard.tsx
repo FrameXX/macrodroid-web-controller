@@ -1,17 +1,17 @@
-import { useMemo, useRef } from "react";
+import { useMemo } from "react";
 import { MAGIC_TEXT_ENTRIES } from "../../modules/const";
-import { useColumnDeterminator } from "../../modules/use_column_determinator";
 import { R_FAB } from "../FAB/FAB";
 import { R_MagicTextEntry } from "../MagicTextEntry/MagicTextEntry";
 import { R_Wizard } from "../Wizard/Wizard";
 import "./MagicTextCheatSheetWizard.scss";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence } from "framer-motion";
 import { R_SearchInput } from "../SearchInput/SearchInput";
 import { useImmer } from "use-immer";
 import { R_Icon } from "../Icon/Icon";
 import { BakeToast, Toast } from "../../modules/toaster";
 import { R_InfoCard } from "../InfoCard/InfoCard";
 import { useKey } from "../../modules/use_key";
+import { R_MultiColList } from "../MultiColList/MultiColList";
 
 interface MagicTextCheatSheetWizardProps {
   open: boolean;
@@ -22,12 +22,6 @@ interface MagicTextCheatSheetWizardProps {
 export function R_MagicTextCheatSheetWizard(
   props: MagicTextCheatSheetWizardProps,
 ) {
-  const entriesContainer = useRef<HTMLDivElement>(null);
-  const entriesColumns = useColumnDeterminator(
-    entriesContainer,
-    MAGIC_TEXT_ENTRIES,
-    300,
-  );
   const [filterValue, setFilterValue] = useImmer("");
 
   const filteredEntries = useMemo(() => {
@@ -56,10 +50,7 @@ export function R_MagicTextCheatSheetWizard(
           <R_InfoCard id="copy-magic-text-info">
             Click on a magic text entry to copy it to clipboard.
           </R_InfoCard>
-          <motion.div
-            animate={{ columns: entriesColumns }}
-            ref={entriesContainer}
-          >
+          <R_MultiColList items={MAGIC_TEXT_ENTRIES} minColWidthPx={300}>
             <AnimatePresence>
               {filteredEntries.map((entry) => (
                 <R_MagicTextEntry
@@ -74,7 +65,7 @@ export function R_MagicTextCheatSheetWizard(
                 />
               ))}
             </AnimatePresence>
-          </motion.div>
+          </R_MultiColList>
         </>,
       ]}
       rightButton={

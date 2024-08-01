@@ -12,13 +12,13 @@ import "./CreateArgumentWizard.scss";
 import { R_IconNotice } from "../IconNotice/IconNotice";
 import { R_Accordion } from "../Accordion/Accordion";
 import { R_SelectOptionCard } from "../SelectOptionCard/SelectOptionCard";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence } from "framer-motion";
 import { Random } from "../../modules/random";
 import { moveElement } from "../../modules/misc";
-import { useRef } from "react";
-import { useColumnDeterminator } from "../../modules/use_column_determinator";
+import { useMemo, useRef } from "react";
 import { useKey } from "../../modules/use_key";
 import { Confirm } from "../../modules/confirm_dialog";
+import { R_MultiColList } from "../MultiColList/MultiColList";
 
 interface AddArgumentWizardProps {
   confirm: Confirm;
@@ -42,7 +42,6 @@ export function R_CreateArgumentWizard(props: AddArgumentWizardProps) {
   const [multiLineStringValue, setMultiLineStringValue] = useImmer("");
   const [decimalValue, setDecimalValue] = useImmer(0);
   const [selectOptions, setSelectOptions] = useImmer<SelectOption[]>([]);
-  const container = useRef(null);
   const idInput = useRef<HTMLInputElement>(null);
   const descriptionInput = useRef<HTMLInputElement>(null);
 
@@ -152,9 +151,9 @@ export function R_CreateArgumentWizard(props: AddArgumentWizardProps) {
     reset();
   }
 
-  const columns = useColumnDeterminator(container, new Array(5), 350);
-
   useKey("Escape", props.onCancel);
+
+  const dummyMultiColListItems = useMemo(() => new Array(5), []);
 
   return (
     <R_Wizard
@@ -163,7 +162,7 @@ export function R_CreateArgumentWizard(props: AddArgumentWizardProps) {
       pages={[
         <>
           <h2>Add argument</h2>
-          <motion.div ref={container} animate={{ columnCount: columns }}>
+          <R_MultiColList items={dummyMultiColListItems}>
             <R_StringOption
               onChange={setName}
               value={name}
@@ -255,7 +254,7 @@ export function R_CreateArgumentWizard(props: AddArgumentWizardProps) {
               hidden={type !== ActionArgType.Decimal}
               title="Default value"
             />
-          </motion.div>
+          </R_MultiColList>
           <R_Accordion open={type == ActionArgType.Selection}>
             <br />
             <hr />

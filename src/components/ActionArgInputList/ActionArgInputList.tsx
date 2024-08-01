@@ -1,10 +1,10 @@
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence } from "framer-motion";
 import { R_ActionArgInput } from "../ActionArgInput/ActionArgInput";
 import { Action, ActionArg } from "../../modules/action";
-import { useEffect, useRef } from "react";
-import { useColumnDeterminator } from "../../modules/use_column_determinator";
+import { useEffect } from "react";
 import { useImmer } from "use-immer";
 import { useForceUpdate } from "../../modules/use_force_update";
+import { R_MultiColList } from "../MultiColList/MultiColList";
 
 interface ActionArgInputListProps {
   configuredAction: Action | null;
@@ -13,12 +13,6 @@ interface ActionArgInputListProps {
 
 export function R_ActionArgInputList(props: ActionArgInputListProps) {
   const [configuredArgs, setConfiguredArgs] = useImmer<ActionArg<any>[]>([]);
-  const actionArgsContainer = useRef(null);
-  const actionArgsColumns = useColumnDeterminator(
-    actionArgsContainer,
-    configuredArgs,
-    400,
-  );
   const forceUpdate = useForceUpdate();
 
   function shouldArgBeRendered(arg: ActionArg<any>): boolean {
@@ -35,10 +29,7 @@ export function R_ActionArgInputList(props: ActionArgInputListProps) {
   }, [props.configuredAction]);
 
   return (
-    <motion.div
-      animate={{ columns: actionArgsColumns }}
-      ref={actionArgsContainer}
-    >
+    <R_MultiColList items={configuredArgs} minColWidthPx={400}>
       {props.configuredAction && (
         <AnimatePresence>
           {configuredArgs.map(
@@ -61,6 +52,6 @@ export function R_ActionArgInputList(props: ActionArgInputListProps) {
           )}
         </AnimatePresence>
       )}
-    </motion.div>
+    </R_MultiColList>
   );
 }

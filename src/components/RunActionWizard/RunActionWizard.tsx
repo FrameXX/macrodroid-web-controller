@@ -4,13 +4,12 @@ import { R_FAB } from "../FAB/FAB";
 import { Action, updateJSONString } from "../../modules/action";
 import { Connection } from "../../modules/connection";
 import { useEffect, useRef } from "react";
-import { motion } from "framer-motion";
 import { R_BooleanOption } from "../BooleanOption/BooleanOption";
-import { useColumnDeterminator } from "../../modules/use_column_determinator";
 import { R_ActionArgInputList } from "../ActionArgInputList/ActionArgInputList";
 import { useForceUpdate } from "../../modules/use_force_update";
 import { BakeToast, Toast, ToastSeverity } from "../../modules/toaster";
 import { useKey } from "../../modules/use_key";
+import { R_MultiColList } from "../MultiColList/MultiColList";
 
 interface RunActionWizardProps {
   open: boolean;
@@ -28,14 +27,6 @@ export function R_RunActionWizard(props: RunActionWizardProps) {
     [],
   );
   const runAction = useRef<Action | null>(null);
-  const connectionsContainer = useRef(null);
-
-  const connectionsColumns = useColumnDeterminator(
-    connectionsContainer,
-    props.connections,
-    400,
-  );
-
   const forceUpdate = useForceUpdate();
 
   useEffect(() => {
@@ -105,10 +96,7 @@ export function R_RunActionWizard(props: RunActionWizardProps) {
   const connectionsPage = (
     <>
       <h2>Select connections to run the action</h2>
-      <motion.div
-        animate={{ columns: connectionsColumns }}
-        ref={connectionsContainer}
-      >
+      <R_MultiColList items={props.connections} minColWidthPx={400}>
         {props.connections.map((connection) => (
           <R_BooleanOption
             key={connection.id}
@@ -117,7 +105,7 @@ export function R_RunActionWizard(props: RunActionWizardProps) {
             value={selectedConnections.includes(connection)}
           />
         ))}
-      </motion.div>
+      </R_MultiColList>
     </>
   );
 
