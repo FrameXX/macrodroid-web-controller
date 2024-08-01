@@ -38,7 +38,7 @@ export const R_MultiLineStringOption = forwardRef<
       className="option string-option"
     >
       {props.iconId && <R_Icon iconId={props.iconId} />}
-      <div className="input-container">
+      <div>
         <div className="title">{props.title}</div>
         <textarea
           rows={4}
@@ -55,12 +55,12 @@ export const R_MultiLineStringOption = forwardRef<
           autoCapitalize={props.autoCapitalize}
           aria-describedby={`input-description-${id}`}
         />
+        {props.description && (
+          <div id={`input-description-${id}`} className="description">
+            {props.description}
+          </div>
+        )}
       </div>
-      {props.description && (
-        <div id={`input-description-${id}`} className="description">
-          {props.description}
-        </div>
-      )}
     </label>
   );
 });

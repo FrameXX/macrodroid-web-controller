@@ -43,7 +43,7 @@ export function R_CreateArgumentWizard(props: AddArgumentWizardProps) {
   const [decimalValue, setDecimalValue] = useImmer(0);
   const [selectOptions, setSelectOptions] = useImmer<SelectOption[]>([]);
   const idInput = useRef<HTMLInputElement>(null);
-  const descriptionInput = useRef<HTMLInputElement>(null);
+  const descriptionInput = useRef<HTMLTextAreaElement>(null);
 
   interface SelectOption {
     id: number;
@@ -186,7 +186,7 @@ export function R_CreateArgumentWizard(props: AddArgumentWizardProps) {
                 if (event.key === "Enter") descriptionInput.current?.focus();
               }}
             />
-            <R_StringOption
+            <R_MultiLineStringOption
               ref={descriptionInput}
               onChange={setDescription}
               value={description}

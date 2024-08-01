@@ -109,6 +109,7 @@ export function R_CreateActionWizard(props: CreateActionWizardProps) {
               setId(newValue);
               setIdValid(valid);
             }}
+            autoCapitalize="none"
             value={id}
             required
             title="Action ID"
