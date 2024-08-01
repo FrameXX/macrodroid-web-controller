@@ -17,18 +17,20 @@ export function R_SelectOption(props: SelectOptionProps) {
 
   return (
     <label title={props.title} className="option boolean-option">
-      {props.iconId && <R_Icon iconId={props.iconId} />}
-      <div className="title">{props.title}</div>
-      <select
-        value={props.value}
-        onChange={(event) => props.onChange(+event.target.value)}
-      >
-        {props.options.map((option, index) => (
-          <option key={index} value={index}>
-            {option}
-          </option>
-        ))}
-      </select>
+      <div>
+        {props.iconId && <R_Icon iconId={props.iconId} />}
+        <div className="title">{props.title}</div>
+        <select
+          value={props.value}
+          onChange={(event) => props.onChange(+event.target.value)}
+        >
+          {props.options.map((option, index) => (
+            <option key={index} value={index}>
+              {option}
+            </option>
+          ))}
+        </select>
+      </div>
       {props.description && (
         <div id={`input-description-${id}`} className="description">
           {props.description}

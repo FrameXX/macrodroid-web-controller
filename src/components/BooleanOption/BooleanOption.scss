@@ -2,8 +2,16 @@
 
 .boolean-option {
   @include card;
-  display: flex;
   align-items: center;
   background-color: var(--color-surface-top);
   max-width: var(--tab-items-max-width);
+
+  > div {
+    display: flex;
+    align-items: center;
+  }
+
+  .title {
+    width: 100%;
+  }
 }

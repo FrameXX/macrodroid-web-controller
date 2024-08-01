@@ -293,6 +293,150 @@ export const ACTIONS: Action[] = [
     ],
     keywords: ["audio", "button", "media", "music", "player"],
   },
+  {
+    id: "enable_airplane_mode",
+    name: "Enable airplane mode",
+    iconId: "airplane",
+    args: [
+      {
+        name: "Method",
+        value: 0,
+        type: ActionArgType.Selection,
+        options: ["MacroDroid as default assistant", "ADB hack", "Root"],
+        id: "method",
+      },
+    ],
+    keywords: ["airplane", "mode", "enable"],
+  },
+  {
+    id: "disable_airplane_mode",
+    name: "Disable airplane mode",
+    iconId: "airplane-off",
+    args: [
+      {
+        name: "Method",
+        value: 0,
+        type: ActionArgType.Selection,
+        options: ["MacroDroid as default assistant", "ADB hack", "Root"],
+        id: "method",
+      },
+    ],
+    keywords: ["airplane", "mode", "disable"],
+  },
+  {
+    id: "disable_macrodroid",
+    name: "Disable MacroDroid",
+    iconId: "grid-off",
+    args: [],
+    keywords: ["macro", "droid", "disable", "turn off"],
+  },
+  {
+    id: "run_macro",
+    name: "Run Macro",
+    iconId: "arrow-top-right",
+    args: [
+      { name: "Name", value: "", type: ActionArgType.String, id: "name" },
+      {
+        name: "Ignore constraints",
+        value: true,
+        type: ActionArgType.Boolean,
+        id: "ignore_constraints",
+      },
+      {
+        name: "Ignore macro disabled",
+        value: true,
+        type: ActionArgType.Boolean,
+        id: "ignore_disabled",
+      },
+    ],
+    keywords: ["macro", "droid", "run", "execute", "launch", "trigger"],
+  },
+  {
+    id: "enable_location_services",
+    name: "Enable location services",
+    iconId: "map-marker",
+    args: [],
+    keywords: ["location", "services", "enable"],
+  },
+  {
+    id: "disable_location_services",
+    name: "Disable location services",
+    iconId: "map-marker-off",
+    args: [],
+    keywords: ["location", "services", "disable"],
+  },
+  {
+    id: "reboot",
+    name: "Reboot",
+    iconId: "reload",
+    args: [
+      {
+        name: "Soft",
+        value: false,
+        type: ActionArgType.Boolean,
+        id: "soft",
+        description:
+          "Soft restart will only halt the system to restart itself without it traditionally being started by the bootloader.",
+      },
+    ],
+    keywords: ["restart", "reboot"],
+  },
+  {
+    id: "power_off",
+    name: "Power off",
+    iconId: "power",
+    args: [
+      {
+        name: "Alternative method",
+        value: false,
+        type: ActionArgType.Boolean,
+        id: "alt_method",
+      },
+    ],
+    keywords: ["power", "off", "shutdown"],
+  },
+  {
+    id: "launch_app",
+    name: "Launch app",
+    iconId: "open-in-new",
+    args: [
+      {
+        name: "Package name",
+        value: "",
+        type: ActionArgType.String,
+        id: "package_name",
+        description:
+          "Package name is unique to every app unlike app name. You can usually find it in the system settings app info page. For example for MacroDroid it is com.arlosoft.macrodroid.",
+      },
+      {
+        name: "Force new",
+        value: false,
+        type: ActionArgType.Boolean,
+        id: "force_new",
+      },
+      {
+        name: "Exclude from recents",
+        value: false,
+        type: ActionArgType.Boolean,
+        id: "exclude_from_recents",
+      },
+    ],
+    keywords: ["app", "open", "launch", "application", "start"],
+  },
+  {
+    id: "enable_flashlight",
+    name: "Enable flashlight",
+    iconId: "flashlight",
+    args: [],
+    keywords: ["flashlight", "enable", "torch", "light"],
+  },
+  {
+    id: "disable_flashlight",
+    name: "Disable flashlight",
+    iconId: "flashlight-off",
+    args: [],
+    keywords: ["flashlight", "disable", "torch", "light"],
+  },
 ];
 
 export const MAGIC_TEXT_ENTRIES: MagicTextEntryProps[] = [

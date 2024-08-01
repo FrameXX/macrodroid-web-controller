@@ -29,13 +29,15 @@ export function R_BooleanOption(requiredProps: BooleanOptionProps) {
       title={props.title}
       className="option boolean-option"
     >
-      {props.iconId && <R_Icon iconId={props.iconId} />}
-      <div className="title">{props.title}</div>
-      <R_Checkbox
-        title={props.title}
-        value={props.value}
-        onChange={props.onChange}
-      />
+      <div>
+        {props.iconId && <R_Icon iconId={props.iconId} />}
+        <div className="title">{props.title}</div>
+        <R_Checkbox
+          title={props.title}
+          value={props.value}
+          onChange={props.onChange}
+        />
+      </div>
       {props.description && (
         <div id={`input-description-${id}`} className="description">
           {props.description}
