@@ -20,7 +20,6 @@ interface ConnectionsProps {
     errorMessage: string,
     connection: Connection,
   ) => void;
-  handleListenFailed: (connection: Connection) => void;
   onClickCompanionMacro: () => void;
 }
 
@@ -84,6 +83,7 @@ export function R_Connections(props: ConnectionsProps) {
               name={connection.name}
               id={connection.id}
               lastActivityTimestamp={connection.lastActivityTimestamp}
+              listenerHealthy={connection.listenerHealthy}
             />
           ))}
         </AnimatePresence>
@@ -104,7 +104,6 @@ export function R_Connections(props: ConnectionsProps) {
         onCancel={closeAddConnectionWizard}
         open={addConnectionWizardOpen}
         handleIncomingFailedRequest={props.handleIncomingFailedRequest}
-        handleListenFailed={props.handleListenFailed}
       />
     </>
   );

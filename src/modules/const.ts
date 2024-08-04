@@ -22,10 +22,15 @@ export const DEFAULT_TRANSITION_DURATION_S = 0.35;
 const PREFERS_REDUCED_MOTION = matchMedia(
   "(prefers-reduced-motion: reduce)",
 ).matches;
+const TRANSITION_BOUNCE = 0.45;
+const TRANSITION_TYPE = "spring";
+const TRANSITION_DURATION = PREFERS_REDUCED_MOTION
+  ? 0.000001
+  : DEFAULT_TRANSITION_DURATION_S;
 export const TRANSITIONS = {
-  duration: PREFERS_REDUCED_MOTION ? 0.000001 : DEFAULT_TRANSITION_DURATION_S,
-  bounce: 0.4,
-  type: "spring",
+  duration: TRANSITION_DURATION,
+  bounce: TRANSITION_BOUNCE,
+  type: TRANSITION_TYPE,
 } as const;
 export const TOASTER_MAX_TOASTS = 3;
 export const TOAST_START_DELAY_MS = 1400;

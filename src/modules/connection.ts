@@ -26,6 +26,7 @@ export const ConnectionsStruct = array(
 );
 
 export class Connection {
+  public listenerHealthy = true;
   public receiverOpened = false;
   public isListening = false;
   public lastActivityTimestamp = 0;

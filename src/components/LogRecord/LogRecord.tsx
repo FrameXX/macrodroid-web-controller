@@ -86,7 +86,7 @@ export function R_LogRecord(props: LogRecordProps) {
               return (
                 <div key={index}>
                   <hr />
-                  <div className="detail">{renderMultiLineString(detail)}</div>
+                  <pre className="detail">{renderMultiLineString(detail)}</pre>
                 </div>
               );
             })}

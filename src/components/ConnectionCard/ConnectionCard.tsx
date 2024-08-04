@@ -8,8 +8,10 @@ import {
   ANIMATE_SCALE_MOUNTED,
   ANIMATE_SCALE_UNMOUNTED,
 } from "../../modules/const";
+import { R_Icon } from "../Icon/Icon";
 
 interface ConnectionProps {
+  listenerHealthy: boolean;
   name: string;
   id: string;
   lastActivityTimestamp: number;
@@ -26,27 +28,39 @@ export function R_Connection(props: ConnectionProps) {
       initial={ANIMATE_SCALE_UNMOUNTED}
       animate={ANIMATE_SCALE_MOUNTED}
       exit={ANIMATE_SCALE_UNMOUNTED}
-      className="connection-card"
+      className="connection-card-container"
     >
-      <div className="info">
-        <div className="name">{props.name}</div>
-        <div className="detail">{props.id}</div>
-        <div className="detail">
-          {generateReadableTimestamp(props.lastActivityTimestamp)}
-        </div>
-        <div className="detail">
-          {generateReadableTimeDifference(
-            Date.now() - props.lastActivityTimestamp,
-          )}{" "}
-          ago
-        </div>
+      <div hidden={props.listenerHealthy} className="error-message">
+        <R_Icon side iconId="alert" />
+        Listener was suspended or failed.
       </div>
-      <R_Button
-        title={`Delete ${props.name}`}
-        iconId="delete-forever"
-        onClick={props.onDelete}
-      />
-      <R_Button title="Poke" iconId="web-sync" onClick={props.onPoke} />
+      <div
+        className={`connection-card ${props.listenerHealthy ? "" : "listener-unhealthy"}`}
+      >
+        <div className="info">
+          <h3 className="name">{props.name}</h3>
+          <pre className="id">{props.id}</pre>
+          <div className="detail">
+            {generateReadableTimestamp(props.lastActivityTimestamp)}
+          </div>
+          <div className="detail">
+            {generateReadableTimeDifference(
+              Date.now() - props.lastActivityTimestamp,
+            )}{" "}
+            ago
+          </div>
+        </div>
+        <R_Button
+          title={`Delete ${props.name}`}
+          iconId="delete-forever"
+          onClick={props.onDelete}
+        />
+        <R_Button
+          title={`Poke ${props.name}`}
+          iconId="web-sync"
+          onClick={props.onPoke}
+        />
+      </div>
     </motion.div>
   );
 }

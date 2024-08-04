@@ -4,15 +4,3 @@
   height: 100%;
   width: 100%;
 }
-
-#log-tab {
-  display: flex;
-  flex-direction: column;
-  overflow-y: auto;
-}
-
-#connections {
-  text-align: center;
-  column-width: 350px;
-  column-gap: 12px;
-}

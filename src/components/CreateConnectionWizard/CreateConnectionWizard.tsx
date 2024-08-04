@@ -28,7 +28,6 @@ interface AddConnectionWizardProps {
     errorMessage: string,
     connection: Connection,
   ) => void;
-  handleListenFailed: (connection: Connection) => void;
   onClickCompanionMacro: () => void;
 }
 
@@ -135,7 +134,17 @@ export function R_CreateConnectionWizard(props: AddConnectionWizardProps) {
       (errorMessage) => {
         props.handleIncomingFailedRequest(errorMessage, connection);
       },
-      () => props.handleListenFailed(connection),
+      handleListenFailed,
+    );
+  }
+
+  function handleListenFailed() {
+    props.bakeToast(
+      new Toast(
+        "Failed to listen for incoming requests.",
+        "alert",
+        ToastSeverity.Error,
+      ),
     );
   }
 

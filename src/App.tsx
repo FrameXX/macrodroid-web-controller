@@ -34,6 +34,7 @@ import {
   NOTIFICATION_REQUEST_COMMENT,
   UKNOWN_REQUEST_COMMENT,
 } from "./modules/const";
+import { R_OfflineIndicator } from "./components/OfflineIndicator/OfflineIndicator";
 
 export function R_App() {
   const [toasts, setToasts] = useImmer<Toast[]>([]);
@@ -130,7 +131,8 @@ export function R_App() {
         (errorMessage) => {
           handleIncomingFailedRequest(errorMessage, connection);
         },
-        () => handleListenFailed(connection),
+        () => handleListenFailed(index),
+        () => handleListenSucceeded(index),
       );
     });
   }
@@ -188,9 +190,9 @@ export function R_App() {
   }
 
   function updateConnectionLastActivity(connectionIndex: number) {
-    setConnections((prevConnections) => {
-      prevConnections[connectionIndex].lastActivityTimestamp = Date.now();
-      return prevConnections;
+    setConnections((draft) => {
+      draft[connectionIndex].lastActivityTimestamp = Date.now();
+      return draft;
     });
     saveConnections();
   }
@@ -274,9 +276,7 @@ export function R_App() {
     connectionIndex: number,
   ) {
     updateConnectionLastActivity(connectionIndex);
-
     const connection = connections[connectionIndex];
-
     const comment = commentIncomingRequest(request);
     const record = {
       comment,
@@ -316,10 +316,35 @@ export function R_App() {
     });
   }
 
-  function handleListenFailed(connection: Connection) {
-    if (document.visibilityState === "hidden") return;
-    const errorMessage = `Listener for connection ${connection.name} was suspended or failed.`;
+  function reportConnectionListenerHealthiness(
+    connectionIndex: number,
+    healthy: boolean,
+  ) {
+    setConnections((draft) => {
+      draft[connectionIndex].listenerHealthy = healthy;
+      return draft;
+    });
+  }
+
+  function handleListenFailed(connectionIndex: number) {
+    reportConnectionListenerHealthiness(connectionIndex, false);
+    const connection = connections[connectionIndex];
+    const errorMessage = `Connection ${connection.name} listener was suspended or failed.`;
     bakeToast(new Toast(errorMessage, "alert", ToastSeverity.Error));
+  }
+
+  function handleListenSucceeded(connectionIndex: number) {
+    const connection = connections[connectionIndex];
+    if (!connection.listenerHealthy) {
+      bakeToast(
+        new Toast(
+          `Connection ${connection.name} was reconnected.`,
+          "info",
+          ToastSeverity.Success,
+        ),
+      );
+    }
+    reportConnectionListenerHealthiness(connectionIndex, true);
   }
 
   async function deleteConnection(connection: Connection) {
@@ -376,7 +401,6 @@ export function R_App() {
               bakeToast={bakeToast}
               log={log}
               handleIncomingFailedRequest={handleIncomingFailedRequest}
-              handleListenFailed={handleListenFailed}
             />
           </R_Tab>
           <R_Tab active={isTabActive(NavTabId.Actions)}>
@@ -427,6 +451,7 @@ export function R_App() {
         onCancel={() => confirmDialog.current.resolve(false)}
         text={confirmDialogText}
       />
+      <R_OfflineIndicator />
       <R_Toaster
         onToastClick={(id) => toaster.current.removeToastById(id)}
         toasts={toasts}

@@ -1,0 +1,20 @@
+.offline-indicator {
+  padding: 6px 12px 6px 6px;
+  display: flex;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  right: 0;
+  background-color: var(--color-surface);
+  border-style: solid;
+  border-color: var(--color-accent-trigger);
+  color: var(--color-accent-trigger);
+  border-width: 0 0 var(--border-width) var(--border-width);
+  border-radius: 0 0 0 var(--border-radius);
+  box-shadow: var(--box-shadow);
+  pointer-events: none;
+
+  .icon {
+    margin-right: 0;
+  }
+}

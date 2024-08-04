@@ -7,7 +7,10 @@
   display: flex;
   align-items: start;
   break-inside: avoid;
-  max-width: var(--tab-items-max-width);
+
+  &.listener-unhealthy {
+    border: var(--border-width) solid var(--color-accent-trigger);
+  }
 
   &:first-child {
     margin-top: 0;
@@ -20,9 +23,17 @@
   .name {
     font-weight: bold;
     word-break: break-word;
+    margin: 0;
+    margin-bottom: 0.2rem;
   }
 
-  .detail {
-    font-size: 0.8rem;
+  .detail,
+  .id {
+    font-size: 0.9rem;
   }
+}
+
+.connection-card-container {
+  max-width: var(--tab-items-max-width);
+  margin: auto;
 }

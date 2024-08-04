@@ -15,8 +15,6 @@
 
   > div {
     width: 100%;
-    // display: flex;
-    // flex-direction: column;
   }
 
   &.failed {
@@ -50,7 +48,6 @@
   }
 
   .details {
-    font-family: "Jetbrains Mono";
     font-size: 0.8rem;
   }
 
@@ -92,7 +89,6 @@
 }
 
 .log-record-container {
-  padding-bottom: 16px;
   max-width: var(--tab-items-max-width);
   margin: auto;
 
