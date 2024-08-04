@@ -44,6 +44,9 @@ export const MACRODROID_APP_URL =
   "https://play.google.com/store/apps/details?id=com.arlosoft.macrodroid";
 export const LOG_RECORD_LIMIT = 40;
 export const RECENT_ACTIONS_LIMIT = 20;
+export const UKNOWN_REQUEST_COMMENT = "Unknown request";
+export const NOTIFICATION_REQUEST_COMMENT = "Notification";
+export const CLIPBOARD_FILL_REQUEST_COMMENT = "Clipboard fill";
 
 export const ACTIONS: Action[] = [
   {

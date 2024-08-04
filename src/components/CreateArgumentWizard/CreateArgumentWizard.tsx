@@ -162,7 +162,7 @@ export function R_CreateArgumentWizard(props: AddArgumentWizardProps) {
       pages={[
         <>
           <h2>Add argument</h2>
-          <R_MultiColList items={dummyMultiColListItems}>
+          <R_MultiColList items={dummyMultiColListItems} maxCols={2}>
             <R_StringOption
               onChange={setName}
               value={name}

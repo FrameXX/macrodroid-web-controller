@@ -16,7 +16,6 @@ interface ConnectionsProps {
   onConnectionDelete: (connection: Connection) => void;
   bakeToast: BakeToast;
   log: (record: LogRecordInitializer) => void;
-  reportConnectionActivity: (connection: Connection) => void;
   handleIncomingFailedRequest: (
     errorMessage: string,
     connection: Connection,
@@ -96,7 +95,6 @@ export function R_Connections(props: ConnectionsProps) {
       />
       <R_CreateConnectionWizard
         onClickCompanionMacro={props.onClickCompanionMacro}
-        reportConnectionActivity={props.reportConnectionActivity}
         log={props.log}
         onConnectionConfirm={(connection) => {
           props.onConnectionConfirm(connection);

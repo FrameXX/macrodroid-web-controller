@@ -24,7 +24,6 @@ interface AddConnectionWizardProps {
   onCancel: () => void;
   onConnectionConfirm: (connection: Connection) => void;
   log: Log;
-  reportConnectionActivity: (connection: Connection) => void;
   handleIncomingFailedRequest: (
     errorMessage: string,
     connection: Connection,

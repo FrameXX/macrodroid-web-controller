@@ -70,7 +70,11 @@ export class OutgoingRequest {
   }
 
   public static poke() {
-    return new OutgoingRequest(OutgoingRequestType.Poke, [], "Poke");
+    return new OutgoingRequest(
+      OutgoingRequestType.Poke,
+      [],
+      "Connection confirmation",
+    );
   }
 
   public static runAction(action: Action) {

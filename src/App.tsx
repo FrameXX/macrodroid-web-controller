@@ -29,6 +29,11 @@ import { R_Actions } from "./components/Actions/Actions";
 import { enums } from "superstruct";
 import { R_WelcomeWizard } from "./components/WelcomeWizard/WelcomeWizard";
 import { R_Extras } from "./components/Extras/Extras";
+import {
+  CLIPBOARD_FILL_REQUEST_COMMENT,
+  NOTIFICATION_REQUEST_COMMENT,
+  UKNOWN_REQUEST_COMMENT,
+} from "./modules/const";
 
 export function R_App() {
   const [toasts, setToasts] = useImmer<Toast[]>([]);
@@ -105,7 +110,7 @@ export function R_App() {
   });
 
   useEffect(() => {
-    if (companionURLArgPresent()) redirectToCompanionMacroWizard();
+    if (isCompanionURLArgPresent()) redirectToCompanionMacroWizard();
     addLogScrollableContainerListener();
   }, []);
 
@@ -117,10 +122,10 @@ export function R_App() {
   }, [connections, logRecords]);
 
   function addListenerToAllConnections() {
-    connections.forEach((connection) => {
+    connections.forEach((connection, index) => {
       connection.listenRequests(
         (request) => {
-          handleIncomingRequest(request, connection);
+          handleIncomingRequest(request, index);
         },
         (errorMessage) => {
           handleIncomingFailedRequest(errorMessage, connection);
@@ -136,7 +141,7 @@ export function R_App() {
     });
   }
 
-  function companionURLArgPresent() {
+  function isCompanionURLArgPresent() {
     const urlParams = new URLSearchParams(window.location.search);
     const companionArg = urlParams.get("companion");
     return companionArg !== null;
@@ -182,70 +187,114 @@ export function R_App() {
     if (!connection.receiverOpened) connection.openReceiver();
   }
 
-  function reportConnectionActivity(activeConnection: Connection) {
-    const activeConnectionIndex = connections.findIndex(
-      (connection) => connection.id === activeConnection.id,
-    );
-    if (activeConnectionIndex === -1)
-      throw new Error(
-        "Connection that was reported to be active could not be found in the connections list.",
-      );
+  function updateConnectionLastActivity(connectionIndex: number) {
     setConnections((prevConnections) => {
-      prevConnections[activeConnectionIndex].lastActivityTimestamp = Date.now();
+      prevConnections[connectionIndex].lastActivityTimestamp = Date.now();
       return prevConnections;
     });
     saveConnections();
   }
 
   function commentIncomingRequest(request: IncomingRequest) {
-    if (request.type === IncomingRequestType.Notification)
-      return "Notification";
-    const mathcingOutgoingLogRecords = logRecords.filter(
+    if (request.type === IncomingRequestType.Notification) {
+      return NOTIFICATION_REQUEST_COMMENT;
+    }
+    if (request.type === IncomingRequestType.ClipboardFill) {
+      return CLIPBOARD_FILL_REQUEST_COMMENT;
+    }
+
+    const matchingOutgoingLogRecords = logRecords.filter(
       (logRecord) =>
         logRecord.type === LogRecordType.OutgoingRequest &&
         logRecord.requestId === request.id,
     );
-    if (mathcingOutgoingLogRecords.length === 0) return "Unknown request";
-    return mathcingOutgoingLogRecords[0].comment!;
+
+    if (matchingOutgoingLogRecords.length === 0) return UKNOWN_REQUEST_COMMENT;
+    if (!matchingOutgoingLogRecords[0].comment) {
+      return UKNOWN_REQUEST_COMMENT;
+    } else {
+      const matchingComment = matchingOutgoingLogRecords[0].comment;
+      return matchingComment;
+    }
+  }
+
+  function isTabActive(tabId: NavTabId) {
+    return activeNavTabId === tabId;
+  }
+
+  function toastifyIncomingRequest(
+    request: IncomingRequest,
+    comment: string,
+    connectionName: string,
+  ) {
+    let message: string;
+    if (request.type === IncomingRequestType.Notification) {
+      message = `New notification from ${connectionName}.`;
+    } else if (request.type === IncomingRequestType.ClipboardFill) {
+      message = `${connectionName} filled the clipboard.`;
+    } else {
+      message = `${connectionName} responded to ${comment}.`;
+    }
+    bakeToast(new Toast(message, "info", ToastSeverity.Info));
+  }
+
+  function notifyIncomingRequest(
+    request: IncomingRequest,
+    comment: string,
+    connectionName: string,
+  ) {
+    if (Notification.permission !== "granted")
+      throw new Error("Notification permission is not granted.");
+
+    let notificationTitle: string;
+    let notificationBody: string | undefined;
+    if (request.type === IncomingRequestType.Notification) {
+      notificationTitle = request.details[0];
+      if (request.details.length > 1)
+        notificationBody = request.details.slice(1).join("\n\n");
+    } else if (request.type === IncomingRequestType.ClipboardFill) {
+      notificationTitle = `${connectionName} filled the clipboard.`;
+      notificationBody = request.details[0];
+    } else {
+      notificationTitle = `${connectionName} responded to ${comment}`;
+      notificationBody = request.details.join("\n\n");
+    }
+
+    const notification = new Notification(notificationTitle, {
+      body: notificationBody,
+    });
+    notification.addEventListener("click", () => {
+      window.focus();
+      setActiveNavTabId(NavTabId.Log);
+    });
   }
 
   function handleIncomingRequest(
     request: IncomingRequest,
-    connection: Connection,
+    connectionIndex: number,
   ) {
-    reportConnectionActivity(connection);
+    updateConnectionLastActivity(connectionIndex);
+
+    const connection = connections[connectionIndex];
 
     const comment = commentIncomingRequest(request);
-    log({
+    const record = {
       comment,
       connectionName: connection.name,
       requestId: request.id,
       response: true,
       type: LogRecordType.IncomingRequest,
       details: request.details,
-    });
+    };
+    log(record);
 
-    if (
-      activeNavTabId === NavTabId.Log ||
-      Notification.permission !== "granted"
-    )
-      return;
+    if (isTabActive(NavTabId.Log)) return;
 
-    let notification: Notification;
-    if (request.type === IncomingRequestType.Notification) {
-      notification = new Notification(request.details[0], {
-        body: request.details.slice(1).join("\n\n"),
-      });
+    if (Notification.permission === "granted") {
+      notifyIncomingRequest(request, comment, connection.name);
     } else {
-      notification = new Notification(comment, {
-        body: request.details.join("\n\n"),
-      });
+      toastifyIncomingRequest(request, comment, connection.name);
     }
-
-    notification.addEventListener("click", () => {
-      focus();
-      setActiveNavTabId(NavTabId.Log);
-    });
   }
 
   function handleIncomingFailedRequest(
@@ -269,13 +318,7 @@ export function R_App() {
 
   function handleListenFailed(connection: Connection) {
     if (document.visibilityState === "hidden") return;
-    const errorMessage = `Failed to listen for incoming requests for connection ${connection.name}.`;
-    // log({
-    //   connectionName: connection.name,
-    //   response: false,
-    //   type: LogRecordType.Technicality,
-    //   errorMessage: "Failed to listen for incoming requests.",
-    // });
+    const errorMessage = `Listener for connection ${connection.name} was suspended or failed.`;
     bakeToast(new Toast(errorMessage, "alert", ToastSeverity.Error));
   }
 
@@ -286,7 +329,7 @@ export function R_App() {
       ))
     )
       return;
-    if (connection.listening) connection.removeRequestListeners();
+    if (connection.isListening) connection.removeRequestListeners();
     if (connection.receiverOpened) connection.closeReceiver();
     setConnections(
       connections.filter(
@@ -324,10 +367,9 @@ export function R_App() {
     <>
       <motion.main layout animate={animate}>
         <div id="tab-content">
-          <R_Tab active={activeNavTabId === NavTabId.Connections}>
+          <R_Tab active={isTabActive(NavTabId.Connections)}>
             <R_Connections
               onClickCompanionMacro={redirectToCompanionMacroWizard}
-              reportConnectionActivity={reportConnectionActivity}
               connections={connections}
               onConnectionConfirm={addConnection}
               onConnectionDelete={deleteConnection}
@@ -337,7 +379,7 @@ export function R_App() {
               handleListenFailed={handleListenFailed}
             />
           </R_Tab>
-          <R_Tab active={activeNavTabId === NavTabId.Actions}>
+          <R_Tab active={isTabActive(NavTabId.Actions)}>
             <R_Actions
               onRecoverError={onRecoverError}
               connections={connections}
@@ -348,7 +390,7 @@ export function R_App() {
           </R_Tab>
           <R_Tab
             ref={logScrollableContainer}
-            active={activeNavTabId === NavTabId.Log}
+            active={isTabActive(NavTabId.Log)}
           >
             <R_Log
               scrolledDown={logScrolledDown}
@@ -358,7 +400,7 @@ export function R_App() {
               confirm={confirm}
             />
           </R_Tab>
-          <R_Tab active={activeNavTabId === NavTabId.Extras}>
+          <R_Tab active={isTabActive(NavTabId.Extras)}>
             <R_Extras
               bakeToast={bakeToast}
               companionMacroWizardOpen={companionMacroWizardOpen}

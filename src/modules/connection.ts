@@ -27,7 +27,7 @@ export const ConnectionsStruct = array(
 
 export class Connection {
   public receiverOpened = false;
-  public listening = false;
+  public isListening = false;
   public lastActivityTimestamp = 0;
   private eventSource?: EventSource;
   private _removeListeners?: () => void;
@@ -105,13 +105,14 @@ export class Connection {
     onRequest: (request: IncomingRequest) => void,
     onFailedRequest?: (errorMessage: string) => void,
     onListenFailed?: (event: Event) => void,
+    onOpen?: (event: Event) => void,
   ) {
     if (!this.eventSource)
       throw new Error(
         "This connection does not have eventSource defined. It has probably not been opened.",
       );
 
-    if (this.listening)
+    if (this.isListening)
       throw new Error(
         "This connection already has listeners added. Remove old listeners before adding new.",
       );
@@ -123,6 +124,7 @@ export class Connection {
     this.eventSource.addEventListener("message", handleMessage);
     if (onListenFailed)
       this.eventSource.addEventListener("error", onListenFailed);
+    if (onOpen) this.eventSource.addEventListener("open", onOpen);
 
     this._removeListeners = () => {
       if (!this.eventSource)
@@ -134,7 +136,7 @@ export class Connection {
         this.eventSource.removeEventListener("error", onListenFailed);
     };
 
-    this.listening = true;
+    this.isListening = true;
   }
 
   public removeRequestListeners() {
@@ -143,7 +145,7 @@ export class Connection {
         "The method to remove listeners has not been defined. Event listeners probably have not been added.",
       );
     this._removeListeners();
-    this.listening = false;
+    this.isListening = false;
   }
 
   public async makeRequest(request: OutgoingRequest) {
