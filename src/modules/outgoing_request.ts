@@ -8,12 +8,6 @@ export enum OutgoingRequestType {
   Poke = "poke",
 }
 
-export enum OutGoingRequestStatus {
-  NotSend,
-  Success,
-  Failed,
-}
-
 export interface SearchParam {
   name: string;
   value: string;

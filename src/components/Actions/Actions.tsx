@@ -138,12 +138,13 @@ export function R_Actions(props: ActionsProps) {
 
   async function dispatchAction(action: Action, connections: Connection[]) {
     setRunActionWizardSkipArgs(false);
+    addRecentAction(action);
     const request = OutgoingRequest.runAction(action);
-    for (const connection of connections) {
+    const logPromises = connections.map(async (connection) => {
       const logRecord = await connection.makeRequest(request);
       props.log(logRecord);
-    }
-    addRecentAction(action);
+    });
+    await Promise.all(logPromises);
   }
 
   function addRecentAction(action: Action) {

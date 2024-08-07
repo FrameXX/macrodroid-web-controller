@@ -8,7 +8,10 @@ import {
 } from "../../modules/const";
 import { BakeToast, Toast, ToastSeverity } from "../../modules/toaster";
 import { Connection } from "../../modules/connection";
-import { IncomingRequest } from "../../modules/incoming_request";
+import {
+  IncomingRequest,
+  IncomingRequestType,
+} from "../../modules/incoming_request";
 import { useImmer } from "use-immer";
 import { OutgoingRequest } from "../../modules/outgoing_request";
 import { Log, LogRecordType } from "../../modules/logger";
@@ -148,22 +151,40 @@ export function R_CreateConnectionWizard(props: AddConnectionWizardProps) {
     );
   }
 
+  function handleInvalidConfirmationRequest(
+    errorMessage: string,
+    connectionName: string,
+    requestId: string,
+  ) {
+    props.bakeToast(new Toast(errorMessage, "alert", ToastSeverity.Error));
+    props.log({
+      connectionName: connectionName,
+      requestId: requestId,
+      response: false,
+      type: LogRecordType.IncomingRequest,
+      errorMessage,
+    });
+  }
+
   function handleIncomingRequest(
     request: IncomingRequest,
     connection: Connection,
     outgoingRequestId: string,
   ) {
     if (request.id !== outgoingRequestId) {
-      const errorMessage =
-        "The connection was confirmed but with a different request ID.";
-      props.bakeToast(new Toast(errorMessage, "alert", ToastSeverity.Error));
-      props.log({
-        connectionName: connection.name,
-        requestId: request.id,
-        response: false,
-        type: LogRecordType.IncomingRequest,
-        errorMessage,
-      });
+      handleInvalidConfirmationRequest(
+        "The connection was confirmed with a unexpected request ID.",
+        connection.name,
+        request.id,
+      );
+      return;
+    }
+    if (request.type !== IncomingRequestType.Confirmation) {
+      handleInvalidConfirmationRequest(
+        "The connection was confirmed with an unexpected request type.",
+        connection.name,
+        request.id,
+      );
       return;
     }
     props.log({

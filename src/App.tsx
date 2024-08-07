@@ -197,21 +197,16 @@ export function R_App() {
     saveConnections();
   }
 
-  function commentIncomingRequest(request: IncomingRequest) {
-    if (request.type === IncomingRequestType.Notification) {
-      return NOTIFICATION_REQUEST_COMMENT;
-    }
-    if (request.type === IncomingRequestType.ClipboardFill) {
-      return CLIPBOARD_FILL_REQUEST_COMMENT;
-    }
-
+  function findIncomingRequestOutgoingComment(request: IncomingRequest) {
     const matchingOutgoingLogRecords = logRecords.filter(
       (logRecord) =>
         logRecord.type === LogRecordType.OutgoingRequest &&
         logRecord.requestId === request.id,
     );
 
-    if (matchingOutgoingLogRecords.length === 0) return UKNOWN_REQUEST_COMMENT;
+    if (matchingOutgoingLogRecords.length === 0) {
+      return UKNOWN_REQUEST_COMMENT;
+    }
     if (!matchingOutgoingLogRecords[0].comment) {
       return UKNOWN_REQUEST_COMMENT;
     } else {
@@ -220,47 +215,99 @@ export function R_App() {
     }
   }
 
+  function commentIncomingRequest(
+    requestType: IncomingRequestType,
+    outgoingComment: string,
+  ) {
+    switch (requestType) {
+      case IncomingRequestType.Notification:
+        return NOTIFICATION_REQUEST_COMMENT;
+      case IncomingRequestType.ClipboardFill:
+        return CLIPBOARD_FILL_REQUEST_COMMENT;
+      case IncomingRequestType.Confirmation:
+        return `Confirm: ${outgoingComment}`;
+      default:
+        return outgoingComment;
+    }
+  }
+
   function isTabActive(tabId: NavTabId) {
     return activeNavTabId === tabId;
   }
 
+  function createMessageAboutIncomingRequest(
+    requestType: IncomingRequestType,
+    connectionName: string,
+    outgoingComment: string,
+  ) {
+    switch (requestType) {
+      case IncomingRequestType.Notification:
+        return `New notification from ${connectionName}.`;
+      case IncomingRequestType.Confirmation:
+        return `${connectionName} confirmed ${outgoingComment}`;
+      case IncomingRequestType.ClipboardFill:
+        return `${connectionName} filled the clipboard.`;
+      case IncomingRequestType.Response:
+        return `${connectionName} responded to ${outgoingComment}`;
+      default:
+        throw new TypeError("Invalid request type was provided.");
+    }
+  }
+
   function toastifyIncomingRequest(
     request: IncomingRequest,
-    comment: string,
+    outgoingComment: string,
     connectionName: string,
   ) {
-    let message: string;
-    if (request.type === IncomingRequestType.Notification) {
-      message = `New notification from ${connectionName}.`;
-    } else if (request.type === IncomingRequestType.ClipboardFill) {
-      message = `${connectionName} filled the clipboard.`;
-    } else {
-      message = `${connectionName} responded to ${comment}.`;
-    }
+    const message = createMessageAboutIncomingRequest(
+      request.type,
+      connectionName,
+      outgoingComment,
+    );
     bakeToast(new Toast(message, "info", ToastSeverity.Info));
   }
 
   function notifyIncomingRequest(
     request: IncomingRequest,
-    comment: string,
+    outgoingComment: string,
     connectionName: string,
   ) {
+    function getNotificationTitle(
+      request: IncomingRequest,
+      connectionName: string,
+      comment: string,
+    ) {
+      return request.type === IncomingRequestType.Notification
+        ? request.details[0]
+        : createMessageAboutIncomingRequest(
+            request.type,
+            connectionName,
+            comment,
+          );
+    }
+
+    function getNotificationBody(request: IncomingRequest) {
+      switch (request.type) {
+        case IncomingRequestType.Notification:
+          return request.details.length > 1
+            ? request.details.slice(1).join("\n\n")
+            : undefined;
+        case IncomingRequestType.ClipboardFill:
+          return request.details[0];
+        default:
+          return request.details.join("\n\n");
+      }
+    }
+
     if (Notification.permission !== "granted")
       throw new Error("Notification permission is not granted.");
 
-    let notificationTitle: string;
-    let notificationBody: string | undefined;
-    if (request.type === IncomingRequestType.Notification) {
-      notificationTitle = request.details[0];
-      if (request.details.length > 1)
-        notificationBody = request.details.slice(1).join("\n\n");
-    } else if (request.type === IncomingRequestType.ClipboardFill) {
-      notificationTitle = `${connectionName} filled the clipboard.`;
-      notificationBody = request.details[0];
-    } else {
-      notificationTitle = `${connectionName} responded to ${comment}`;
-      notificationBody = request.details.join("\n\n");
-    }
+    const notificationTitle = getNotificationTitle(
+      request,
+      connectionName,
+      outgoingComment,
+    );
+    const notificationBody = getNotificationBody(request);
 
     const notification = new Notification(notificationTitle, {
       body: notificationBody,
@@ -275,10 +322,10 @@ export function R_App() {
     request: IncomingRequest,
     connectionIndex: number,
   ) {
-    updateConnectionLastActivity(connectionIndex);
     const connection = connections[connectionIndex];
-    const comment = commentIncomingRequest(request);
-    const record = {
+    const outgoingComment = findIncomingRequestOutgoingComment(request);
+    const comment = commentIncomingRequest(request.type, outgoingComment);
+    const logRecord: LogRecordInitializer = {
       comment,
       connectionName: connection.name,
       requestId: request.id,
@@ -286,14 +333,19 @@ export function R_App() {
       type: LogRecordType.IncomingRequest,
       details: request.details,
     };
-    log(record);
+
+    updateConnectionLastActivity(connectionIndex);
+    log(logRecord);
+
+    if (request.type === IncomingRequestType.ClipboardFill)
+      navigator.clipboard.writeText(request.details[0]);
 
     if (isTabActive(NavTabId.Log)) return;
 
     if (Notification.permission === "granted") {
-      notifyIncomingRequest(request, comment, connection.name);
+      notifyIncomingRequest(request, outgoingComment, connection.name);
     } else {
-      toastifyIncomingRequest(request, comment, connection.name);
+      toastifyIncomingRequest(request, outgoingComment, connection.name);
     }
   }
 

@@ -2,6 +2,7 @@ import { array, assert, number, object, string } from "superstruct";
 
 export enum IncomingRequestType {
   Response,
+  Confirmation,
   Notification,
   ClipboardFill,
 }
@@ -27,7 +28,7 @@ export class IncomingRequest {
     assert(parsedRequest, RequestStruct);
     return new IncomingRequest(
       parsedRequest.id,
-      IncomingRequestType.Response,
+      parsedRequest.type,
       parsedRequest.details,
     );
   }
