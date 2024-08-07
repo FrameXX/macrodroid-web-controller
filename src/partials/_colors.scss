@@ -2,40 +2,36 @@
   --color-primary-item: #ffffff;
   --color-primary-item-inactive: #9ba7b5;
   --color-primary: #3e526d;
+
+  --color-text: #ffffff;
+  --color-text-secondary: #d9d9d9;
+  --color-item: #ffffff;
+  --color-item-negative: #3e526d;
+  --color-action: #1665b0;
+  --color-accent-action: #90caf8;
+  --color-trigger: #b22a2a;
+  --color-accent-trigger: #ee9a9a;
+  --color-constraint: #387f3d;
+  --color-accent-constraint: #a5d6a7;
+  --color-surface: #3d3d3d;
+  --color-surface-top: #454545;
+  --color-accent: #99a6db;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    --color-text: #000000;
-    --color-text-secondary: #262626;
-    --color-item: #3e526d;
-    --color-item-negative: #ffffff;
-    --color-action: #0288d1;
-    --color-accent-action: #0277bd;
-    --color-trigger: #e23632;
-    --color-accent-trigger: #d32f2e;
-    --color-constraint: #3ca040;
-    --color-accent-constraint: #398e3c;
-    --color-surface: #fafafa;
-    --color-surface-top: #f2f2f2;
-    --color-accent: #2b4263;
-  }
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --color-text: #ffffff;
-    --color-text-secondary: #d9d9d9;
-    --color-item: #ffffff;
-    --color-item-negative: #3e526d;
-    --color-action: #1665b0;
-    --color-accent-action: #90caf8;
-    --color-trigger: #b22a2a;
-    --color-accent-trigger: #ee9a9a;
-    --color-constraint: #387f3d;
-    --color-accent-constraint: #a5d6a7;
-    --color-surface: #3d3d3d;
-    --color-surface-top: #454545;
-    --color-accent: #99a6db;
-  }
-}
+// @media (prefers-color-scheme: light) {
+//   :root {
+//     --color-text: #000000;
+//     --color-text-secondary: #262626;
+//     --color-item: #3e526d;
+//     --color-item-negative: #ffffff;
+//     --color-action: #0288d1;
+//     --color-accent-action: #0277bd;
+//     --color-trigger: #e23632;
+//     --color-accent-trigger: #d32f2e;
+//     --color-constraint: #3ca040;
+//     --color-accent-constraint: #398e3c;
+//     --color-surface: #fafafa;
+//     --color-surface-top: #f2f2f2;
+//     --color-accent: #2b4263;
+//   }
+// }
