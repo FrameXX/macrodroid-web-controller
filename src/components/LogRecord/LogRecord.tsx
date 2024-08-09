@@ -13,6 +13,7 @@ interface LogRecordProps {
   onConnectionNameClick: () => void;
   onRequestIdClick?: () => void;
   onCommentClick?: () => void;
+  onCopyText: () => void;
 }
 
 export function R_LogRecord(props: LogRecordProps) {
@@ -31,10 +32,19 @@ export function R_LogRecord(props: LogRecordProps) {
     return (
       <div>
         {lines.map((line, index) => (
-          <div key={index}>{line}</div>
+          <span key={index}>
+            {line}
+            <br />
+          </span>
         ))}
       </div>
     );
+  }
+
+  function copyText() {
+    if (!props.record.copyText) throw new Error("copyText is undefined");
+    navigator.clipboard.writeText(props.record.copyText);
+    props.onCopyText();
   }
 
   return (
@@ -45,7 +55,7 @@ export function R_LogRecord(props: LogRecordProps) {
       exit={{ opacity: 0, x: DEFAULT_TRANSITION_TRANSLATE_PX }}
       className="log-record-container"
     >
-      <div hidden={!props.record.response} className="response">
+      <div hidden={!props.record.isResponse} className="response">
         <R_Icon side iconId="keyboard-return" />
         In response to request&nbsp;
         <a role="button" onClick={props.onRequestIdClick}>
@@ -92,13 +102,21 @@ export function R_LogRecord(props: LogRecordProps) {
             })}
           </div>
         </div>
-        <R_Button
-          hidden={!isTooLong}
-          onClick={() => setExpanded((prevExpaneded) => !prevExpaneded)}
-          title="Expand"
-          iconId="chevron-down"
-          iconUpsideDown={expanded}
-        />
+        <div className="actions">
+          <R_Button
+            hidden={props.record.copyText === undefined}
+            onClick={copyText}
+            title="Copy text"
+            iconId="content-copy"
+          />
+          <R_Button
+            hidden={!isTooLong}
+            onClick={() => setExpanded((prevExpaneded) => !prevExpaneded)}
+            title="Expand"
+            iconId="chevron-down"
+            iconUpsideDown={expanded}
+          />
+        </div>
         <div hidden={expanded || !isTooLong} className="bottom-shade" />
       </R_Accordion>
     </motion.div>

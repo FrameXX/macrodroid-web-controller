@@ -16,7 +16,7 @@ interface ConnectionsProps {
   onConnectionDelete: (connection: Connection) => void;
   bakeToast: BakeToast;
   log: (record: LogRecordInitializer) => void;
-  handleIncomingFailedRequest: (
+  handleIncomingInvalidRequest: (
     errorMessage: string,
     connection: Connection,
   ) => void;
@@ -35,7 +35,7 @@ export function R_Connections(props: ConnectionsProps) {
   }
 
   async function pokeConnection(connection: Connection) {
-    const request = OutgoingRequest.poke();
+    const request = OutgoingRequest.createPokeRequest();
     props.bakeToast(new Toast("Making poke request.", "message-arrow-right"));
     const requestLog = await connection.makeRequest(request);
     props.log(requestLog);
@@ -103,7 +103,7 @@ export function R_Connections(props: ConnectionsProps) {
         bakeToast={props.bakeToast}
         onCancel={closeAddConnectionWizard}
         open={addConnectionWizardOpen}
-        handleIncomingFailedRequest={props.handleIncomingFailedRequest}
+        handleIncomingInvalidRequest={props.handleIncomingInvalidRequest}
       />
     </>
   );

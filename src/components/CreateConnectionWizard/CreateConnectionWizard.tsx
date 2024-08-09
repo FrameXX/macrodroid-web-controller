@@ -27,7 +27,7 @@ interface AddConnectionWizardProps {
   onCancel: () => void;
   onConnectionConfirm: (connection: Connection) => void;
   log: Log;
-  handleIncomingFailedRequest: (
+  handleIncomingInvalidRequest: (
     errorMessage: string,
     connection: Connection,
   ) => void;
@@ -102,7 +102,7 @@ export function R_CreateConnectionWizard(props: AddConnectionWizardProps) {
     const connection = new Connection(connectionName, webhookId);
     setLastConnection(connection);
 
-    const request = OutgoingRequest.addConnection();
+    const request = OutgoingRequest.createAddConnectionRequest();
     setConnectionAddRequestId(request.id);
     props.bakeToast(
       new Toast(
@@ -135,7 +135,7 @@ export function R_CreateConnectionWizard(props: AddConnectionWizardProps) {
     connection.listenRequests(
       (request) => handleIncomingRequest(request, connection, request.id),
       (errorMessage) => {
-        props.handleIncomingFailedRequest(errorMessage, connection);
+        props.handleIncomingInvalidRequest(errorMessage, connection);
       },
       handleListenFailed,
     );
@@ -160,7 +160,7 @@ export function R_CreateConnectionWizard(props: AddConnectionWizardProps) {
     props.log({
       connectionName: connectionName,
       requestId: requestId,
-      response: false,
+      isResponse: false,
       type: LogRecordType.IncomingRequest,
       errorMessage,
     });
@@ -191,7 +191,7 @@ export function R_CreateConnectionWizard(props: AddConnectionWizardProps) {
       comment: CONFIRM_CONNECTION_REQUEST_COMMENT,
       connectionName: connection.name,
       requestId: request.id,
-      response: true,
+      isResponse: true,
       type: LogRecordType.IncomingRequest,
     });
     onSuccess(connection);

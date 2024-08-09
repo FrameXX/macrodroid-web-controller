@@ -12,6 +12,7 @@ import { LogRecord } from "../../modules/logger";
 import { R_Button } from "../Button/Button";
 import { Confirm } from "../../modules/confirm_dialog";
 import { R_SearchInput } from "../SearchInput/SearchInput";
+import { BakeToast, Toast } from "../../modules/toaster";
 
 interface LogProps {
   logRecords: LogRecord[];
@@ -19,6 +20,7 @@ interface LogProps {
   onScrollUp: () => void;
   clearLog: () => void;
   confirm: Confirm;
+  bakeToast: BakeToast;
 }
 
 enum FilterType {
@@ -158,6 +160,9 @@ export function R_Log(props: LogProps) {
                 }}
                 key={record.id}
                 record={record}
+                onCopyText={() =>
+                  props.bakeToast(new Toast("Text copied", "content-copy"))
+                }
               />
             );
           })}

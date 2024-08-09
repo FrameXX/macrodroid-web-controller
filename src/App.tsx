@@ -30,11 +30,12 @@ import { enums } from "superstruct";
 import { R_WelcomeWizard } from "./components/WelcomeWizard/WelcomeWizard";
 import { R_Extras } from "./components/Extras/Extras";
 import {
-  CLIPBOARD_FILL_REQUEST_COMMENT,
-  NOTIFICATION_REQUEST_COMMENT,
+  CLIPBOARD_FILL_REQUEST_COMMENT as INCOMING_CLIPBOARD_FILL_REQUEST_COMMENT,
+  NOTIFICATION_REQUEST_COMMENT as INCOMING_NOTIFICATION_REQUEST_COMMENT,
   UKNOWN_REQUEST_COMMENT,
 } from "./modules/const";
 import { R_OfflineIndicator } from "./components/OfflineIndicator/OfflineIndicator";
+import { OutgoingRequest } from "./modules/outgoing_request";
 
 export function R_App() {
   const [toasts, setToasts] = useImmer<Toast[]>([]);
@@ -129,7 +130,7 @@ export function R_App() {
           handleIncomingRequest(request, index);
         },
         (errorMessage) => {
-          handleIncomingFailedRequest(errorMessage, connection);
+          handleIncomingInvalidRequest(errorMessage, connection);
         },
         () => handleListenFailed(index),
         () => handleListenSucceeded(index),
@@ -198,21 +199,16 @@ export function R_App() {
   }
 
   function findIncomingRequestOutgoingComment(request: IncomingRequest) {
-    const matchingOutgoingLogRecords = logRecords.filter(
+    const matchingOutgoingLogRecordIndex = logRecords.findIndex(
       (logRecord) =>
         logRecord.type === LogRecordType.OutgoingRequest &&
         logRecord.requestId === request.id,
     );
 
-    if (matchingOutgoingLogRecords.length === 0) {
-      return UKNOWN_REQUEST_COMMENT;
+    if (matchingOutgoingLogRecordIndex === -1) {
+      return undefined;
     }
-    if (!matchingOutgoingLogRecords[0].comment) {
-      return UKNOWN_REQUEST_COMMENT;
-    } else {
-      const matchingComment = matchingOutgoingLogRecords[0].comment;
-      return matchingComment;
-    }
+    return logRecords[matchingOutgoingLogRecordIndex].comment;
   }
 
   function commentIncomingRequest(
@@ -221,9 +217,9 @@ export function R_App() {
   ) {
     switch (requestType) {
       case IncomingRequestType.Notification:
-        return NOTIFICATION_REQUEST_COMMENT;
-      case IncomingRequestType.ClipboardFill:
-        return CLIPBOARD_FILL_REQUEST_COMMENT;
+        return INCOMING_NOTIFICATION_REQUEST_COMMENT;
+      case IncomingRequestType.TextShare:
+        return INCOMING_CLIPBOARD_FILL_REQUEST_COMMENT;
       case IncomingRequestType.Confirmation:
         return `Confirm: ${outgoingComment}`;
       default:
@@ -235,35 +231,12 @@ export function R_App() {
     return activeNavTabId === tabId;
   }
 
-  function createMessageAboutIncomingRequest(
-    requestType: IncomingRequestType,
-    connectionName: string,
-    outgoingComment: string,
-  ) {
-    switch (requestType) {
-      case IncomingRequestType.Notification:
-        return `New notification from ${connectionName}.`;
-      case IncomingRequestType.Confirmation:
-        return `${connectionName} confirmed ${outgoingComment}`;
-      case IncomingRequestType.ClipboardFill:
-        return `${connectionName} filled the clipboard.`;
-      case IncomingRequestType.Response:
-        return `${connectionName} responded to ${outgoingComment}`;
-      default:
-        throw new TypeError("Invalid request type was provided.");
-    }
-  }
-
   function toastifyIncomingRequest(
     request: IncomingRequest,
     outgoingComment: string,
     connectionName: string,
   ) {
-    const message = createMessageAboutIncomingRequest(
-      request.type,
-      connectionName,
-      outgoingComment,
-    );
+    const message = request.createInfoMessage(connectionName, outgoingComment);
     bakeToast(new Toast(message, "info", ToastSeverity.Info));
   }
 
@@ -272,50 +245,38 @@ export function R_App() {
     outgoingComment: string,
     connectionName: string,
   ) {
-    function getNotificationTitle(
-      request: IncomingRequest,
-      connectionName: string,
-      comment: string,
-    ) {
-      return request.type === IncomingRequestType.Notification
-        ? request.details[0]
-        : createMessageAboutIncomingRequest(
-            request.type,
-            connectionName,
-            comment,
-          );
-    }
-
-    function getNotificationBody(request: IncomingRequest) {
-      switch (request.type) {
-        case IncomingRequestType.Notification:
-          return request.details.length > 1
-            ? request.details.slice(1).join("\n\n")
-            : undefined;
-        case IncomingRequestType.ClipboardFill:
-          return request.details[0];
-        default:
-          return request.details.join("\n\n");
-      }
-    }
-
     if (Notification.permission !== "granted")
       throw new Error("Notification permission is not granted.");
 
-    const notificationTitle = getNotificationTitle(
-      request,
-      connectionName,
-      outgoingComment,
-    );
-    const notificationBody = getNotificationBody(request);
+    const notificationTitle = getNotificationTitle();
+    const notificationBody = getNotificationBody();
 
     const notification = new Notification(notificationTitle, {
       body: notificationBody,
     });
-    notification.addEventListener("click", () => {
+    notification.addEventListener("click", handleNotificationClick);
+
+    function handleNotificationClick() {
       window.focus();
       setActiveNavTabId(NavTabId.Log);
-    });
+    }
+
+    function getNotificationTitle() {
+      return request.type === IncomingRequestType.Notification
+        ? request.getNotificationTitle()
+        : request.createInfoMessage(connectionName, outgoingComment);
+    }
+
+    function getNotificationBody() {
+      switch (request.type) {
+        case IncomingRequestType.Notification:
+          return request.getNotificationBody();
+        case IncomingRequestType.TextShare:
+          return request.getSharedText();
+        default:
+          return request.details.join("\n\n");
+      }
+    }
   }
 
   function handleIncomingRequest(
@@ -323,22 +284,30 @@ export function R_App() {
     connectionIndex: number,
   ) {
     const connection = connections[connectionIndex];
-    const outgoingComment = findIncomingRequestOutgoingComment(request);
+    const outgoingComment =
+      findIncomingRequestOutgoingComment(request) || UKNOWN_REQUEST_COMMENT;
     const comment = commentIncomingRequest(request.type, outgoingComment);
+    const isResponse =
+      request.type === IncomingRequestType.Confirmation ||
+      request.type === IncomingRequestType.Response;
+    const copyText =
+      request.type === IncomingRequestType.TextShare
+        ? request.getSharedText()
+        : undefined;
     const logRecord: LogRecordInitializer = {
       comment,
+      copyText,
       connectionName: connection.name,
       requestId: request.id,
-      response: true,
+      isResponse,
       type: LogRecordType.IncomingRequest,
       details: request.details,
     };
-
-    updateConnectionLastActivity(connectionIndex);
     log(logRecord);
 
-    if (request.type === IncomingRequestType.ClipboardFill)
-      navigator.clipboard.writeText(request.details[0]);
+    updateConnectionLastActivity(connectionIndex);
+    handleClipboardFillConfirm();
+    handleNotificationConfirm();
 
     if (isTabActive(NavTabId.Log)) return;
 
@@ -347,22 +316,45 @@ export function R_App() {
     } else {
       toastifyIncomingRequest(request, outgoingComment, connection.name);
     }
+
+    async function handleClipboardFillConfirm() {
+      if (request.type !== IncomingRequestType.TextShare) return;
+      if (!request.getTextShareRequireConfirm()) return;
+      const confirmRequest = OutgoingRequest.createConfirmRequest(
+        request.id,
+        INCOMING_CLIPBOARD_FILL_REQUEST_COMMENT,
+      );
+      const record = await connection.makeRequest(confirmRequest);
+      log(record);
+    }
+
+    async function handleNotificationConfirm() {
+      if (request.type !== IncomingRequestType.Notification) return;
+      if (!request.getNotificationRequireConfirm()) return;
+      const confirmRequest = OutgoingRequest.createConfirmRequest(
+        request.id,
+        INCOMING_NOTIFICATION_REQUEST_COMMENT,
+      );
+      const record = await connection.makeRequest(confirmRequest);
+      log(record);
+    }
   }
 
-  function handleIncomingFailedRequest(
+  function handleIncomingInvalidRequest(
     errorMessage: string,
     connection: Connection,
   ) {
     bakeToast(
       new Toast(
-        `An incoming request with invalid strcuture was received. ${errorMessage}`,
+        `An incoming request with an invalid structure was received. ${errorMessage}`,
         "alert",
         ToastSeverity.Error,
       ),
     );
     log({
+      comment: "Invalid request",
       connectionName: connection.name,
-      response: false,
+      isResponse: false,
       type: LogRecordType.IncomingRequest,
       errorMessage,
     });
@@ -452,7 +444,7 @@ export function R_App() {
               onConnectionDelete={deleteConnection}
               bakeToast={bakeToast}
               log={log}
-              handleIncomingFailedRequest={handleIncomingFailedRequest}
+              handleIncomingInvalidRequest={handleIncomingInvalidRequest}
             />
           </R_Tab>
           <R_Tab active={isTabActive(NavTabId.Actions)}>
@@ -474,6 +466,7 @@ export function R_App() {
               logRecords={logRecords}
               clearLog={logger.current.clear}
               confirm={confirm}
+              bakeToast={bakeToast}
             />
           </R_Tab>
           <R_Tab active={isTabActive(NavTabId.Extras)}>

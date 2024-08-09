@@ -158,7 +158,7 @@ export class Connection {
     const URL = this.generateRequestURL(request.type, URLParams);
     const requestLog: LogRecordInitializer = {
       connectionName: this.name,
-      response: false,
+      isResponse: false,
       comment: request.comment,
       requestId: request.id,
       type: LogRecordType.OutgoingRequest,

@@ -6,6 +6,7 @@ export enum OutgoingRequestType {
   Add = "add",
   Action = "action",
   Poke = "poke",
+  Confirm = "confirm",
 }
 
 export interface SearchParam {
@@ -43,31 +44,43 @@ function actionArgsToSearchParams(actionArgs: ActionArg<any>[]): SearchParam[] {
 }
 
 export class OutgoingRequest {
-  public readonly id: string;
-
   constructor(
     public readonly type: OutgoingRequestType,
     public readonly data: SearchParam[],
-    public readonly comment?: string,
+    public readonly comment: string,
+    public readonly id: string,
     public readonly details?: string[],
-    idLenght: number = 5,
-  ) {
-    this.id = Random.readableId(idLenght);
-  }
+  ) {}
 
-  public static addConnection() {
+  public static createAddConnectionRequest() {
     return new OutgoingRequest(
       OutgoingRequestType.Add,
       [],
       CONFIRM_CONNECTION_REQUEST_COMMENT,
+      Random.readableId(),
     );
   }
 
-  public static poke() {
+  public static createPokeRequest() {
     return new OutgoingRequest(
       OutgoingRequestType.Poke,
       [],
       "Connection confirmation",
+      Random.readableId(),
+    );
+  }
+
+  public static createConfirmRequest(
+    requestId: string,
+    incomingComment: string,
+  ) {
+    const searchParams = [{ name: "requestId", value: requestId }];
+    const comment = `Confirm: ${incomingComment}`;
+    return new OutgoingRequest(
+      OutgoingRequestType.Confirm,
+      searchParams,
+      comment,
+      requestId,
     );
   }
 
@@ -82,6 +95,7 @@ export class OutgoingRequest {
       OutgoingRequestType.Action,
       searchParams,
       comment,
+      Random.readableId(),
       details,
     );
   }

@@ -54,9 +54,6 @@ export function R_Extras(props: ExtrasProps) {
         onClose={() => props.onCloseCompanionMacroWizard()}
       />
       <footer>
-        Made with ❤️ by Jiří Král.
-        <br />
-        <br />
         <R_ExternalLink
           iconId="github"
           href="https://github.com/FrameXX/macrodroid-web-controller"
@@ -64,6 +61,7 @@ export function R_Extras(props: ExtrasProps) {
         >
           Source code
         </R_ExternalLink>
+        Made with ❤️ by Jiří Král.
       </footer>
     </>
   );

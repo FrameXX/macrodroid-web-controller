@@ -21,10 +21,11 @@ export interface LogRecord extends LogRecordInitializer {
 
 export interface LogRecordInitializer {
   connectionName: string;
-  response: boolean;
+  isResponse: boolean;
   type: LogRecordType;
   requestId?: string;
-  comment?: string;
+  comment: string;
+  copyText?: string;
   details?: string[];
   errorMessage?: string;
 }
@@ -36,12 +37,13 @@ export const LogRecordsStruct = array(
     readableTimestamp: string(),
     id: number(),
     connectionName: string(),
-    response: boolean(),
+    isResponse: boolean(),
     type: number(),
     requestId: optional(string()),
     comment: optional(string()),
     details: optional(array(string())),
     errorMessage: optional(string()),
+    copyText: optional(string()),
   }),
 );
 
