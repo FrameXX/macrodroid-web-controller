@@ -158,6 +158,7 @@ export function R_CreateConnectionWizard(props: AddConnectionWizardProps) {
   ) {
     props.bakeToast(new Toast(errorMessage, "alert", ToastSeverity.Error));
     props.log({
+      comment: "Invalid request",
       connectionName: connectionName,
       requestId: requestId,
       isResponse: false,
