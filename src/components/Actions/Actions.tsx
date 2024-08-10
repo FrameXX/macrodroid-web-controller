@@ -136,10 +136,14 @@ export function R_Actions(props: ActionsProps) {
     openRunActionWizard();
   }
 
-  async function dispatchAction(action: Action, connections: Connection[]) {
+  async function dispatchAction(
+    action: Action,
+    connections: Connection[],
+    requireConfirmation: boolean,
+  ) {
     setRunActionWizardSkipArgs(false);
     addRecentAction(action);
-    const request = OutgoingRequest.runAction(action);
+    const request = OutgoingRequest.runAction(action, requireConfirmation);
     const requestLogs: LogRecordInitializer[] = [];
     const logPromises = connections.map(async (connection) => {
       const requestLog = await connection.makeRequest(request);
@@ -335,10 +339,10 @@ export function R_Actions(props: ActionsProps) {
         open={runActionWizardOpen}
         connections={props.connections}
         onCancel={closeRunActionWizard}
-        onConfirmRunAction={(action, connections) => {
+        onConfirmRunAction={(action, connections, requireConfirmation) => {
           closeConfigActionWizard();
           closeRunActionWizard();
-          dispatchAction(action, connections);
+          dispatchAction(action, connections, requireConfirmation);
         }}
         runAction={runAction}
       />

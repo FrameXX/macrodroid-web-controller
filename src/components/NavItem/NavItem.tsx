@@ -38,7 +38,7 @@ export function R_NavItem(props: NavItemProps) {
       animate={animate}
       role="button"
       tabIndex={0}
-      title={props.title}
+      title={`Open ${props.title} tab`}
       className={`nav-item ${props.active ? "active" : ""}`}
       onClick={props.onClick}
     >

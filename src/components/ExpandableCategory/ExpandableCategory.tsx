@@ -13,13 +13,13 @@ export function R_ExpandableCategory(props: CategoryProps) {
   const defaultOpen = props.defaultOpen ? props.defaultOpen : false;
   const [open, setOpen] = useImmer(defaultOpen);
 
+  const title = open
+    ? `Collapse category ${props.name}`
+    : `Expand category ${props.name}`;
+
   return (
     <div className="expandable-category">
-      <button
-        onClick={() => setOpen(!open)}
-        title={props.name}
-        className="head"
-      >
+      <button onClick={() => setOpen(!open)} title={title} className="head">
         <R_Icon iconId={props.iconId} />
         <h2>{props.name}</h2>
         <R_Icon upsideDown={open} iconId="chevron-down" />

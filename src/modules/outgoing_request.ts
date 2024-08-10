@@ -84,12 +84,16 @@ export class OutgoingRequest {
     );
   }
 
-  public static runAction(action: Action) {
+  public static runAction(action: Action, requireConfirmation: boolean) {
     const comment = `Action: ${action.name}`;
     const details = action.args.map((arg) => `${arg.name}: ${arg.value}`);
     const searchParams = [
       ...actionArgsToSearchParams(action.args),
       { name: "actionId", value: action.id },
+      {
+        name: "requireConfirmation",
+        value: requireConfirmation.toString(),
+      },
     ];
     return new OutgoingRequest(
       OutgoingRequestType.Action,

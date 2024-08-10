@@ -10,7 +10,7 @@ interface OpenableCategoryProps {
 export function R_OpenableCategory(props: OpenableCategoryProps) {
   return (
     <button
-      title={props.name}
+      title={`Open ${props.name}`}
       onClick={props.onClick}
       className="openable-category"
     >

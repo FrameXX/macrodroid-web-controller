@@ -22,7 +22,9 @@ const defaultProps: Partial<ActionCardProps> = {
 
 export function R_ConfiguredActionCard(requiredProps: ActionCardProps) {
   const props = useDefaultProps(requiredProps, defaultProps);
-  const saveButtonTitle = props.saved ? "Unsave" : "Save";
+  const saveButtonTitle = props.saved
+    ? `Unsave action ${props.name}`
+    : `Save action ${props.name}`;
   const saveButtonIcondId = props.saved ? "star" : "star-outline";
 
   return (
@@ -41,7 +43,11 @@ export function R_ConfiguredActionCard(requiredProps: ActionCardProps) {
         iconId={saveButtonIcondId}
         title={saveButtonTitle}
       />
-      <R_Button onClick={props.onRun} title="Run" iconId="play" />
+      <R_Button
+        onClick={props.onRun}
+        title={`Run action ${props.name}`}
+        iconId="play"
+      />
     </motion.div>
   );
 }

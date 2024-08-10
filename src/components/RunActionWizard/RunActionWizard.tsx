@@ -15,7 +15,11 @@ interface RunActionWizardProps {
   open: boolean;
   runAction: Action | null;
   onCancel: () => void;
-  onConfirmRunAction: (action: Action, connections: Connection[]) => void;
+  onConfirmRunAction: (
+    action: Action,
+    connections: Connection[],
+    requireConfirmation: boolean,
+  ) => void;
   bakeToast: BakeToast;
   connections: Connection[];
   skipArgs: boolean;
@@ -26,6 +30,7 @@ export function R_RunActionWizard(props: RunActionWizardProps) {
   const [selectedConnections, setSelectedConnections] = useImmer<Connection[]>(
     [],
   );
+  const [requireConfirmation, setRequireConfirmation] = useImmer(false);
   const runAction = useRef<Action | null>(null);
   const forceUpdate = useForceUpdate();
 
@@ -72,13 +77,26 @@ export function R_RunActionWizard(props: RunActionWizardProps) {
   function confirmRunAction() {
     if (!runAction.current) throw Error("Run action is not defined.");
     updateJSONString(runAction.current);
-    props.onConfirmRunAction(runAction.current, selectedConnections);
+    props.onConfirmRunAction(
+      runAction.current,
+      selectedConnections,
+      requireConfirmation,
+    );
     reset();
   }
 
   function reset() {
     setSelectedConnections([]);
     setActivePageIndex(0);
+    setRequireConfirmation(false);
+  }
+
+  function nextPage() {
+    setActivePageIndex(activePageIndex + 1);
+  }
+
+  function previousPage() {
+    setActivePageIndex(activePageIndex - 1);
   }
 
   const argsPage = (
@@ -109,9 +127,22 @@ export function R_RunActionWizard(props: RunActionWizardProps) {
     </>
   );
 
+  const confirmationPage = (
+    <>
+      <h2>Require confirmation?</h2>
+      <R_BooleanOption
+        title="Require confirmation"
+        iconId="check-all"
+        description="All connections will send a confirmation request immidiately after they receive the action request to ensure you that the action request was received."
+        value={requireConfirmation}
+        onChange={() => setRequireConfirmation(!requireConfirmation)}
+      />
+    </>
+  );
+
   const pages = props.skipArgs
-    ? [connectionsPage]
-    : [argsPage, connectionsPage];
+    ? [connectionsPage, confirmationPage]
+    : [argsPage, connectionsPage, confirmationPage];
 
   return (
     <R_Wizard
@@ -121,17 +152,17 @@ export function R_RunActionWizard(props: RunActionWizardProps) {
       leftButton={
         <>
           <R_FAB
-            hidden={activePageIndex !== 0 && !props.skipArgs}
+            hidden={activePageIndex !== 0}
             left
             title="Cancel"
             onClick={props.onCancel}
             iconId="close"
           />
           <R_FAB
-            hidden={activePageIndex === 0 || props.skipArgs}
+            hidden={activePageIndex === 0}
             left
             title="Previous page"
-            onClick={() => setActivePageIndex(0)}
+            onClick={previousPage}
             iconId="chevron-left"
           />
         </>
@@ -139,16 +170,18 @@ export function R_RunActionWizard(props: RunActionWizardProps) {
       rightButton={
         <>
           <R_FAB
-            hidden={activePageIndex !== 0 || props.skipArgs}
+            hidden={
+              activePageIndex === pages.length - 1 ||
+              (((activePageIndex === 0 && props.skipArgs) ||
+                (activePageIndex === 1 && !props.skipArgs)) &&
+                !selectedConnections.length)
+            }
             title="Next page"
             iconId="chevron-right"
-            onClick={() => setActivePageIndex(1)}
+            onClick={nextPage}
           />
           <R_FAB
-            hidden={
-              (activePageIndex !== 1 && !props.skipArgs) ||
-              !selectedConnections.length
-            }
+            hidden={activePageIndex !== pages.length - 1}
             title="Run action"
             iconId="play"
             onClick={confirmRunAction}
