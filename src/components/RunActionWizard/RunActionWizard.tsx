@@ -140,7 +140,9 @@ export function R_RunActionWizard(props: RunActionWizardProps) {
     </>
   );
 
-  const pages = props.skipArgs
+  const skipArgs = props.skipArgs || props.runAction?.args.length === 0;
+
+  const pages = skipArgs
     ? [connectionsPage, confirmationPage]
     : [argsPage, connectionsPage, confirmationPage];
 
@@ -172,8 +174,8 @@ export function R_RunActionWizard(props: RunActionWizardProps) {
           <R_FAB
             hidden={
               activePageIndex === pages.length - 1 ||
-              (((activePageIndex === 0 && props.skipArgs) ||
-                (activePageIndex === 1 && !props.skipArgs)) &&
+              (((activePageIndex === 0 && skipArgs) ||
+                (activePageIndex === 1 && !skipArgs)) &&
                 !selectedConnections.length)
             }
             title="Next page"
