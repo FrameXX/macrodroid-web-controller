@@ -116,7 +116,7 @@ export function R_CreateConnectionWizard(props: AddConnectionWizardProps) {
     if (requestLog.errorMessage) {
       props.bakeToast(
         new Toast(
-          `Failed to request connection confirmation. ${requestLog.errorMessage}`,
+          `Failed to request connection creation confirmation. ${requestLog.errorMessage}`,
           "alert",
           ToastSeverity.Error,
         ),
@@ -124,7 +124,7 @@ export function R_CreateConnectionWizard(props: AddConnectionWizardProps) {
     } else {
       props.bakeToast(
         new Toast(
-          "Connection confirmation requested. Waiting for response.",
+          "Connection creation confirmation requested. Waiting for response.",
           "transit-connection-variant",
           ToastSeverity.Success,
         ),

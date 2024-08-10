@@ -36,14 +36,19 @@ export function R_Connections(props: ConnectionsProps) {
 
   async function pokeConnection(connection: Connection) {
     const request = OutgoingRequest.createPokeRequest();
-    props.bakeToast(new Toast("Making poke request.", "message-arrow-right"));
+    props.bakeToast(
+      new Toast(
+        "Making connection confirmation request.",
+        "message-arrow-right",
+      ),
+    );
     const requestLog = await connection.makeRequest(request);
     props.log(requestLog);
 
     if (requestLog.errorMessage) {
       props.bakeToast(
         new Toast(
-          `Failed to poke connection. ${requestLog.errorMessage}`,
+          `Failed to request connection confirmation. ${requestLog.errorMessage}`,
           "alert",
           ToastSeverity.Error,
         ),
@@ -52,7 +57,7 @@ export function R_Connections(props: ConnectionsProps) {
     } else {
       props.bakeToast(
         new Toast(
-          "Activity evidence requested.",
+          "Connection confirmation requested.",
           "transit-connection-variant",
           ToastSeverity.Success,
         ),

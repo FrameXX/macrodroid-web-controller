@@ -56,7 +56,7 @@ export function R_Connection(props: ConnectionProps) {
           onClick={props.onDelete}
         />
         <R_Button
-          title={`Poke ${props.name}`}
+          title={`Request connection confirmation of ${props.name}`}
           iconId="web-sync"
           onClick={props.onPoke}
         />

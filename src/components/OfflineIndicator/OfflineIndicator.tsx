@@ -5,7 +5,7 @@ import { useImmer } from "use-immer";
 import { motion, Target } from "framer-motion";
 
 export function R_OfflineIndicator() {
-  const [online, setOnline] = useImmer(true);
+  const [online, setOnline] = useImmer(navigator.onLine);
 
   function handleOffline() {
     setOnline(false);

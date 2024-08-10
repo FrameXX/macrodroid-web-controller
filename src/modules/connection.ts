@@ -168,6 +168,7 @@ export class Connection {
     try {
       response = await fetch(URL);
     } catch (error) {
+      console.log("Caught.");
       requestLog.errorMessage =
         error instanceof Error ? error.message : "Unknown error.";
       return requestLog;

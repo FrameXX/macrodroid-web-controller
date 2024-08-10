@@ -317,7 +317,7 @@ export function R_App() {
     log(logRecord);
 
     updateConnectionLastActivity(connectionIndex);
-    handleClipboardFillConfirm();
+    handleTextShareConfirm();
     handleNotificationConfirm();
 
     if (isTabActive(NavTabId.Log)) return;
@@ -328,15 +328,25 @@ export function R_App() {
       toastifyIncomingRequest(request, outgoingComment, connection.name);
     }
 
-    async function handleClipboardFillConfirm() {
+    async function handleTextShareConfirm() {
       if (request.type !== IncomingRequestType.TextShare) return;
       if (!request.getTextShareRequireConfirm()) return;
       const confirmRequest = OutgoingRequest.createConfirmRequest(
         request.id,
         INCOMING_CLIPBOARD_FILL_REQUEST_COMMENT,
       );
-      const record = await connection.makeRequest(confirmRequest);
-      log(record);
+      const requestLog = await connection.makeRequest(confirmRequest);
+      log(requestLog);
+
+      if (requestLog.errorMessage) {
+        bakeToast(
+          new Toast(
+            `Failed to confirm text share request. ${requestLog.errorMessage}`,
+            "alert",
+            ToastSeverity.Error,
+          ),
+        );
+      }
     }
 
     async function handleNotificationConfirm() {
@@ -346,8 +356,18 @@ export function R_App() {
         request.id,
         INCOMING_NOTIFICATION_REQUEST_COMMENT,
       );
-      const record = await connection.makeRequest(confirmRequest);
-      log(record);
+      const requestLog = await connection.makeRequest(confirmRequest);
+      log(requestLog);
+
+      if (requestLog.errorMessage) {
+        bakeToast(
+          new Toast(
+            `Failed to confirm notification request. ${requestLog.errorMessage}`,
+            "alert",
+            ToastSeverity.Error,
+          ),
+        );
+      }
     }
   }
 

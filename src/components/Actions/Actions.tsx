@@ -14,7 +14,7 @@ import { AnimatePresence } from "framer-motion";
 import { R_ConfiguredActionCard } from "../ConfiguredActionCard/ConfiguredActionCard";
 import "./Actions.scss";
 import { OutgoingRequest } from "../../modules/outgoing_request";
-import { Log } from "../../modules/logger";
+import { Log, LogRecordInitializer } from "../../modules/logger";
 import { Connection } from "../../modules/connection";
 import { R_RunActionWizard } from "../RunActionWizard/RunActionWizard";
 import { useLocalStorage } from "../../modules/use_local_storage";
@@ -140,11 +140,34 @@ export function R_Actions(props: ActionsProps) {
     setRunActionWizardSkipArgs(false);
     addRecentAction(action);
     const request = OutgoingRequest.runAction(action);
+    const requestLogs: LogRecordInitializer[] = [];
     const logPromises = connections.map(async (connection) => {
-      const logRecord = await connection.makeRequest(request);
-      props.log(logRecord);
+      const requestLog = await connection.makeRequest(request);
+      props.log(requestLog);
+      requestLogs.push(requestLog);
     });
     await Promise.all(logPromises);
+    const someRequestFailed =
+      requestLogs.findIndex(
+        (requestLog) => typeof requestLog.errorMessage !== "undefined",
+      ) !== -1;
+    if (someRequestFailed) {
+      props.bakeToast(
+        new Toast(
+          "Some action requests have failed. See the log for more info.",
+          "alert",
+          ToastSeverity.Error,
+        ),
+      );
+    } else {
+      props.bakeToast(
+        new Toast(
+          "Action was successfully requested on all connections.",
+          "check-all",
+          ToastSeverity.Success,
+        ),
+      );
+    }
   }
 
   function addRecentAction(action: Action) {
