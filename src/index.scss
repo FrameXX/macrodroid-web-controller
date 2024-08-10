@@ -81,6 +81,19 @@ a {
   color: var(--color-accent);
 }
 
+button,
+select,
+[role="button"]:not(a),
+.external-link {
+  &:hover,
+  &:focus {
+    &:not(.fab):not(.nav-item):not([role="checkbox"]) {
+      outline: var(--border-width) solid var(--color-text);
+      outline-offset: calc(var(--border-width) * -0.5);
+    }
+  }
+}
+
 hr {
   height: 0;
   border: none;
