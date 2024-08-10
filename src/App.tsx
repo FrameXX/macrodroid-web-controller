@@ -413,7 +413,7 @@ export function R_App() {
     if (!connection.listenerHealthy) {
       bakeToast(
         new Toast(
-          `Connection ${connection.name} was reestablished.`,
+          `Connection to ${connection.name} was reestablished.`,
           "transit-connection-variant",
           ToastSeverity.Success,
         ),
