@@ -57,6 +57,17 @@ export function R_App() {
   );
   const logScrollableContainer = useRef<HTMLDivElement>(null);
 
+  useEffect(() => {
+    if (!navigator.cookieEnabled)
+      bakeToast(
+        new Toast(
+          "Cookies are disabled. No current changes will be restored in the next session. Some functionality may be crippled.",
+          "cookie-remove",
+          ToastSeverity.Error,
+        ),
+      );
+  }, []);
+
   useLocalStorage(logRecords, setLogRecords, {
     storageKey: "logRecords",
     struct: LogRecordsStruct,
@@ -382,8 +393,8 @@ export function R_App() {
     if (!connection.listenerHealthy) {
       bakeToast(
         new Toast(
-          `Connection ${connection.name} was reconnected.`,
-          "info",
+          `Connection ${connection.name} was reestablished.`,
+          "transit-connection-variant",
           ToastSeverity.Success,
         ),
       );
