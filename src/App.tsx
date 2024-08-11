@@ -30,8 +30,10 @@ import { enums } from "superstruct";
 import { R_WelcomeWizard } from "./components/WelcomeWizard/WelcomeWizard";
 import { R_Extras } from "./components/Extras/Extras";
 import {
+  CONNECTIONS_STORAGE_KEY,
   CLIPBOARD_FILL_REQUEST_COMMENT as INCOMING_CLIPBOARD_FILL_REQUEST_COMMENT,
   NOTIFICATION_REQUEST_COMMENT as INCOMING_NOTIFICATION_REQUEST_COMMENT,
+  LOG_RECORDS_STORAGE_KEY,
   UKNOWN_REQUEST_COMMENT,
 } from "./modules/const";
 import { R_OfflineIndicator } from "./components/OfflineIndicator/OfflineIndicator";
@@ -69,7 +71,7 @@ export function R_App() {
   }, []);
 
   useLocalStorage(logRecords, setLogRecords, {
-    storageKey: "logRecords",
+    storageKey: LOG_RECORDS_STORAGE_KEY,
     struct: LogRecordsStruct,
     stringify: JSON.stringify,
     parse: JSON.parse,
@@ -86,7 +88,7 @@ export function R_App() {
     connections,
     (connections) => connections.forEach(addConnection),
     {
-      storageKey: "connections",
+      storageKey: CONNECTIONS_STORAGE_KEY,
       struct: ConnectionsStruct,
       stringify: (connections) =>
         JSON.stringify(connections.map((connection) => connection.rawObject)),
@@ -502,6 +504,7 @@ export function R_App() {
           </R_Tab>
           <R_Tab active={isTabActive(NavTabId.Extras)}>
             <R_Extras
+              confirm={confirm}
               bakeToast={bakeToast}
               companionMacroWizardOpen={companionMacroWizardOpen}
               onCloseCompanionMacroWizard={() =>

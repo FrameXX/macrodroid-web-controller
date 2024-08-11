@@ -8,10 +8,10 @@ export function useKey(key: string, handler: () => void) {
       }
     }
 
-    document.addEventListener("keydown", handleKeyDown);
+    document.addEventListener("keyup", handleKeyDown);
 
     return () => {
-      document.removeEventListener("keydown", handleKeyDown);
+      document.removeEventListener("keyup", handleKeyDown);
     };
   }, [handler]);
 }

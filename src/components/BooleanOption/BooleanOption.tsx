@@ -20,20 +20,19 @@ const defaultProps: Partial<BooleanOptionProps> = {
 
 export function R_BooleanOption(requiredProps: BooleanOptionProps) {
   const props = useDefaultProps(requiredProps, defaultProps);
-
   const id = useRandomNumber(Random.id);
 
   return (
     <label
       hidden={props.hidden}
-      title={props.title}
+      title={`Toggle ${props.title}`}
       className="option boolean-option"
     >
       <div>
         {props.iconId && <R_Icon iconId={props.iconId} />}
         <div className="title">{props.title}</div>
         <R_Checkbox
-          title={props.title}
+          title={`Toggle ${props.title}`}
           value={props.value}
           onChange={props.onChange}
         />

@@ -18,7 +18,13 @@ import { Log, LogRecordInitializer } from "../../modules/logger";
 import { Connection } from "../../modules/connection";
 import { R_RunActionWizard } from "../RunActionWizard/RunActionWizard";
 import { useLocalStorage } from "../../modules/use_local_storage";
-import { ACTIONS, RECENT_ACTIONS_LIMIT } from "../../modules/const";
+import {
+  ACTIONS,
+  CUSTOM_ACTIONS_STORAGE_KEY,
+  RECENT_ACTIONS_LIMIT,
+  RECENT_ACTIONS_STORAGE_KEY,
+  SAVED_ACTIONS_STORAGE_KEY,
+} from "../../modules/const";
 import { R_CreateActionWizard } from "../CreateActionWizard/CreateActionWizard";
 import { R_CreateArgumentWizard } from "../CreateArgumentWizard/CreateArgumentWizard";
 import { moveElement } from "../../modules/misc";
@@ -52,7 +58,7 @@ export function R_Actions(props: ActionsProps) {
   }, [customActions]);
 
   useLocalStorage(customActions, setCustomActions, {
-    storageKey: "customActions",
+    storageKey: CUSTOM_ACTIONS_STORAGE_KEY,
     struct: ActionsStruct,
     stringify: JSON.stringify,
     parse: JSON.parse,
@@ -61,7 +67,7 @@ export function R_Actions(props: ActionsProps) {
     },
   });
   useLocalStorage(savedActions, setSavedActions, {
-    storageKey: "savedActions",
+    storageKey: SAVED_ACTIONS_STORAGE_KEY,
     struct: ActionsStruct,
     stringify: JSON.stringify,
     parse: JSON.parse,
@@ -70,7 +76,7 @@ export function R_Actions(props: ActionsProps) {
     },
   });
   useLocalStorage(recentActions, setRecentActions, {
-    storageKey: "recentlyRunActions",
+    storageKey: RECENT_ACTIONS_STORAGE_KEY,
     struct: ActionsStruct,
     stringify: JSON.stringify,
     parse: JSON.parse,

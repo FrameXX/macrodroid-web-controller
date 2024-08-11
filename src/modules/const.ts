@@ -18,7 +18,7 @@ export const CONFIRM_CONNECTION_REQUEST_COMMENT =
 export const SPLASHSCREEN_TIMEOUT_MS = 350;
 export const DEFAULT_TRANSITION_TRANSLATE_PX = 40;
 export const DEFAULT_TRANSITION_UNMOUNTED_SCALE = 0.8;
-export const DEFAULT_TRANSITION_DURATION_S = 0.35;
+export const DEFAULT_TRANSITION_DURATION_S = 0.3;
 const PREFERS_REDUCED_MOTION = matchMedia(
   "(prefers-reduced-motion: reduce)",
 ).matches;
@@ -38,11 +38,11 @@ export const TOAST_MS_PER_CHAR = 70;
 export const ANIMATE_SCALE_UNMOUNTED: Target = {
   opacity: 0,
   transform: `scale(${DEFAULT_TRANSITION_UNMOUNTED_SCALE})`,
-};
+} as const;
 export const ANIMATE_SCALE_MOUNTED: Target = {
   opacity: 1,
   transform: "scale(1)",
-};
+} as const;
 
 // OTHER
 export const MACRODROID_APP_URL =
@@ -52,6 +52,12 @@ export const RECENT_ACTIONS_LIMIT = 20;
 export const UKNOWN_REQUEST_COMMENT = "Unknown request";
 export const NOTIFICATION_REQUEST_COMMENT = "Notification";
 export const CLIPBOARD_FILL_REQUEST_COMMENT = "Clipboard fill";
+
+export const CONNECTIONS_STORAGE_KEY = "connections";
+export const LOG_RECORDS_STORAGE_KEY = "logRecords";
+export const CUSTOM_ACTIONS_STORAGE_KEY = "customActions";
+export const SAVED_ACTIONS_STORAGE_KEY = "savedActions";
+export const RECENT_ACTIONS_STORAGE_KEY = "recentActions";
 
 export const ACTIONS: Action[] = [
   {
@@ -310,7 +316,7 @@ export const ACTIONS: Action[] = [
         name: "Method",
         value: 0,
         type: ActionArgType.Selection,
-        options: ["MacroDroid as default assistant", "ADB hack", "Root"],
+        options: ["Default assistant", "ADB hack", "Root"],
         id: "method",
       },
     ],
@@ -445,7 +451,7 @@ export const ACTIONS: Action[] = [
     args: [],
     keywords: ["flashlight", "disable", "torch", "light"],
   },
-];
+] as const;
 
 export const MAGIC_TEXT_ENTRIES: MagicTextEntryProps[] = [
   { title: "MacroDroid Mode", magicText: "mode" },
@@ -535,4 +541,4 @@ export const MAGIC_TEXT_ENTRIES: MagicTextEntryProps[] = [
     title: "Current volume (Bluetooth voice)",
     magicText: "vol_bt_voice",
   },
-];
+] as const;

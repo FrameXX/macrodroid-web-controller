@@ -6,9 +6,12 @@ import "./Extras.scss";
 import { R_ExternalLink } from "../ExternalLink/ExternalLink";
 import { R_CompanionMacroWizard } from "../CompanionMacroWizard/CompanionMacroWizard";
 import { R_MagicTextCheatSheetWizard } from "../MagicTextCheatSheetWizard/MagicTextCheatSheetWizard";
+import { R_ManageDataWizard } from "../ManageDataWizard/ManageDataWizard";
+import { Confirm } from "../../modules/confirm_dialog";
 
 interface ExtrasProps {
   bakeToast: BakeToast;
+  confirm: Confirm;
   companionMacroWizardOpen: boolean;
   onCloseCompanionMacroWizard: () => void;
   onClickOpenCompanionMacroWizard: () => void;
@@ -21,6 +24,7 @@ export function R_Extras(props: ExtrasProps) {
     notificationPermissionWizardOpen,
     setNotificationPermissionWizardOpen,
   ] = useImmer(false);
+  const [manageDataWizardOpen, setManageDataWizardOpen] = useImmer(false);
 
   return (
     <>
@@ -39,6 +43,11 @@ export function R_Extras(props: ExtrasProps) {
         iconId="cogs"
         name="Companion macro"
       />
+      <R_OpenableCategory
+        onClick={() => setManageDataWizardOpen(true)}
+        iconId="database-cog"
+        name="Data management"
+      />
       <R_MagicTextCheatSheetWizard
         bakeToast={props.bakeToast}
         open={magicTextCheatSheetWizardOpen}
@@ -52,6 +61,12 @@ export function R_Extras(props: ExtrasProps) {
       <R_CompanionMacroWizard
         open={props.companionMacroWizardOpen}
         onClose={() => props.onCloseCompanionMacroWizard()}
+      />
+      <R_ManageDataWizard
+        bakeToast={props.bakeToast}
+        confirm={props.confirm}
+        open={manageDataWizardOpen}
+        onClose={() => setManageDataWizardOpen(false)}
       />
       <footer>
         <R_ExternalLink
