@@ -541,4 +541,84 @@ export const MAGIC_TEXT_ENTRIES: MagicTextEntryProps[] = [
     title: "Current volume (Bluetooth voice)",
     magicText: "vol_bt_voice",
   },
+  {
+    title: "Device name",
+    magicText: "device_name",
+  },
+  {
+    title: "Device uptime",
+    magicText: "uptime",
+  },
+  {
+    title: "Device uptime (s)",
+    magicText: "uptime_secs",
+  },
+  {
+    title: "Device manufacturer",
+    magicText: "device_manufacturer",
+  },
+  {
+    title: "Device model",
+    magicText: "device_model",
+  },
+  {
+    title: "MacroDroid version",
+    magicText: "macrodroid_version",
+  },
+  {
+    title: "MacroDroid is pro",
+    magicText: "macrodroid_is_pro",
+  },
+  {
+    title: "Android version",
+    magicText: "android_version",
+  },
+  {
+    title: "Android version (SDK)",
+    magicText: "android_version_sdk",
+  },
+  {
+    title: "SIM operator name",
+    magicText: "sim_operator_name",
+  },
+  {
+    title: "SIM 2 operator name",
+    magicText: "sim2_operator_name",
+  },
+  {
+    title: "Screen resolution",
+    magicText: "screen_res",
+  },
+  {
+    title: "Screen resolution (X)",
+    magicText: "screen_res_x",
+  },
+  {
+    title: "Screen resolution (Y)",
+    magicText: "screen_res_y",
+  },
+  {
+    title: "RAM (total)",
+    magicText: "ram_total",
+  },
+  {
+    title: "RAM (available)",
+    magicText: "ram_available",
+  },
+  {
+    title: "Storage total (external)",
+    magicText: "storage_external_total",
+  },
+  {
+    title: "Storage free (external)",
+    magicText: "storage_external_free",
+  },
+  {
+    title: "Storage total (internal)",
+    magicText: "storage_internal_total",
+  },
+  {
+    title: "Storage free (internal)",
+    magicText: "storage_internal_free",
+  },
 ] as const;
