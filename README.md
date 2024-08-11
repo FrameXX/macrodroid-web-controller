@@ -4,7 +4,7 @@
 
 # MacroDroid Web Controller
 
-**Single page app that serves as a sort of remote control to trigger MacroDroid actions on remote Android devices connected to internet and running the MacroDroid app with ease**
+**Single page app that serves as a remote control to trigger MacroDroid actions on remote Android devices connected to internet and running the MacroDroid app with ease**
 
 <a href="https://www.gnu.org/licenses/agpl-3.0.en.html" alt="License: GPLv3"><img src="https://img.shields.io/badge/License-AGPL%20v3-blue.svg"></a>
 
@@ -13,6 +13,15 @@
 ## Using the app
 
 The app is available at [https://macrodroid-wc.web.app/](https://macrodroid-wc.web.app/). It will guide you through its usage.
+
+## Features
+
+- Easily create connections with your devices. Manage multiple connections and see when they were last active.
+- Request actions on a single or multiple connections, see your last requested actions, save actions as favourite and create your custom actions.
+- Send notifications from your MacroDroid devices to the web client (usually on desktop), or share any text you wish.
+- Inspect log to see responses to your actions or history of web client and connections activity.
+- Use the magic text cheat sheet to remind yourself of MacroDroid's magic text options, without leaving the web UI.
+- Selectively export and import data from web client running on one device to other.
 
 ## Development
 
