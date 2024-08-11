@@ -54,8 +54,8 @@ export function R_WelcomeWizard(props: WelcomeWizardProps) {
         </R_SplashBox>,
         <R_SplashBox splash={<R_Icon iconId="transit-connection-variant" />}>
           <h2>Create connections</h2>
-          Create connections with your devices. Manage multiple connections and
-          see when they were last active.
+          Create connections with devices running MacroDroid. Manage multiple
+          connections and see when they were last active.
         </R_SplashBox>,
         <R_SplashBox splash={<R_Icon iconId="play" />}>
           <h2>Trigger actions</h2>

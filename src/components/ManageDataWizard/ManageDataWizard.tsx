@@ -207,8 +207,11 @@ export function R_ManageDataWizard(props: ManageDataWizardProps) {
           />
           <R_InfoCard id="data-import-notice">
             When importing an exported file, only data included in the export
-            will be overwritten. Other data will be left unchanged. The page
-            will be reloaded after import.
+            will be overwritten. For example if you exported only connections
+            your current connections will be replaced with the ones from the
+            imported file. Your saved actions and any other data won't be
+            touched. Other data will be left unchanged. The page will be
+            reloaded after import.
           </R_InfoCard>
           <div className="actions">
             <R_Button
