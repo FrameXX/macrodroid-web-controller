@@ -49,38 +49,42 @@ export function R_WelcomeWizard(props: WelcomeWizardProps) {
       pages={[
         <R_SplashBox splash={<R_Icon iconId="web" />}>
           <h2>Welcome to MacroDroid Web Controller</h2>
-          An easy way to remotely control MacroDroid using web interface.
+          An easy way to remotely control MacroDroid using friendly web user
+          interface.
         </R_SplashBox>,
         <R_SplashBox splash={<R_Icon iconId="transit-connection-variant" />}>
-          <h2>Make connections</h2>
-          Connect with devices and see when they were active the last time.
+          <h2>Create connections</h2>
+          Create connections with your devices. Manage multiple connections and
+          see when they were last active.
         </R_SplashBox>,
         <R_SplashBox splash={<R_Icon iconId="play" />}>
           <h2>Trigger actions</h2>
-          Trigger a variety of predefined actions on single or multiple
-          connections, create custom actions and save your favourite ones.
+          Request actions on a single or multiple connections, see your last
+          requested actions, save actions as favourite and create your custom
+          actions.
         </R_SplashBox>,
         <R_SplashBox splash={<R_Icon iconId="text-box" />}>
           <h2>Inspect log</h2>
-          See responses to your actions and history of requests.
+          Inspect log to see responses to your actions or history of web client
+          and connections activity.
         </R_SplashBox>,
         <R_SplashBox splash={<R_Icon iconId="security" />}>
           <h2>Disclaimer of liability</h2>
           The outging requests from this website are routed through MacroDroid
-          webhooks servers and are thus fairly private, however the incoming
+          webhook servers and are thus fairly private, however the incoming
           requests to this website are routed through ntfy.sh servers over topic
           that follows the following format:{" "}
           <pre>{NTFY_TOPIC_PREFIX}-&#123;connection id&#125;</pre>For example
           "macrodroid-wc-muqaruha" could be such a topic.
           <br />
           <br />I cannot gurantee that someone else won't be able to read the
-          contents of these requests <b>(while it is improbable)</b> and I urge
-          you to{" "}
+          contents of these requests <b>(while it is very improbable)</b> and I
+          urge you to{" "}
           <b>
-            refrain from sending any sensitive or personal data using this
-            website
+            refrain from sending any sensitive or personal data from or to
+            MacroDroid Web Controller web client.
           </b>
-          . I am not responsible for any data loss.
+          I am not responsible for any possible data loss.
           <br />
           <br />
           <R_BooleanOption
