@@ -5,7 +5,7 @@ import { R_Wizard } from "../Wizard/Wizard";
 
 interface CompanionMacroWizardProps {
   open: boolean;
-  onClose: () => void;
+  onClose: () => unknown;
 }
 
 export function R_CompanionMacroWizard(props: CompanionMacroWizardProps) {

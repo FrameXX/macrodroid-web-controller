@@ -14,7 +14,7 @@ import { Confirm } from "../../modules/confirm_dialog";
 interface CreateActionWizardProps {
   confirm: Confirm;
   open: boolean;
-  args: ActionArg<any>[];
+  args: ActionArg<unknown>[];
   actions: Action[];
   onArgDelete: (index: number) => void;
   onArgMoveDown: (index: number) => void;

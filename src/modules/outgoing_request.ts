@@ -34,7 +34,9 @@ function searchParamNameFromActionArgument(
   }
 }
 
-function actionArgsToSearchParams(actionArgs: ActionArg<any>[]): SearchParam[] {
+function actionArgsToSearchParams(
+  actionArgs: ActionArg<unknown>[],
+): SearchParam[] {
   return actionArgs.map((arg) => {
     return {
       name: searchParamNameFromActionArgument(arg.type, arg.id),

@@ -5,7 +5,7 @@ import "./Toaster.scss";
 
 interface ToasterProps {
   toasts: Toast[];
-  onToastClick: (id: number) => any;
+  onToastClick: (id: number) => unknown;
 }
 
 /**

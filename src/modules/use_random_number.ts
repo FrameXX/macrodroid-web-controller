@@ -1,6 +1,4 @@
-import { useMemo } from "react";
-
-export function useRandomNumber(generator: () => any) {
-  const id = useMemo(generator, []);
+export function useRandomNumber(generator: () => number) {
+  const id = generator();
   return id;
 }

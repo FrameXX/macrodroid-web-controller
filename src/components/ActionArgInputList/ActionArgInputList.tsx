@@ -8,14 +8,16 @@ import { R_MultiColList } from "../MultiColList/MultiColList";
 
 interface ActionArgInputListProps {
   configuredAction: Action | null;
-  onArgChange: (index: number, newValue: any) => void;
+  onArgChange: (index: number, newValue: unknown) => unknown;
 }
 
 export function R_ActionArgInputList(props: ActionArgInputListProps) {
-  const [configuredArgs, setConfiguredArgs] = useImmer<ActionArg<any>[]>([]);
+  const [configuredArgs, setConfiguredArgs] = useImmer<ActionArg<unknown>[]>(
+    [],
+  );
   const forceUpdate = useForceUpdate();
 
-  function shouldArgBeRendered(arg: ActionArg<any>): boolean {
+  function shouldArgBeRendered(arg: ActionArg<unknown>): boolean {
     if (!arg.useCondition) return true;
     return (
       configuredArgs[arg.useCondition.argumentIndex].value ===

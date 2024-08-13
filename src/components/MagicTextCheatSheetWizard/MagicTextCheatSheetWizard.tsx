@@ -15,7 +15,7 @@ import { R_MultiColList } from "../MultiColList/MultiColList";
 
 interface MagicTextCheatSheetWizardProps {
   open: boolean;
-  onClose: () => void;
+  onClose: () => unknown;
   bakeToast: BakeToast;
 }
 

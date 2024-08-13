@@ -31,7 +31,7 @@ export const TRANSITIONS = {
   duration: TRANSITION_DURATION,
   bounce: TRANSITION_BOUNCE,
   type: TRANSITION_TYPE,
-} as const;
+};
 export const TOASTER_MAX_TOASTS = 3;
 export const TOAST_START_DELAY_MS = 1400;
 export const TOAST_MS_PER_CHAR = 70;

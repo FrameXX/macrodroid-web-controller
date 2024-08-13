@@ -51,7 +51,7 @@ export function R_Actions(props: ActionsProps) {
   const [savedActions, setSavedActions] = useImmer<Action[]>([]);
   const [runAction, setRunAction] = useImmer<Action | null>(null);
   const [runActionWizardSkipArgs, setRunActionWizardSkipArgs] = useImmer(false);
-  const [newActionArgs, setNewActionArgs] = useImmer<ActionArg<any>[]>([]);
+  const [newActionArgs, setNewActionArgs] = useImmer<ActionArg<unknown>[]>([]);
   const [customActions, setCustomActions] = useImmer<Action[]>([]);
   const actions = useMemo(() => {
     return [...ACTIONS, ...customActions];
@@ -237,14 +237,14 @@ export function R_Actions(props: ActionsProps) {
     addSavedAction(recentActions[index]);
   }
 
-  function addNewActionArg(arg: ActionArg<any>) {
+  function addNewActionArg(arg: ActionArg<unknown>) {
     setNewActionArgs((draft) => {
       draft.push(arg);
       return draft;
     });
   }
 
-  function handleArgCreation(arg: ActionArg<any>) {
+  function handleArgCreation(arg: ActionArg<unknown>) {
     addNewActionArg(arg);
     closeAddArgumentWizard();
   }

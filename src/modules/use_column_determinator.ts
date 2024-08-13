@@ -2,7 +2,7 @@ import { useResizeObserver } from "./use_resize_observer";
 
 export function useColumnDeterminator(
   parentRef: React.MutableRefObject<HTMLElement | null>,
-  childrenArray: any[],
+  childrenArray: unknown[],
   minColumnWidth: number,
   maxColumns: number = 5,
 ) {

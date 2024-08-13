@@ -21,7 +21,7 @@ interface ManageDataWizardProps {
   bakeToast: BakeToast;
   confirm: Confirm;
   open: boolean;
-  onClose: () => any;
+  onClose: () => unknown;
 }
 
 const exportedDataStruct = array(size(array(string()), 2, 2));

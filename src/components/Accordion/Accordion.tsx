@@ -21,7 +21,7 @@ export function R_Accordion(requiredProps: AccordionProps) {
   const props = useDefaultProps(requiredProps, defaultProps);
 
   const fullSqueeze = props.closedHeight === 0;
-  const transition = structuredClone(TRANSITIONS) as any;
+  const transition = structuredClone(TRANSITIONS);
   transition.bounce = 0;
 
   const defaultOpenHeight = fullSqueeze ? "auto" : undefined;

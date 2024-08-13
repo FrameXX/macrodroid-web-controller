@@ -23,9 +23,9 @@ import { R_MultiColList } from "../MultiColList/MultiColList";
 interface AddArgumentWizardProps {
   confirm: Confirm;
   open: boolean;
-  otherArgs: ActionArg<any>[];
+  otherArgs: ActionArg<unknown>[];
   onCancel: () => void;
-  onCreate: (arg: ActionArg<any>) => void;
+  onCreate: (arg: ActionArg<unknown>) => void;
 }
 
 const defaultValueInputIconId = "help";
@@ -51,7 +51,6 @@ export function R_CreateArgumentWizard(props: AddArgumentWizardProps) {
     valid: boolean;
   }
 
-  // @ts-ignore
   function reset() {
     setName("");
     setId("");

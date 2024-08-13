@@ -6,7 +6,7 @@ import { Target, motion } from "framer-motion";
 interface CheckboxProps {
   title: string;
   value?: boolean;
-  onChange: (newValue: boolean) => void;
+  onChange: (newValue: boolean) => unknown;
 }
 
 export function R_Checkbox(props: CheckboxProps) {

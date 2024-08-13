@@ -86,7 +86,7 @@ export class Connection {
   }
 
   private handleIncomingRequest(
-    event: MessageEvent<any>,
+    event: MessageEvent<string>,
     onRequest: (request: IncomingRequest) => void,
     onFailedRequest?: (errorMessage: string) => void,
   ) {
@@ -118,7 +118,7 @@ export class Connection {
         "This connection already has listeners added. Remove old listeners before adding new.",
       );
 
-    const handleMessage = (event: MessageEvent<any>) => {
+    const handleMessage = (event: MessageEvent<string>) => {
       this.handleIncomingRequest(event, onRequest, onFailedRequest);
     };
 

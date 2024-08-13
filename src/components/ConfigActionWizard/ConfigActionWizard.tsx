@@ -26,7 +26,6 @@ interface ConfigActionWizardProps {
 }
 
 export function R_ConfigActionWizard(props: ConfigActionWizardProps) {
-  // @ts-ignore
   const [saveWithoutRunning, setSaveWithoutRunning] = useImmer(false);
   const [actionName, setActionName] = useImmer("");
   const [activePageIndex, setActivePageIndex] = useImmer(0);

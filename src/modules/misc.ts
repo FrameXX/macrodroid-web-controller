@@ -1,5 +1,5 @@
 export function moveElement(
-  arr: Array<any>,
+  arr: Array<unknown>,
   originIndex: number,
   targetIndex: number,
 ) {

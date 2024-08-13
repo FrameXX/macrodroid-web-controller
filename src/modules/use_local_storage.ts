@@ -4,6 +4,8 @@ import { Struct, assert } from "superstruct";
 type ManualSave<T> = (customState?: T) => void;
 
 export interface StoreConfig<T> {
+  // Unfortunately "Struct<unknown>" does not work here.
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   struct: Struct<any>;
   storageKey: string;
   stringify: (object: T) => string;
@@ -35,7 +37,12 @@ export function useLocalStorage<T>(
     save(state, storeConfig.stringify, storeConfig.storageKey);
   }, [state]);
 
-  return (customState?: T) => save(customState ? customState : state, storeConfig.stringify, storeConfig.storageKey);
+  return (customState?: T) =>
+    save(
+      customState ? customState : state,
+      storeConfig.stringify,
+      storeConfig.storageKey,
+    );
 }
 
 function save<T>(
@@ -46,7 +53,10 @@ function save<T>(
   localStorage.setItem(storageKey, stringify(state));
 }
 
-function validateObject(object: unknown, struct: Struct<any>): string | void {
+function validateObject(
+  object: unknown,
+  struct: Struct<unknown>,
+): string | void {
   try {
     assert(object, struct);
   } catch (error) {

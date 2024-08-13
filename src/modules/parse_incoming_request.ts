@@ -7,7 +7,9 @@ export interface ParsedIncomingRequest {
 
 const IncomingRequestStruct = object({ id: number(), data: array(string()) });
 
-export function parseIncomingRequest(responseData: any): ParsedIncomingRequest {
+export function parseIncomingRequest(
+  responseData: string,
+): ParsedIncomingRequest {
   const parsedResponse = JSON.parse(responseData);
   assert(parsedResponse, IncomingRequestStruct);
   return parsedResponse;

@@ -10,7 +10,7 @@ import { R_MultiColList } from "../MultiColList/MultiColList";
 interface CustomActionsWizardProps {
   actions: Action[];
   open: boolean;
-  onClose: () => void;
+  onClose: () => unknown;
   createActionWizardOpen: boolean;
   onOpenCreateActionWizard: () => void;
   onCustomActionDelete: (index: number) => void;

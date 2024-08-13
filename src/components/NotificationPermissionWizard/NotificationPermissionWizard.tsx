@@ -7,7 +7,7 @@ import { R_Wizard } from "../Wizard/Wizard";
 interface NotificationPermissionWizardProps {
   open: boolean;
   bakeToast: BakeToast;
-  onClose: () => void;
+  onClose: () => unknown;
 }
 
 export function R_NotificationPermissionWizard(

@@ -1,4 +1,4 @@
-import { any, array, number, object, optional, string } from "superstruct";
+import { array, number, object, optional, string, unknown } from "superstruct";
 
 export function updateJSONString(action: Action) {
   action.JSONstring = undefined;
@@ -15,13 +15,13 @@ export const ActionsStruct = array(
         id: string(),
         name: string(),
         description: optional(string()),
-        value: any(),
+        value: unknown(),
         type: number(),
         options: optional(array(string())),
         useCondition: optional(
           object({
             argumentIndex: number(),
-            argumentValue: any(),
+            argumentValue: unknown(),
           }),
         ),
       }),
@@ -42,7 +42,7 @@ export enum ActionArgType {
 
 export interface ActionArgUseCondition {
   argumentIndex: number;
-  argumentValue: any;
+  argumentValue: unknown;
 }
 
 export interface ActionArg<T> {
@@ -59,7 +59,7 @@ export interface Action {
   id: string;
   name: string;
   iconId: string;
-  args: ActionArg<any>[];
+  args: ActionArg<unknown>[];
   keywords: string[];
   JSONstring?: string;
 }
