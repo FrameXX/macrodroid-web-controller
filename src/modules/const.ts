@@ -331,7 +331,7 @@ export const ACTIONS: Action[] = [
         name: "Method",
         value: 0,
         type: ActionArgType.Selection,
-        options: ["MacroDroid as default assistant", "ADB hack", "Root"],
+        options: ["Default assistant", "ADB hack", "Root"],
         id: "method",
       },
     ],
@@ -462,7 +462,7 @@ export const ACTIONS: Action[] = [
         type: ActionArgType.Boolean,
         id: "show_screenshot_ui",
         description:
-          "When enabled Android system UI that shows standartly as you take a screenshot will be shown. When disabled there should be no visible clue that screenshot was taken at the moment of taking it.",
+          "When enabled standard Android screenshot UI as you take a screenshot will be shown which can vary depending on the ROM. When disabled there should be no visible clue that screenshot was taken at the moment of taking it.",
       },
     ],
     keywords: ["screenshot", "capture", "take", "screen", "record"],
@@ -488,6 +488,8 @@ export const ACTIONS: Action[] = [
       },
     ],
     keywords: ["record", "capture", "audio", "microphone", "camcorder"],
+    notice:
+      "MacroDroid does not allow for setting the directory dynamically using variables. The recordings will be saved in Recordings/ directory of your internal storage.",
   },
   {
     id: "stop_recording_microphone",
@@ -521,9 +523,13 @@ export const ACTIONS: Action[] = [
         value: true,
         type: ActionArgType.Boolean,
         id: "show_icon",
+        description:
+          "When this option is disabled there should be no visible clue that picture was taken at the moment of taking it.",
       },
     ],
-    keywords: ["picture", "photo", "capture", "take", "camera"],
+    keywords: ["picture", "photo", "capture", "take", "camera", "record"],
+    notice:
+      "MacroDroid does not allow for setting the directory dynamically using variables. The photos will be saved in DCIM/Camera/ directory of your internal storage.",
   },
   {
     id: "set_volume",

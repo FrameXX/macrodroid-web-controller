@@ -279,7 +279,7 @@ export function R_CreateConnectionWizard(props: AddConnectionWizardProps) {
             title="Connection name"
             description="This is your custom name, so that you can differentiate the connection from other."
           />
-          <R_InfoCard id="webhook-id-disclosure-info">
+          <R_InfoCard id="webhook-id-disclosure-notice">
             The provided webhook ID is not ever send as a part of any request
             and stays only on this device.
           </R_InfoCard>

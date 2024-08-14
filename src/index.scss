@@ -170,6 +170,7 @@ select {
   border-radius: var(--border-radius);
   background-image: url("./assets/img/dropdown.svg");
   background-size: 1.3rem;
+  max-width: 220px;
 
   &:active {
     outline: none;

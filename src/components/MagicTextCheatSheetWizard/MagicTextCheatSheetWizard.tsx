@@ -47,7 +47,7 @@ export function R_MagicTextCheatSheetWizard(
               onSearch={setFilterValue}
             />
           </div>
-          <R_InfoCard id="copy-magic-text-info">
+          <R_InfoCard id="copy-magic-text-notice">
             Click on a magic text entry to copy it to clipboard.
           </R_InfoCard>
           <R_MultiColList items={MAGIC_TEXT_ENTRIES} minColWidthPx={300}>

@@ -27,6 +27,7 @@ export const ActionsStruct = array(
       }),
     ),
     keywords: array(string()),
+    notice: optional(string()),
     JSONstring: optional(string()),
   }),
 );
@@ -62,4 +63,5 @@ export interface Action {
   args: ActionArg<unknown>[];
   keywords: string[];
   JSONstring?: string;
+  notice?: string;
 }

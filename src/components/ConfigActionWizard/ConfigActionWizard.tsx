@@ -14,6 +14,7 @@ import { R_BooleanOption } from "../BooleanOption/BooleanOption";
 import { R_ActionArgInputList } from "../ActionArgInputList/ActionArgInputList";
 import { useKey } from "../../modules/use_key";
 import { R_MultiColList } from "../MultiColList/MultiColList";
+import { R_InfoCard } from "../InfoCard/InfoCard";
 
 interface ConfigActionWizardProps {
   open: boolean;
@@ -116,6 +117,12 @@ export function R_ConfigActionWizard(props: ConfigActionWizardProps) {
         </>,
         <>
           <h2>{`Enter action args: ${configuredAction.current?.name}`}</h2>
+          <R_InfoCard
+            hidden={!configuredAction.current?.notice}
+            id={`action-${configuredAction.current?.id}-notice`}
+          >
+            {configuredAction.current?.notice}
+          </R_InfoCard>
           <R_IconNotice
             hidden={configuredAction.current?.args.length !== 0}
             iconId="emoticon-wink"
