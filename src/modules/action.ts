@@ -20,8 +20,8 @@ export const ActionsStruct = array(
         options: optional(array(string())),
         useCondition: optional(
           object({
-            argumentIndex: number(),
-            argumentValue: unknown(),
+            argIndex: number(),
+            argValue: unknown(),
           }),
         ),
       }),
@@ -41,8 +41,8 @@ export enum ActionArgType {
 }
 
 export interface ActionArgUseCondition {
-  argumentIndex: number;
-  argumentValue: unknown;
+  argIndex: number;
+  argValue: unknown;
 }
 
 export interface ActionArg<T> {

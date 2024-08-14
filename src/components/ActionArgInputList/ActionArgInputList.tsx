@@ -20,8 +20,8 @@ export function R_ActionArgInputList(props: ActionArgInputListProps) {
   function shouldArgBeRendered(arg: ActionArg<unknown>): boolean {
     if (!arg.useCondition) return true;
     return (
-      configuredArgs[arg.useCondition.argumentIndex].value ===
-      arg.useCondition.argumentValue
+      configuredArgs[arg.useCondition.argIndex].value ===
+      arg.useCondition.argValue
     );
   }
 
