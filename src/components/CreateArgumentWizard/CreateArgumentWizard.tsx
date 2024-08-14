@@ -167,6 +167,7 @@ export function R_CreateArgumentWizard(props: AddArgumentWizardProps) {
               value={name}
               required
               title="Name"
+              placeholder="Name"
               iconId="rename"
               description="The name of the argument shown in the web UI"
               onKeyUp={(event) => {
@@ -179,6 +180,7 @@ export function R_CreateArgumentWizard(props: AddArgumentWizardProps) {
               value={id}
               required
               title="ID"
+              placeholder="ID"
               iconId="identifier"
               description="The ID of the argument that will be send to MacroDroid"
               onKeyUp={(event) => {
@@ -190,6 +192,7 @@ export function R_CreateArgumentWizard(props: AddArgumentWizardProps) {
               onChange={setDescription}
               value={description}
               title="Description"
+              placeholder="Description"
               iconId="rename"
               description="Describe what is the argument for. This is not required."
             />

@@ -41,7 +41,7 @@ export function R_CreateActionWizard(props: CreateActionWizardProps) {
   });
 
   useKey("Enter", () => {
-    if (activePageIndex === 1) create();
+    if (activePageIndex === 1 && !props.createArgumentWizardOpen) create();
   });
 
   function canGoSecondPage() {
@@ -119,6 +119,7 @@ export function R_CreateActionWizard(props: CreateActionWizardProps) {
             ref={idInput}
             onKeyUp={(event) => {
               if (event.key === "Enter" && canGoSecondPage()) handleNextPage();
+              event.stopPropagation();
             }}
           />
         </>,

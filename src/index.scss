@@ -169,6 +169,7 @@ select {
   box-shadow: var(--box-shadow);
   border-radius: var(--border-radius);
   background-image: url("./assets/img/dropdown.svg");
+  background-size: 1.3rem;
 
   &:active {
     outline: none;

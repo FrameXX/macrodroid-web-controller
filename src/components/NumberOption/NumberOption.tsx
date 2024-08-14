@@ -31,17 +31,19 @@ export function R_NumberOption(requiredProps: BooleanOptionProps) {
       title={props.title}
       className="option boolean-option"
     >
-      {props.iconId && <R_Icon iconId={props.iconId} />}
-      <div className="title">{props.title}</div>
-      <input
-        value={props.value}
-        placeholder={props.title}
-        title={props.title}
-        onChange={(event) => props.onChange(+event.target.value)}
-        type="number"
-        step={props.decimal ? "any" : 1}
-        required={props.required}
-      />
+      <div>
+        {props.iconId && <R_Icon iconId={props.iconId} />}
+        <div className="title">{props.title}</div>
+        <input
+          value={props.value}
+          placeholder={props.title}
+          title={props.title}
+          onChange={(event) => props.onChange(+event.target.value)}
+          type="number"
+          step={props.decimal ? "any" : 1}
+          required={props.required}
+        />
+      </div>
       {props.description && (
         <div id={`input-description-${id}`} className="description">
           {props.description}
