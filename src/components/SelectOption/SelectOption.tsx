@@ -16,7 +16,7 @@ export function R_SelectOption(props: SelectOptionProps) {
   const id = useRandomNumber(Random.id);
 
   return (
-    <label title={props.title} className="option boolean-option">
+    <label title={props.title} className="option simple-option">
       <div>
         {props.iconId && <R_Icon iconId={props.iconId} />}
         <div className="title">{props.title}</div>

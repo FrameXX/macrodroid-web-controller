@@ -31,10 +31,6 @@ export function R_WelcomeWizard(props: WelcomeWizardProps) {
   Notification.permission;
 
   function nextPage() {
-    if (activePageIndex === 6) {
-      setOpen(false);
-      return;
-    }
     setActivePageIndex((prevActivePageIndex) => prevActivePageIndex + 1);
   }
 
@@ -114,7 +110,14 @@ export function R_WelcomeWizard(props: WelcomeWizardProps) {
             hidden={activePageIndex === 4 && !acceptTOS}
             title="Next page"
             iconId="chevron-right"
-            onClick={nextPage}
+            onClick={() => {
+              if (activePageIndex === 6) {
+                setOpen(false);
+                return;
+              }
+              if (activePageIndex === 4 && !acceptTOS) return;
+              nextPage();
+            }}
           />
         </>
       }

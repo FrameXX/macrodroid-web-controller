@@ -29,7 +29,7 @@ export function R_NumberOption(requiredProps: BooleanOptionProps) {
     <label
       hidden={props.hidden}
       title={props.title}
-      className="option boolean-option"
+      className="option simple-option"
     >
       <div>
         {props.iconId && <R_Icon iconId={props.iconId} />}

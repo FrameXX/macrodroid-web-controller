@@ -1,3 +1,5 @@
+@use "./mixins" as *;
+
 .option {
   break-inside: avoid;
 
@@ -5,5 +7,50 @@
     font-weight: bold;
     width: 100%;
     text-align: left;
+  }
+}
+
+.simple-option {
+  @include card;
+  align-items: center;
+  background-color: var(--color-surface-top);
+  max-width: var(--tab-items-max-width);
+
+  > div {
+    display: flex;
+    align-items: center;
+  }
+
+  .title {
+    width: 100%;
+  }
+}
+
+.string-option {
+  @include card;
+  background-color: var(--color-surface-top);
+  max-width: var(--tab-items-max-width);
+  display: flex;
+  align-items: top;
+
+  h3 {
+    margin-top: 0.4rem;
+  }
+
+  img {
+    width: 100%;
+    max-width: 250px;
+  }
+
+  > div {
+    width: 100%;
+  }
+
+  .title {
+    margin: 0.5rem 0;
+  }
+
+  textarea {
+    resize: vertical;
   }
 }

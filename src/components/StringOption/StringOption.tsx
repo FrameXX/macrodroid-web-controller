@@ -1,6 +1,5 @@
 import { forwardRef } from "react";
 import { Random } from "../../modules/random";
-import "./StringOption.scss";
 import { R_Icon } from "../Icon/Icon";
 import { useDefaultProps } from "../../modules/use_default_props";
 import { useRandomNumber } from "../../modules/use_random_number";

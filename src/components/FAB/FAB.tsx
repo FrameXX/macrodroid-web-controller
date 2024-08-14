@@ -30,6 +30,7 @@ export function R_FAB(requiredProps: FABProps) {
     scale: props.hidden ? 0 : 1,
     opacity: props.hidden ? 0 : 1,
     pointerEvents: props.hidden ? "none" : "all",
+    display: props.hidden ? "none" : "flex",
   };
   return (
     <motion.button

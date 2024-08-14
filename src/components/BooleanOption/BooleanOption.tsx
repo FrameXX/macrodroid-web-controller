@@ -3,7 +3,6 @@ import { useDefaultProps } from "../../modules/use_default_props";
 import { useRandomNumber } from "../../modules/use_random_number";
 import { R_Checkbox } from "../Checkbox/Checkbox";
 import { R_Icon } from "../Icon/Icon";
-import "./BooleanOption.scss";
 
 interface BooleanOptionProps {
   title: string;
@@ -26,7 +25,7 @@ export function R_BooleanOption(requiredProps: BooleanOptionProps) {
     <label
       hidden={props.hidden}
       title={`Toggle ${props.title}`}
-      className="option boolean-option"
+      className="option simple-option"
     >
       <div>
         {props.iconId && <R_Icon iconId={props.iconId} />}
