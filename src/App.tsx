@@ -250,7 +250,9 @@ export function R_App() {
     connectionName: string,
   ) {
     const message = request.createInfoMessage(connectionName, outgoingComment);
-    bakeToast(new Toast(message, "info", ToastSeverity.Info));
+    bakeToast(
+      new Toast(message, "transit-connection-variant", ToastSeverity.Info),
+    );
   }
 
   function notifyIncomingRequest(
@@ -300,6 +302,7 @@ export function R_App() {
     const outgoingComment =
       findIncomingRequestOutgoingComment(request) || UKNOWN_REQUEST_COMMENT;
     const comment = commentIncomingRequest(request.type, outgoingComment);
+    console.log(comment);
     const isResponse =
       request.type === IncomingRequestType.Confirmation ||
       request.type === IncomingRequestType.Response;

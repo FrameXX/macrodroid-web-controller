@@ -1,6 +1,9 @@
 @use "../../partials/mixins" as *;
 
 .expandable-category {
+  display: flex;
+  flex-direction: column-reverse;
+
   .head {
     @include card;
 

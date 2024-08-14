@@ -51,7 +51,7 @@ export const LOG_RECORD_LIMIT = 40;
 export const RECENT_ACTIONS_LIMIT = 20;
 export const UKNOWN_REQUEST_COMMENT = "Unknown request";
 export const NOTIFICATION_REQUEST_COMMENT = "Notification";
-export const CLIPBOARD_FILL_REQUEST_COMMENT = "Clipboard fill";
+export const CLIPBOARD_FILL_REQUEST_COMMENT = "Shared text";
 
 export const CONNECTIONS_STORAGE_KEY = "connections";
 export const LOG_RECORDS_STORAGE_KEY = "logRecords";

@@ -31,11 +31,11 @@ export class IncomingRequest {
       case IncomingRequestType.Notification:
         return `New notification from ${connectionName}.`;
       case IncomingRequestType.Confirmation:
-        return `${connectionName} confirmed ${outgoingComment}`;
+        return `${connectionName} confirmed ${outgoingComment}.`;
       case IncomingRequestType.TextShare:
         return `${connectionName} shared text.`;
       case IncomingRequestType.Response:
-        return `${connectionName} responded to ${outgoingComment}`;
+        return `${connectionName} responded to ${outgoingComment}.`;
       default:
         throw new TypeError("Invalid request type was provided.");
     }
