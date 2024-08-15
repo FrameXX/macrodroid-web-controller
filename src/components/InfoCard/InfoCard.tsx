@@ -6,6 +6,7 @@ import "./InfoCard.scss";
 import { R_Accordion } from "../Accordion/Accordion";
 import { useLocalStorage } from "../../modules/use_local_storage";
 import { boolean } from "superstruct";
+import { useEffect } from "react";
 
 interface InfoCardProps extends React.PropsWithChildren {
   hidden?: boolean;
@@ -20,11 +21,24 @@ export function R_InfoCard(requiredProps: InfoCardProps) {
   const props = useDefaultProps(requiredProps, defaultProps);
   const [closed, setClosed] = useImmer(false);
   useLocalStorage(closed, setClosed, {
-    storageKey: `infoCardClosed_${props.id}`,
-    stringify: (open) => `${open}`,
+    storageKey: getStorageKey(),
+    stringify: (open) => open.toString(),
     parse: (string) => string === "true",
     struct: boolean(),
   });
+
+  function getStorageKey() {
+    return `infoCardClosed_${props.id}`;
+  }
+
+  function getClosedBefore() {
+    if (!navigator.cookieEnabled) return false;
+    return localStorage.getItem(getStorageKey()) === "true";
+  }
+
+  useEffect(() => {
+    setClosed(getClosedBefore());
+  }, [props.id]);
 
   return (
     <R_Accordion open={!props.hidden && !closed}>
