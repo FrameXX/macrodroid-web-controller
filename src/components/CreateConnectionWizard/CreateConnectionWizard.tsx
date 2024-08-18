@@ -191,7 +191,7 @@ export function R_CreateConnectionWizard(props: AddConnectionWizardProps) {
       return;
     }
     props.log({
-      comment: CONFIRM_CONNECTION_REQUEST_COMMENT,
+      comment: `Confirm: ${CONFIRM_CONNECTION_REQUEST_COMMENT}`,
       connectionName: connection.name,
       requestId: request.id,
       isResponse: true,
@@ -260,6 +260,12 @@ export function R_CreateConnectionWizard(props: AddConnectionWizardProps) {
               imported into MacroDroid
             </h3>
           </R_SimpleCard>
+          <R_InfoCard id="companion-safety-notice">
+            The companion macro will ignore all action requests that do not
+            contain a connection ID that was generated and send over secure
+            connection during this connection creation process after approval on
+            both sides of the connection.
+          </R_InfoCard>
         </>,
         <>
           <h2>Enter info</h2>
@@ -282,8 +288,8 @@ export function R_CreateConnectionWizard(props: AddConnectionWizardProps) {
             description="This is your custom name, so that you can differentiate the connection from other."
           />
           <R_InfoCard id="webhook-id-disclosure-notice">
-            The provided webhook ID is not ever send as a part of any request
-            and stays only on this device.
+            The provided webhook ID is never send as a part of any request and
+            stays only on this device.
           </R_InfoCard>
           <R_StringOption
             iconId="webhook"

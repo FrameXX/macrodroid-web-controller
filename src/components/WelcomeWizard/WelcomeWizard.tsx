@@ -66,23 +66,30 @@ export function R_WelcomeWizard(props: WelcomeWizardProps) {
         </R_SplashBox>,
         <R_SplashBox splash={<R_Icon iconId="security" />}>
           <h2>Disclaimer of liability</h2>
-          The outging requests from this website are routed through MacroDroid
-          webhook servers and are thus fairly private, however the incoming
-          requests to this website are routed through ntfy.sh servers over topic
-          that follows the following format:{" "}
-          <pre>{NTFY_TOPIC_PREFIX}-&#123;connection id&#125;</pre>For example
-          "macrodroid-wc-muqaruha" could be such a topic.
-          <br />
-          <br />I cannot gurantee that someone else won't be able to read the
-          contents of these requests <b>(while it is very improbable)</b> and I
-          urge you to{" "}
-          <b>
-            refrain from sending any sensitive or personal data from or to
-            MacroDroid Web Controller web client.
-          </b>
-          I am not responsible for any possible data loss.
-          <br />
-          <br />
+          <p>
+            The outging requests from this website are routed through MacroDroid
+            webhook servers and are thus fairly private, however the incoming
+            requests to this website are routed through ntfy.sh servers over
+            topic that follows the following format:{" "}
+            <pre>{NTFY_TOPIC_PREFIX}-&#123;connection ID&#125;</pre>For example
+            "macrodroid-wc-muqaruha" could be such a topic.
+          </p>
+          <p>
+            I cannot gurantee that someone else won't be able to read the
+            contents of these requests <b>(while it is very improbable)</b> and
+            I urge you to{" "}
+            <b>
+              refrain from sending any sensitive or personal data from or to
+              MacroDroid Web Controller web client.
+            </b>
+          </p>
+          <p>
+            <b>
+              I am not responsible for any possible data loss. This software is
+              distributed "as is", with no warranty expressed or implied, and no
+              guarantee for accuracy or applicability to any purpose.
+            </b>
+          </p>{" "}
           <R_BooleanOption
             value={acceptTOS}
             onChange={setAcceptTOS}
