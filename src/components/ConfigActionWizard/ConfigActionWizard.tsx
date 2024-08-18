@@ -35,11 +35,7 @@ export function R_ConfigActionWizard(props: ConfigActionWizardProps) {
 
   const filteredActions = useMemo(() => {
     const filter = filterValue.toLowerCase();
-    return props.actions.filter((action) =>
-      `${action.name}${action.keywords.join("")}`
-        .toLowerCase()
-        .includes(filter),
-    );
+    return props.actions.filter((action) => filterAction(action, filter));
   }, [filterValue, props.actions]);
 
   useEffect(() => {
@@ -54,6 +50,20 @@ export function R_ConfigActionWizard(props: ConfigActionWizardProps) {
       previousPage();
     }
   });
+
+  function filterAction(action: Action, filter: string) {
+    if (action.name.toLowerCase().includes(filter)) return true;
+    const filterKeywords = filter.split(" ");
+    if (
+      filterKeywords.filter(
+        (filterKeyword) =>
+          action.keywords.findIndex((actionKeyword) =>
+            actionKeyword.includes(filterKeyword),
+          ) !== -1,
+      ).length === filterKeywords.length
+    )
+      return true;
+  }
 
   function selectAction(action: Action) {
     configuredAction.current = structuredClone(action);

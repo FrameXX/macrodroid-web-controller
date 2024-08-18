@@ -149,7 +149,10 @@ export function R_Actions(props: ActionsProps) {
   ) {
     setRunActionWizardSkipArgs(false);
     addRecentAction(action);
-    const request = OutgoingRequest.runAction(action, requireConfirmation);
+    const request = OutgoingRequest.createActionRequest(
+      action,
+      requireConfirmation,
+    );
     const requestLogs: LogRecordInitializer[] = [];
     const logPromises = connections.map(async (connection) => {
       const requestLog = await connection.makeRequest(request);
@@ -172,8 +175,8 @@ export function R_Actions(props: ActionsProps) {
     } else {
       props.bakeToast(
         new Toast(
-          "Action was successfully requested on all connections.",
-          "check-all",
+          "Action was successfully requested on all connection webhooks.",
+          "webhook",
           ToastSeverity.Success,
         ),
       );

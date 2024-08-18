@@ -34,6 +34,16 @@ function searchParamNameFromActionArgument(
   }
 }
 
+function generateActionArgDetail(arg: ActionArg<unknown>) {
+  const value =
+    arg.type === ActionArgType.Selection &&
+    typeof arg.value === "number" &&
+    arg.options
+      ? arg.options[arg.value]
+      : arg.value;
+  return `${arg.name}: ${value}`;
+}
+
 function actionArgsToSearchParams(
   actionArgs: ActionArg<unknown>[],
 ): SearchParam[] {
@@ -86,9 +96,12 @@ export class OutgoingRequest {
     );
   }
 
-  public static runAction(action: Action, requireConfirmation: boolean) {
+  public static createActionRequest(
+    action: Action,
+    requireConfirmation: boolean,
+  ) {
     const comment = `Action: ${action.name}`;
-    const details = action.args.map((arg) => `${arg.name}: ${arg.value}`);
+    const details = action.args.map(generateActionArgDetail);
     const searchParams = [
       ...actionArgsToSearchParams(action.args),
       { name: "actionId", value: action.id },

@@ -48,7 +48,7 @@ export function R_Connections(props: ConnectionsProps) {
     if (requestLog.errorMessage) {
       props.bakeToast(
         new Toast(
-          `Failed to request connection confirmation. ${requestLog.errorMessage}`,
+          `Failed to request connection confirmation webhook. ${requestLog.errorMessage}`,
           "alert",
           ToastSeverity.Error,
         ),
@@ -57,8 +57,8 @@ export function R_Connections(props: ConnectionsProps) {
     } else {
       props.bakeToast(
         new Toast(
-          "Connection confirmation requested.",
-          "transit-connection-variant",
+          "Connection confirmation webhook requested.",
+          "webhook",
           ToastSeverity.Success,
         ),
       );

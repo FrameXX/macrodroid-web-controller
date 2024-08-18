@@ -68,6 +68,8 @@ export function R_CreateConnectionWizard(props: AddConnectionWizardProps) {
     setConnectionName("");
     setWebhookId("");
     setActivePageIndex(0);
+    setWebhookIdValid(false);
+    setConnectionNameValid(false);
   }
 
   function onSuccess(connection: Connection) {
