@@ -655,6 +655,7 @@ export const ACTIONS: Action[] = [
   },
   {
     name: "Get clipboard text",
+    notice: "This action usually works only when the screen is on.",
     id: "get_clipboard_text",
     iconId: "clipboard-arrow-down",
     args: [],
@@ -846,6 +847,8 @@ export const ACTIONS: Action[] = [
   },
   {
     name: "Keep device awake",
+    notice:
+      "This action may not work on some devices with more aggressive battery saving features.",
     id: "keep_device_awake",
     iconId: "eye",
     args: [
