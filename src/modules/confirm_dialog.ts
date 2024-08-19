@@ -11,7 +11,7 @@ export class ConfirmDialog {
     private readonly setConfirmDialogText: Updater<string>,
   ) {
     addEventListener("keyup", (event: KeyboardEvent) => {
-      if (event.key === "Escape" && this.resolve) this.resolve(false);
+      if (event.key === "Escape" && this._resolve) this.resolve(false);
     });
   }
 
@@ -23,10 +23,7 @@ export class ConfirmDialog {
   }
 
   public resolve(value: boolean) {
-    if (!this._resolve) {
-      console.error("Resolver not found.");
-      return;
-    }
+    if (!this._resolve) throw new Error("Resolver not found.");
     this._resolve(value);
     this.setConfirmDialogOpen(false);
     this._resolve = undefined;

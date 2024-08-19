@@ -32,6 +32,7 @@ export function R_ConfigActionWizard(props: ConfigActionWizardProps) {
   const [activePageIndex, setActivePageIndex] = useImmer(0);
   const [filterValue, setFilterValue] = useImmer("");
   const configuredAction = useRef<Action | null>(null);
+  const filterValueInput = useRef<HTMLInputElement>(null);
 
   const filteredActions = useMemo(() => {
     const filter = filterValue.toLowerCase();
@@ -49,6 +50,10 @@ export function R_ConfigActionWizard(props: ConfigActionWizardProps) {
     } else {
       previousPage();
     }
+  });
+
+  useKey("/", () => {
+    if (props.open) filterValueInput.current?.focus();
   });
 
   function filterAction(action: Action, filter: string) {
@@ -100,8 +105,9 @@ export function R_ConfigActionWizard(props: ConfigActionWizardProps) {
           <div className="sticky-filter">
             <R_Icon iconId="magnify" />
             <R_SearchInput
-              placeholder="Filter actions"
+              placeholder='Filter actions (type "/" to focus)'
               onSearch={setFilterValue}
+              ref={filterValueInput}
             />
           </div>
           <R_IconNotice

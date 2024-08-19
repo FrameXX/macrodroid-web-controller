@@ -19,7 +19,7 @@ const defaultProps: Partial<InfoCardProps> = {
 
 export function R_InfoCard(requiredProps: InfoCardProps) {
   const props = useDefaultProps(requiredProps, defaultProps);
-  const [closed, setClosed] = useImmer(false);
+  const [closed, setClosed] = useImmer(getClosedBefore());
   useLocalStorage(closed, setClosed, {
     storageKey: getStorageKey(),
     stringify: (open) => open.toString(),

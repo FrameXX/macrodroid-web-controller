@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, useRef } from "react";
 import { MAGIC_TEXT_ENTRIES } from "../../modules/const";
 import { R_FAB } from "../FAB/FAB";
 import { R_MagicTextEntry } from "../MagicTextEntry/MagicTextEntry";
@@ -23,15 +23,19 @@ export function R_MagicTextCheatSheetWizard(
   props: MagicTextCheatSheetWizardProps,
 ) {
   const [filterValue, setFilterValue] = useImmer("");
-
   const filteredEntries = useMemo(() => {
     const filter = filterValue.toLowerCase();
     return MAGIC_TEXT_ENTRIES.filter((entry) =>
       `${entry.title}${entry.magicText}`.toLowerCase().includes(filter),
     );
   }, [filterValue]);
+  const filterValueInput = useRef<HTMLInputElement>(null);
 
   useKey("Escape", props.onClose);
+
+  useKey("/", () => {
+    if (props.open) filterValueInput.current?.focus();
+  });
 
   return (
     <R_Wizard
@@ -43,12 +47,17 @@ export function R_MagicTextCheatSheetWizard(
           <div className="sticky-filter">
             <R_Icon iconId="magnify" />
             <R_SearchInput
-              placeholder="Filter magic text entries"
+              placeholder='Filter magic text entries (type "/" to focus)'
               onSearch={setFilterValue}
+              ref={filterValueInput}
             />
           </div>
           <R_InfoCard id="copy-magic-text-notice">
             Click on a magic text entry to copy it to clipboard.
+          </R_InfoCard>
+          <R_InfoCard id="magic-text-entries-notice">
+            Entries that are present only on some devices or are relevant to the
+            currently running macro like macro category etc. are not shown here.
           </R_InfoCard>
           <R_MultiColList items={MAGIC_TEXT_ENTRIES} minColWidthPx={300}>
             <AnimatePresence>

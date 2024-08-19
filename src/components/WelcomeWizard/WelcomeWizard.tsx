@@ -70,17 +70,19 @@ export function R_WelcomeWizard(props: WelcomeWizardProps) {
             The outging requests from this website are routed through MacroDroid
             webhook servers and are thus fairly private, however the incoming
             requests to this website are routed through ntfy.sh servers over
-            topic that follows the following format:{" "}
-            <pre>{NTFY_TOPIC_PREFIX}-&#123;connection ID&#125;</pre>For example
-            "macrodroid-wc-muqaruha" could be such a topic.
+            topic that follows the following format:
           </p>
+          <pre>{NTFY_TOPIC_PREFIX}-&#123;connection ID&#125;</pre>
+          <p>For example "macrodroid-wc-muqaruha" could be such a topic.</p>
           <p>
             I cannot gurantee that someone else won't be able to read the
             contents of these requests <b>(while it is very improbable)</b> and
             I urge you to{" "}
             <b>
               refrain from sending any sensitive or personal data from or to
-              MacroDroid Web Controller web client.
+              MacroDroid Web Controller web client. Also generally it's a good
+              practice not to share your webhook ID and connection ID with
+              anyone.
             </b>
           </p>
           <p>

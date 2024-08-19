@@ -13,6 +13,7 @@ import { R_Button } from "../Button/Button";
 import { Confirm } from "../../modules/confirm_dialog";
 import { R_SearchInput } from "../SearchInput/SearchInput";
 import { BakeToast, Toast } from "../../modules/toaster";
+import { useKey } from "../../modules/use_key";
 
 interface LogProps {
   logRecords: LogRecord[];
@@ -42,6 +43,10 @@ export function R_Log(props: LogProps) {
 
   const wideEnoughScreenForFilterIcon = useInnerSize(() => {
     return innerWidth > 500;
+  });
+
+  useKey("/", () => {
+    filterValueInput.current?.focus();
   });
 
   function setFilter(value: string, type: FilterType) {
@@ -108,7 +113,7 @@ export function R_Log(props: LogProps) {
         <R_SearchInput
           ref={filterValueInput}
           onSearch={setFilterValue}
-          placeholder="Filter log using..."
+          placeholder='Filter log (type "/" to focus)'
         />
         <select
           ref={filterTypeSelect}
