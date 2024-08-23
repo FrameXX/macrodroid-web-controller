@@ -26,6 +26,7 @@ export interface LogRecordInitializer {
   requestId?: string;
   comment: string;
   copyText?: string;
+  webhookURL?: string;
   details?: string[];
   errorMessage?: string;
 }
@@ -43,7 +44,8 @@ export const LogRecordsStruct = array(
     comment: optional(string()),
     details: optional(array(string())),
     errorMessage: optional(string()),
-    copyText: optional(string()),
+    webhookURL: optional(string()),
+    copyURL: optional(string()),
   }),
 );
 

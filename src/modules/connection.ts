@@ -163,6 +163,7 @@ export class Connection {
       requestId: request.id,
       type: LogRecordType.OutgoingRequest,
       details: request.details,
+      webhookURL: URL.toString(),
     };
     let response: Response;
     try {

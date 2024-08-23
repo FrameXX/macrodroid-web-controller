@@ -3,11 +3,10 @@ import { R_Wizard } from "../Wizard/Wizard";
 import { R_FAB } from "../FAB/FAB";
 import { Action, updateJSONString } from "../../modules/action";
 import { Connection } from "../../modules/connection";
-import { useEffect, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { R_BooleanOption } from "../BooleanOption/BooleanOption";
 import { R_ActionArgInputList } from "../ActionArgInputList/ActionArgInputList";
 import { useForceUpdate } from "../../modules/use_force_update";
-import { BakeToast, Toast, ToastSeverity } from "../../modules/toaster";
 import { useKey } from "../../modules/use_key";
 import { R_MultiColList } from "../MultiColList/MultiColList";
 
@@ -20,9 +19,9 @@ interface RunActionWizardProps {
     connections: Connection[],
     requireConfirmation: boolean,
   ) => void;
-  bakeToast: BakeToast;
   connections: Connection[];
   skipArgs: boolean;
+  skipConfirmation: boolean;
 }
 
 export function R_RunActionWizard(props: RunActionWizardProps) {
@@ -33,17 +32,24 @@ export function R_RunActionWizard(props: RunActionWizardProps) {
   const [requireConfirmation, setRequireConfirmation] = useImmer(false);
   const runAction = useRef<Action | null>(null);
   const forceUpdate = useForceUpdate();
+  const skipArgs = useMemo(() => {
+    return props.skipArgs || props.runAction?.args.length === 0;
+  }, [props.skipArgs, props.runAction]);
+  const skipConnections = useMemo(
+    () => props.connections.length <= 1,
+    [props.connections],
+  );
 
   useEffect(() => {
-    if (props.open && props.connections.length < 1) {
-      props.bakeToast(
-        new Toast(
-          "Cannot run action if no connections are configured.",
-          "alert",
-          ToastSeverity.Error,
-        ),
-      );
-      props.onCancel();
+    if (
+      props.open &&
+      skipArgs &&
+      props.skipConfirmation &&
+      props.connections.length === 1
+    ) {
+      throw new Error("There's nothing to configure about the action.");
+    } else if (props.open && props.connections.length === 0) {
+      throw new Error("There are no connections to make action requests with.");
     }
   }, [props.open]);
 
@@ -51,6 +57,14 @@ export function R_RunActionWizard(props: RunActionWizardProps) {
     runAction.current = structuredClone(props.runAction);
     forceUpdate();
   }, [props.runAction]);
+
+  useKey("Escape", () => {
+    if (activePageIndex === 0) {
+      props.onCancel();
+    } else {
+      setActivePageIndex(0);
+    }
+  });
 
   function toggleConnection(connection: Connection, value: boolean) {
     if (value) {
@@ -66,20 +80,15 @@ export function R_RunActionWizard(props: RunActionWizardProps) {
     }
   }
 
-  useKey("Escape", () => {
-    if (activePageIndex === 0) {
-      props.onCancel();
-    } else {
-      setActivePageIndex(0);
-    }
-  });
-
   function confirmRunAction() {
     if (!runAction.current) throw Error("Run action is not defined.");
     updateJSONString(runAction.current);
+    const connections = skipConnections
+      ? [props.connections[0]]
+      : selectedConnections;
     props.onConfirmRunAction(
       runAction.current,
-      selectedConnections,
+      connections,
       requireConfirmation,
     );
     reset();
@@ -97,6 +106,14 @@ export function R_RunActionWizard(props: RunActionWizardProps) {
 
   function previousPage() {
     setActivePageIndex(activePageIndex - 1);
+  }
+
+  function getPages() {
+    const pages: React.ReactNode[] = [];
+    if (!skipArgs) pages.push(argsPage);
+    if (!skipConnections) pages.push(connectionsPage);
+    if (!props.skipConfirmation) pages.push(confirmationPage);
+    return pages;
   }
 
   const argsPage = (
@@ -140,11 +157,12 @@ export function R_RunActionWizard(props: RunActionWizardProps) {
     </>
   );
 
-  const skipArgs = props.skipArgs || props.runAction?.args.length === 0;
-
-  const pages = skipArgs
-    ? [connectionsPage, confirmationPage]
-    : [argsPage, connectionsPage, confirmationPage];
+  const pages = useMemo(getPages, [
+    skipArgs,
+    skipConnections,
+    props.skipConfirmation,
+    runAction.current,
+  ]);
 
   return (
     <R_Wizard
@@ -174,9 +192,10 @@ export function R_RunActionWizard(props: RunActionWizardProps) {
           <R_FAB
             hidden={
               activePageIndex === pages.length - 1 ||
-              (((activePageIndex === 0 && skipArgs) ||
-                (activePageIndex === 1 && !skipArgs)) &&
-                !selectedConnections.length)
+              (!skipConnections &&
+                selectedConnections.length === 0 &&
+                ((activePageIndex === 0 && skipArgs) ||
+                  (activePageIndex === 1 && !skipArgs)))
             }
             title="Next page"
             iconId="chevron-right"

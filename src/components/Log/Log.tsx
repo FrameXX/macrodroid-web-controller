@@ -166,7 +166,12 @@ export function R_Log(props: LogProps) {
                 key={record.id}
                 record={record}
                 onCopyText={() =>
-                  props.bakeToast(new Toast("Text copied", "content-copy"))
+                  props.bakeToast(new Toast("Text copied.", "content-copy"))
+                }
+                onCopyWebhookURL={() =>
+                  props.bakeToast(
+                    new Toast("Webhook URL copied.", "content-copy"),
+                  )
                 }
               />
             );

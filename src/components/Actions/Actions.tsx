@@ -51,6 +51,8 @@ export function R_Actions(props: ActionsProps) {
   const [savedActions, setSavedActions] = useImmer<Action[]>([]);
   const [runAction, setRunAction] = useImmer<Action | null>(null);
   const [runActionWizardSkipArgs, setRunActionWizardSkipArgs] = useImmer(false);
+  const [runActionWizardSkipConfirmation, setRunActionWizardSkipConfirmation] =
+    useImmer(false);
   const [newActionArgs, setNewActionArgs] = useImmer<ActionArg<unknown>[]>([]);
   const [customActions, setCustomActions] = useImmer<Action[]>([]);
   const actions = useMemo(() => {
@@ -135,10 +137,25 @@ export function R_Actions(props: ActionsProps) {
     }
   }
 
-  function runRunActionWizard(action: Action, skipArgs: boolean) {
-    // Action has to be copyed so that the ConfigActionWizard can still modify its version.
+  function runRunActionWizard(
+    action: Action,
+    skipArgs = false,
+    skipConfirmation = false,
+  ) {
+    if (props.connections.length === 0) {
+      props.bakeToast(
+        new Toast(
+          "There are no connections to run the action configured.",
+          "transit-connection-variant",
+          ToastSeverity.Error,
+        ),
+      );
+      return;
+    }
+    // Action has to be copied so that the RunActionWizard can still modify its own version.
     setRunAction(structuredClone(action));
     setRunActionWizardSkipArgs(skipArgs);
+    setRunActionWizardSkipConfirmation(skipConfirmation);
     openRunActionWizard();
   }
 
@@ -148,6 +165,9 @@ export function R_Actions(props: ActionsProps) {
     requireConfirmation: boolean,
   ) {
     setRunActionWizardSkipArgs(false);
+    setRunActionWizardSkipConfirmation(false);
+    if (connections.length === 0)
+      throw new Error("No connections to dispatch the action were provided.");
     addRecentAction(action);
     const request = OutgoingRequest.createActionRequest(
       action,
@@ -167,7 +187,7 @@ export function R_Actions(props: ActionsProps) {
     if (someRequestFailed) {
       props.bakeToast(
         new Toast(
-          "Some action requests have failed. See the log for more info.",
+          "Some action webhook trigger requests have failed. See the log for more info.",
           "alert",
           ToastSeverity.Error,
         ),
@@ -175,7 +195,7 @@ export function R_Actions(props: ActionsProps) {
     } else {
       props.bakeToast(
         new Toast(
-          "Action was successfully requested on all connection webhooks.",
+          "Action webhook trigger was successfully requested for all connections.",
           "webhook",
           ToastSeverity.Success,
         ),
@@ -343,7 +363,7 @@ export function R_Actions(props: ActionsProps) {
         onConfigCustomActions={openCustomActionsWizard}
       />
       <R_RunActionWizard
-        bakeToast={props.bakeToast}
+        skipConfirmation={runActionWizardSkipConfirmation}
         skipArgs={runActionWizardSkipArgs}
         open={runActionWizardOpen}
         connections={props.connections}

@@ -6,7 +6,7 @@ import { forwardRef } from "react";
 
 interface ButtonProps {
   id?: string;
-  onClick: () => void;
+  onClick: () => unknown;
   iconId: string;
   title: string;
   text?: string;

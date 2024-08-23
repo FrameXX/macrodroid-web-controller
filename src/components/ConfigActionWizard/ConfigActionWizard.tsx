@@ -91,6 +91,8 @@ export function R_ConfigActionWizard(props: ConfigActionWizardProps) {
   }
 
   function reset() {
+    setFilterValue("");
+    if (filterValueInput.current) filterValueInput.current.value = "";
     clearActionSelection();
     setActivePageIndex(0);
     setSaveWithoutRunning(false);

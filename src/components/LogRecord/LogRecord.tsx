@@ -10,10 +10,11 @@ import { LogRecord, LogRecordType } from "../../modules/logger";
 
 interface LogRecordProps {
   record: LogRecord;
-  onConnectionNameClick: () => void;
-  onRequestIdClick?: () => void;
-  onCommentClick?: () => void;
-  onCopyText: () => void;
+  onConnectionNameClick: () => unknown;
+  onRequestIdClick?: () => unknown;
+  onCommentClick?: () => unknown;
+  onCopyText: () => unknown;
+  onCopyWebhookURL: () => unknown;
 }
 
 export function R_LogRecord(props: LogRecordProps) {
@@ -45,6 +46,12 @@ export function R_LogRecord(props: LogRecordProps) {
     if (!props.record.copyText) throw new Error("copyText is undefined");
     navigator.clipboard.writeText(props.record.copyText);
     props.onCopyText();
+  }
+
+  function copyURL() {
+    if (!props.record.webhookURL) throw new Error("copyURL is undefined");
+    navigator.clipboard.writeText(props.record.webhookURL);
+    props.onCopyWebhookURL();
   }
 
   return (
@@ -104,17 +111,23 @@ export function R_LogRecord(props: LogRecordProps) {
         </div>
         <div className="actions">
           <R_Button
+            hidden={!isTooLong}
+            onClick={() => setExpanded((prevExpaneded) => !prevExpaneded)}
+            title="Expand"
+            iconId="chevron-down"
+            iconUpsideDown={expanded}
+          />
+          <R_Button
             hidden={props.record.copyText === undefined}
             onClick={copyText}
             title="Copy text"
             iconId="content-copy"
           />
           <R_Button
-            hidden={!isTooLong}
-            onClick={() => setExpanded((prevExpaneded) => !prevExpaneded)}
-            title="Expand"
-            iconId="chevron-down"
-            iconUpsideDown={expanded}
+            hidden={props.record.webhookURL === undefined}
+            onClick={copyURL}
+            title="Copy webhook URL"
+            iconId="link-variant"
           />
         </div>
         <div hidden={expanded || !isTooLong} className="bottom-shade" />

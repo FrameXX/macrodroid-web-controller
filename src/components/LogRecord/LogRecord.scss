@@ -56,10 +56,11 @@
   }
 
   .actions {
+    height: fit-content;
     width: fit-content;
-    position: absolute;
-    top: 10px;
-    right: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
   }
 
   .bottom-shade {

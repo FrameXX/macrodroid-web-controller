@@ -655,7 +655,7 @@ export const ACTIONS: Action[] = [
   },
   {
     name: "Get clipboard text",
-    notice: "This action usually works only when the screen is on.",
+    notice: "This action usually works only when the screen is unlocked.",
     id: "get_clipboard_text",
     iconId: "clipboard-arrow-down",
     args: [],
