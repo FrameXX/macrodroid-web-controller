@@ -76,7 +76,8 @@ export function R_NotificationPermissionSplashBox(
       <br />
       <R_WarningCard hidden={status !== "Denied"}>
         Once you deny the notification permission you have to grant it manually
-        using the in-browser settings.
+        using in your web browser settings for this website. Some browser block
+        notification permission requests by default.
       </R_WarningCard>
       <R_Button
         title="Grant permission"
