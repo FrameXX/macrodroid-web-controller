@@ -7,6 +7,7 @@ import {
   Action,
   ActionArg,
   ActionsStruct,
+  parseActionArg,
   updateJSONString,
 } from "../../modules/action";
 import { BakeToast, Toast, ToastSeverity } from "../../modules/toaster";
@@ -28,7 +29,7 @@ import {
 import { R_CreateActionWizard } from "../CreateActionWizard/CreateActionWizard";
 import { R_CreateArgumentWizard } from "../CreateArgumentWizard/CreateArgumentWizard";
 import { moveElement } from "../../modules/misc";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { Confirm } from "../../modules/confirm_dialog";
 import { R_CustomActionsWizard } from "../CustomActionsWizard/CustomActionsWizard";
 
@@ -37,7 +38,9 @@ interface ActionsProps {
   bakeToast: BakeToast;
   log: Log;
   connections: Connection[];
+  connectionsRecovered: boolean;
   onRecoverError: (errorMessage: string, name: string) => void;
+  onDispatchActionFromURLParams: () => unknown;
 }
 
 export function R_Actions(props: ActionsProps) {
@@ -87,6 +90,104 @@ export function R_Actions(props: ActionsProps) {
     },
   });
 
+  useEffect(() => {
+    if (!props.connectionsRecovered) return;
+    if (isActionURLParamPresent()) dispatchActionFromURLParams();
+  }, [props.connectionsRecovered]);
+
+  function dispatchActionFromURLParams() {
+    let actionDispatchArgs: [Action, Connection[], boolean];
+    try {
+      actionDispatchArgs = parseActionURLParams();
+    } catch (error) {
+      if (error instanceof Error) {
+        props.bakeToast(
+          new Toast(
+            `Action URL parsing failed. ${error.message}`,
+            "alert",
+            ToastSeverity.Error,
+          ),
+        );
+      } else {
+        props.bakeToast(
+          new Toast(
+            `Action URL parsing failed. Unknown error.`,
+            "alert",
+            ToastSeverity.Error,
+          ),
+        );
+      }
+      return;
+    }
+    dispatchAction(...actionDispatchArgs);
+    props.onDispatchActionFromURLParams();
+  }
+
+  function isActionURLParamPresent() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const actionArg = urlParams.get("action");
+    return actionArg !== null;
+  }
+
+  function parseActionURLParams(): [Action, Connection[], boolean] {
+    const urlParams = new URLSearchParams(window.location.search);
+
+    function getAction() {
+      const actionId = urlParams.get("id");
+      if (!actionId) throw new Error("Action ID is missing from URL params.");
+      const matchingActionIndex = actions.findIndex((action) => {
+        return action.id === actionId;
+      });
+      if (matchingActionIndex === -1)
+        throw new Error("Action ID was not found in actions list.");
+      return structuredClone(actions[matchingActionIndex]);
+    }
+
+    function getConnections() {
+      const connectionIdsParam = urlParams.getAll("connectionId");
+      if (connectionIdsParam.length === 0)
+        throw new Error("Connection ID is missing from URL params.");
+      const connections: Connection[] = [];
+      for (const connectionId of connectionIdsParam) {
+        const matchingConnectionIndex = props.connections.findIndex(
+          (connection) => {
+            return connection.id === connectionId;
+          },
+        );
+        if (matchingConnectionIndex === -1)
+          throw new Error(
+            `Connection ID ${connectionId} was not found in connections list.`,
+          );
+        connections.push(props.connections[matchingConnectionIndex]);
+      }
+      return connections;
+    }
+
+    const action = getAction();
+    const connections = getConnections();
+
+    const requireConfirmationParam = urlParams.get("requireConfirmation");
+    const requireConfirmation =
+      requireConfirmationParam !== null
+        ? Boolean(requireConfirmationParam)
+        : false;
+
+    for (const argIndex in action.args) {
+      const id = action.args[argIndex].id;
+      const paramValue = urlParams.get(`arg_${id}`);
+      if (paramValue === null)
+        throw new Error(
+          `Action argument ${id} is missing from URL params. It should be present with "arg_" prefix.`,
+        );
+      action.args[argIndex].value = parseActionArg(
+        paramValue,
+        action.args[argIndex].type,
+      );
+    }
+
+    return [action, connections, requireConfirmation];
+  }
+
   function openConfigActionWizard() {
     setConfigActionWizardOpen(true);
   }
@@ -133,7 +234,7 @@ export function R_Actions(props: ActionsProps) {
       addSavedAction(action);
       setConfigActionWizardOpen(false);
     } else {
-      runRunActionWizard(action, true);
+      handleActionRunRequest(action, true);
     }
   }
 
@@ -142,16 +243,6 @@ export function R_Actions(props: ActionsProps) {
     skipArgs = false,
     skipConfirmation = false,
   ) {
-    if (props.connections.length === 0) {
-      props.bakeToast(
-        new Toast(
-          "There are no connections to run the action configured.",
-          "transit-connection-variant",
-          ToastSeverity.Error,
-        ),
-      );
-      return;
-    }
     // Action has to be copied so that the RunActionWizard can still modify its own version.
     setRunAction(structuredClone(action));
     setRunActionWizardSkipArgs(skipArgs);
@@ -164,8 +255,6 @@ export function R_Actions(props: ActionsProps) {
     connections: Connection[],
     requireConfirmation: boolean,
   ) {
-    setRunActionWizardSkipArgs(false);
-    setRunActionWizardSkipConfirmation(false);
     if (connections.length === 0)
       throw new Error("No connections to dispatch the action were provided.");
     addRecentAction(action);
@@ -204,6 +293,7 @@ export function R_Actions(props: ActionsProps) {
   }
 
   function addRecentAction(action: Action) {
+    updateJSONString(action);
     if (recentActions.length >= RECENT_ACTIONS_LIMIT)
       setRecentActions((recentActions) => {
         recentActions.pop();
@@ -309,6 +399,42 @@ export function R_Actions(props: ActionsProps) {
     });
   }
 
+  function handleConfirmRunAction(
+    action: Action,
+    connections: Connection[],
+    requireConfirmation: boolean,
+  ) {
+    closeConfigActionWizard();
+    closeRunActionWizard();
+    setRunActionWizardSkipArgs(false);
+    setRunActionWizardSkipConfirmation(false);
+    dispatchAction(action, connections, requireConfirmation);
+  }
+
+  function handleActionRunRequest(
+    action: Action,
+    skipArgs = false,
+    skipConfirmation = false,
+  ) {
+    if (props.connections.length === 0) {
+      props.bakeToast(
+        new Toast(
+          "There are no connections to run the action configured.",
+          "transit-connection-variant",
+          ToastSeverity.Error,
+        ),
+      );
+      return;
+    }
+
+    if (skipArgs && skipConfirmation && props.connections.length === 1) {
+      dispatchAction(action, props.connections, false);
+      return;
+    }
+
+    runRunActionWizard(action, skipArgs, skipConfirmation);
+  }
+
   return (
     <>
       <R_ExpandableCategory defaultOpen name="Saved" iconId="star">
@@ -324,7 +450,8 @@ export function R_Actions(props: ActionsProps) {
                 key={action.JSONstring}
                 name={action.name}
                 iconId={action.iconId}
-                onRun={() => runRunActionWizard(action, false)}
+                onRun={() => handleActionRunRequest(action, true, true)}
+                onRunWithOptions={() => handleActionRunRequest(action)}
               />
             ))}
           </AnimatePresence>
@@ -342,7 +469,8 @@ export function R_Actions(props: ActionsProps) {
                 key={action.JSONstring}
                 name={action.name}
                 iconId={action.iconId}
-                onRun={() => runRunActionWizard(action, false)}
+                onRun={() => handleActionRunRequest(action, true, true)}
+                onRunWithOptions={() => handleActionRunRequest(action)}
               />
             ))}
           </AnimatePresence>
@@ -368,11 +496,7 @@ export function R_Actions(props: ActionsProps) {
         open={runActionWizardOpen}
         connections={props.connections}
         onCancel={closeRunActionWizard}
-        onConfirmRunAction={(action, connections, requireConfirmation) => {
-          closeConfigActionWizard();
-          closeRunActionWizard();
-          dispatchAction(action, connections, requireConfirmation);
-        }}
+        onConfirmRunAction={handleConfirmRunAction}
         runAction={runAction}
       />
       <R_CustomActionsWizard

@@ -1,7 +1,7 @@
 import { useImmer } from "use-immer";
 import { R_Wizard } from "../Wizard/Wizard";
 import { R_FAB } from "../FAB/FAB";
-import { Action, updateJSONString } from "../../modules/action";
+import { Action } from "../../modules/action";
 import { Connection } from "../../modules/connection";
 import { useEffect, useMemo, useRef } from "react";
 import { R_BooleanOption } from "../BooleanOption/BooleanOption";
@@ -82,7 +82,6 @@ export function R_RunActionWizard(props: RunActionWizardProps) {
 
   function confirmRunAction() {
     if (!runAction.current) throw Error("Run action is not defined.");
-    updateJSONString(runAction.current);
     const connections = skipConnections
       ? [props.connections[0]]
       : selectedConnections;

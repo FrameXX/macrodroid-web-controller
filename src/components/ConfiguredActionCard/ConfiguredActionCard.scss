@@ -2,13 +2,40 @@
 
 .configured-action-card {
   @include card;
+  gap: 0;
   background-color: var(--color-surface-top);
-  display: flex;
-  align-items: center;
   width: 100%;
   max-width: var(--tab-items-max-width);
+  display: flex;
+  flex-direction: column;
+
+  .content {
+    display: flex;
+    align-items: center;
+  }
 
   .name {
     width: 100%;
+  }
+
+  .gap {
+    height: 10px;
+  }
+
+  .more-actions-container {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .more-actions {
+    display: flex;
+    flex-wrap: wrap-reverse;
+    gap: 12px;
+    justify-content: end;
+    width: 100%;
+
+    .button {
+      margin: 0;
+    }
   }
 }

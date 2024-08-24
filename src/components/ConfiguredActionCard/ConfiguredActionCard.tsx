@@ -7,13 +7,16 @@ import {
 } from "../../modules/const";
 import { R_Button } from "../Button/Button";
 import { useDefaultProps } from "../../modules/use_default_props";
+import { R_Accordion } from "../Accordion/Accordion";
+import { useImmer } from "use-immer";
 
 interface ActionCardProps {
   saved?: boolean;
   name: string;
   iconId: string;
-  onToggleSave: () => void;
-  onRun: () => void;
+  onToggleSave: () => unknown;
+  onRun: () => unknown;
+  onRunWithOptions: () => unknown;
 }
 
 const defaultProps: Partial<ActionCardProps> = {
@@ -22,6 +25,8 @@ const defaultProps: Partial<ActionCardProps> = {
 
 export function R_ConfiguredActionCard(requiredProps: ActionCardProps) {
   const props = useDefaultProps(requiredProps, defaultProps);
+  const [showMoreActions, setShowMoreActions] = useImmer(false);
+  const saveButtonText = props.saved ? "Unsave" : "Save";
   const saveButtonTitle = props.saved
     ? `Unsave action ${props.name}`
     : `Save action ${props.name}`;
@@ -36,18 +41,49 @@ export function R_ConfiguredActionCard(requiredProps: ActionCardProps) {
       title={props.name}
       className="configured-action-card"
     >
-      <R_Icon iconId={props.iconId} />
-      <div className="name">{props.name}</div>
-      <R_Button
-        onClick={props.onToggleSave}
-        iconId={saveButtonIcondId}
-        title={saveButtonTitle}
-      />
-      <R_Button
-        onClick={props.onRun}
-        title={`Run action ${props.name}`}
-        iconId="play"
-      />
+      <div className="content">
+        <R_Icon iconId={props.iconId} />
+        <div className="name">{props.name}</div>
+        <R_Button
+          onClick={() => setShowMoreActions(!showMoreActions)}
+          iconId="dots-vertical"
+          title={`Show more actions for action ${props.name}`}
+        />
+        <R_Button
+          onClick={props.onRun}
+          title={`Quickly run action ${props.name}`}
+          iconId="play-outline"
+        />
+      </div>
+      <R_Accordion open={showMoreActions} className="more-actions-container">
+        <div className="gap" />
+        <div className="more-actions">
+          <R_Button
+            iconId="link-variant"
+            title={`Create link to action ${props.name}`}
+            text="Create link"
+            onClick={() => {}}
+          />
+          <R_Button
+            onClick={() => {
+              props.onToggleSave();
+              setShowMoreActions(false);
+            }}
+            iconId={saveButtonIcondId}
+            title={saveButtonTitle}
+            text={saveButtonText}
+          />
+          <R_Button
+            onClick={() => {
+              props.onRunWithOptions();
+              setShowMoreActions(false);
+            }}
+            title={`Run action ${props.name} with options`}
+            text="Run with options"
+            iconId="play"
+          />
+        </div>
+      </R_Accordion>
     </motion.div>
   );
 }

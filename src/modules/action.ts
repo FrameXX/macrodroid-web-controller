@@ -1,5 +1,22 @@
 import { array, number, object, optional, string, unknown } from "superstruct";
 
+export function parseActionArg(arg: string, type: ActionArgType) {
+  switch (type) {
+    case ActionArgType.Boolean:
+      return Boolean(arg);
+    case ActionArgType.Integer:
+      return parseInt(arg);
+    case ActionArgType.Selection:
+      return parseInt(arg);
+    case ActionArgType.String:
+      return arg;
+    case ActionArgType.MultiLineString:
+      return arg;
+    case ActionArgType.Decimal:
+      return parseFloat(arg);
+  }
+}
+
 export function updateJSONString(action: Action) {
   action.JSONstring = undefined;
   action.JSONstring = JSON.stringify(action);

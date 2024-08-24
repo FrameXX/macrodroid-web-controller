@@ -2,7 +2,7 @@
 
 .magic-text-entry {
   @include card;
-  text-align: left;
+  text-align: start;
   background-color: var(--color-surface-top);
   max-width: var(--tab-items-max-width);
   width: 100%;

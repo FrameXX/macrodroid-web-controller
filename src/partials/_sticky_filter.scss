@@ -2,7 +2,7 @@
 
 .sticky-filter {
   @include card;
-  text-align: left;
+  text-align: start;
   gap: 8px;
   display: flex;
   justify-content: center;

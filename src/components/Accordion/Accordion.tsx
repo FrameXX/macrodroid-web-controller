@@ -33,7 +33,7 @@ export function R_Accordion(requiredProps: AccordionProps) {
     y: props.open || !fullSqueeze ? 0 : -DEFAULT_TRANSITION_TRANSLATE_PX,
     opacity: props.open || !fullSqueeze ? 1 : 0,
     visibility: props.open || !fullSqueeze ? "visible" : "hidden",
-    overflow: props.open || !fullSqueeze ? "visible" : "hidden",
+    overflow: props.open ? "visible" : "hidden",
   };
 
   return (

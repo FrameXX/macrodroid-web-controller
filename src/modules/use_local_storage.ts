@@ -18,14 +18,19 @@ export function useLocalStorage<T>(
   state: T,
   setState: (newState: T) => void,
   storeConfig: StoreConfig<T>,
+  onRecoverFinished?: () => unknown,
 ): ManualSave<T> {
   const firstRender = useRef(true);
 
   useEffect(() => {
     if (!firstRender.current) return;
-    if (!navigator.cookieEnabled) return;
+    if (!navigator.cookieEnabled) {
+      if (onRecoverFinished) onRecoverFinished();
+      return;
+    }
     const recovered = recover<T>(storeConfig);
     if (recovered !== null) setState(recovered);
+    if (onRecoverFinished) onRecoverFinished();
   }, []);
 
   useEffect(() => {

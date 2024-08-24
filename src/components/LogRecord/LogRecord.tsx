@@ -25,7 +25,7 @@ export function R_LogRecord(props: LogRecordProps) {
   } as const;
   const iconId = iconIdMap[props.record.type];
   const isTooLong = props.record.filterString.length > 340;
-  const closedHeight = isTooLong ? 150 : "auto";
+  const closedHeight = isTooLong ? 200 : "auto";
   const [expanded, setExpanded] = useImmer(false);
 
   function renderMultiLineString(string: string) {

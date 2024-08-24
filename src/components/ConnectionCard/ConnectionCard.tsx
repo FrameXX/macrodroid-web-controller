@@ -51,7 +51,7 @@ export function R_Connection(props: ConnectionProps) {
           </div>
         </div>
         <R_Button
-          title={`Delete ${props.name}`}
+          title={`Delete connection ${props.name}`}
           iconId="delete-forever"
           onClick={props.onDelete}
         />

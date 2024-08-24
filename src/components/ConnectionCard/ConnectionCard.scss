@@ -3,7 +3,7 @@
 .connection-card {
   @include card;
   @include surface-top;
-  text-align: left;
+  text-align: start;
   display: flex;
   align-items: start;
   break-inside: avoid;

@@ -58,6 +58,7 @@ export function R_App() {
     new ConfirmDialog(setConfirmDialogOpen, setConfirmDialogText),
   );
   const logScrollableContainer = useRef<HTMLDivElement>(null);
+  const connectionsRecovered = useRef(false);
 
   useEffect(() => {
     if (!navigator.cookieEnabled)
@@ -107,6 +108,9 @@ export function R_App() {
             ),
         ),
     },
+    () => {
+      connectionsRecovered.current = true;
+    },
   );
 
   useLocalStorage(activeNavTabId, setActiveNavTabId, {
@@ -125,7 +129,7 @@ export function R_App() {
   });
 
   useEffect(() => {
-    if (isCompanionURLArgPresent()) redirectToCompanionMacroWizard();
+    if (isCompanionURLParamPresent()) redirectToCompanionMacroWizard();
     addLogScrollableContainerListener();
   }, []);
 
@@ -157,7 +161,7 @@ export function R_App() {
     });
   }
 
-  function isCompanionURLArgPresent() {
+  function isCompanionURLParamPresent() {
     const urlParams = new URLSearchParams(window.location.search);
     const companionArg = urlParams.get("companion");
     return companionArg !== null;
@@ -485,8 +489,12 @@ export function R_App() {
           </R_Tab>
           <R_Tab active={isTabActive(NavTabId.Actions)}>
             <R_Actions
+              onDispatchActionFromURLParams={() =>
+                setActiveNavTabId(NavTabId.Log)
+              }
               onRecoverError={onRecoverError}
               connections={connections}
+              connectionsRecovered={connectionsRecovered.current}
               log={log}
               bakeToast={bakeToast}
               confirm={confirm}

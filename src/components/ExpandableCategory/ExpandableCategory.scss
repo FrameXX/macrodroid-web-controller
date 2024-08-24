@@ -7,7 +7,7 @@
   .head {
     @include card;
 
-    text-align: left;
+    text-align: start;
     display: flex;
     align-items: center;
     color: var(--color-primary-item);
