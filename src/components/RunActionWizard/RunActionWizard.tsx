@@ -59,6 +59,7 @@ export function R_RunActionWizard(props: RunActionWizardProps) {
   }, [props.runAction]);
 
   useKey("Escape", () => {
+    if (!props.open) return;
     if (activePageIndex === 0) {
       props.onCancel();
     } else {

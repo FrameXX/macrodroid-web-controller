@@ -34,6 +34,7 @@ export function R_Accordion(requiredProps: AccordionProps) {
     opacity: props.open || !fullSqueeze ? 1 : 0,
     visibility: props.open || !fullSqueeze ? "visible" : "hidden",
     overflow: props.open ? "visible" : "hidden",
+    pointerEvents: props.open || !fullSqueeze ? "auto" : "none",
   };
 
   return (

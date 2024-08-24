@@ -257,6 +257,9 @@ export function R_Actions(props: ActionsProps) {
   ) {
     if (connections.length === 0)
       throw new Error("No connections to dispatch the action were provided.");
+    props.bakeToast(
+      new Toast("Dispatching action.", "play", ToastSeverity.Info),
+    );
     addRecentAction(action);
     const request = OutgoingRequest.createActionRequest(
       action,
