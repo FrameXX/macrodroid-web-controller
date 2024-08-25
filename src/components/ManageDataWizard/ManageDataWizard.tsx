@@ -14,7 +14,7 @@ import {
   RECENT_ACTIONS_STORAGE_KEY,
   SAVED_ACTIONS_STORAGE_KEY,
 } from "../../modules/const";
-import { BakeToast, Toast, ToastSeverity } from "../../modules/toaster";
+import { BakeToast, ToastSeverity } from "../../modules/toaster";
 import { array, assert, size, string } from "superstruct";
 
 interface ManageDataWizardProps {
@@ -97,7 +97,10 @@ export function R_ManageDataWizard(props: ManageDataWizardProps) {
   async function importData() {
     const file = await requestFile();
     if (!file) {
-      props.bakeToast(new Toast("File import was canceled.", "file-cancel"));
+      props.bakeToast({
+        message: "File import was canceled.",
+        iconId: "file-cancel",
+      });
       return;
     }
 
@@ -111,9 +114,11 @@ export function R_ManageDataWizard(props: ManageDataWizardProps) {
       } else {
         errorMessage = "Failed to read file. Unknown error.";
       }
-      props.bakeToast(
-        new Toast(errorMessage, "file-alert", ToastSeverity.Error),
-      );
+      props.bakeToast({
+        message: errorMessage,
+        iconId: "file-alert",
+        severity: ToastSeverity.Error,
+      });
       return;
     }
 
@@ -127,9 +132,11 @@ export function R_ManageDataWizard(props: ManageDataWizardProps) {
       } else {
         errorMessage = "Failed to parse file data. Unknown error.";
       }
-      props.bakeToast(
-        new Toast(errorMessage, "file-alert", ToastSeverity.Error),
-      );
+      props.bakeToast({
+        message: errorMessage,
+        iconId: "file-alert",
+        severity: ToastSeverity.Error,
+      });
       return;
     }
 
@@ -143,9 +150,11 @@ export function R_ManageDataWizard(props: ManageDataWizardProps) {
         errorMessage =
           "The file structure could not be verified. Unknown error.";
       }
-      props.bakeToast(
-        new Toast(errorMessage, "file-alert", ToastSeverity.Error),
-      );
+      props.bakeToast({
+        message: errorMessage,
+        iconId: "file-alert",
+        severity: ToastSeverity.Error,
+      });
       return;
     }
 

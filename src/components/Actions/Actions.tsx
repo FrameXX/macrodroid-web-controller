@@ -10,7 +10,7 @@ import {
   parseActionArg,
   updateJSONString,
 } from "../../modules/action";
-import { BakeToast, Toast, ToastSeverity } from "../../modules/toaster";
+import { BakeToast, ToastSeverity } from "../../modules/toaster";
 import { AnimatePresence } from "framer-motion";
 import { R_ConfiguredActionCard } from "../ConfiguredActionCard/ConfiguredActionCard";
 import "./Actions.scss";
@@ -106,21 +106,17 @@ export function R_Actions(props: ActionsProps) {
       actionDispatchArgs = parseActionURLParams();
     } catch (error) {
       if (error instanceof Error) {
-        props.bakeToast(
-          new Toast(
-            `Action URL parsing failed. ${error.message}`,
-            "alert",
-            ToastSeverity.Error,
-          ),
-        );
+        props.bakeToast({
+          message: `Action URL parsing failed. ${error.message}`,
+          iconId: "alert",
+          severity: ToastSeverity.Error,
+        });
       } else {
-        props.bakeToast(
-          new Toast(
-            `Action URL parsing failed. Unknown error.`,
-            "alert",
-            ToastSeverity.Error,
-          ),
-        );
+        props.bakeToast({
+          message: `Action URL parsing failed. Unknown error.`,
+          iconId: "alert",
+          severity: ToastSeverity.Error,
+        });
       }
       return;
     }
@@ -269,9 +265,7 @@ export function R_Actions(props: ActionsProps) {
   ) {
     if (connections.length === 0)
       throw new Error("No connections to dispatch the action were provided.");
-    props.bakeToast(
-      new Toast("Dispatching action.", "play", ToastSeverity.Info),
-    );
+    props.bakeToast({ message: "Dispatching action.", iconId: "play" });
     addRecentAction(action);
     const request = OutgoingRequest.createActionRequest(
       action,
@@ -289,21 +283,19 @@ export function R_Actions(props: ActionsProps) {
         (requestLog) => typeof requestLog.errorMessage !== "undefined",
       ) !== -1;
     if (someRequestFailed) {
-      props.bakeToast(
-        new Toast(
+      props.bakeToast({
+        message:
           "Some action webhook trigger requests have failed. See the log for more info.",
-          "alert",
-          ToastSeverity.Error,
-        ),
-      );
+        iconId: "alert",
+        severity: ToastSeverity.Error,
+      });
     } else {
-      props.bakeToast(
-        new Toast(
+      props.bakeToast({
+        message:
           "Action webhook trigger was successfully requested for all connections.",
-          "webhook",
-          ToastSeverity.Success,
-        ),
-      );
+        iconId: "webhook",
+        severity: ToastSeverity.Success,
+      });
     }
   }
 
@@ -338,20 +330,19 @@ export function R_Actions(props: ActionsProps) {
       return savedAction.JSONstring === action.JSONstring;
     });
     if (sameActions.length > 0) {
-      props.bakeToast(
-        new Toast(
+      props.bakeToast({
+        message:
           "Saving cancelled. You already have the same action with the same configuration saved.",
-          "cancel",
-          ToastSeverity.Error,
-        ),
-      );
+        iconId: "cancel",
+        severity: ToastSeverity.Error,
+      });
       return;
     }
     setSavedActions((savedActions) => {
       savedActions.push(action);
       return savedActions;
     });
-    props.bakeToast(new Toast("Action saved.", "star", ToastSeverity.Success));
+    props.bakeToast({ message: "Action saved.", iconId: "star" });
   }
 
   function unsaveAction(index: number) {
@@ -428,13 +419,11 @@ export function R_Actions(props: ActionsProps) {
 
   function handleActionLinkCreationRequest(action: Action) {
     if (props.connections.length === 0) {
-      props.bakeToast(
-        new Toast(
-          "There are no connections to that the link could target.",
-          "transit-connection-variant",
-          ToastSeverity.Error,
-        ),
-      );
+      props.bakeToast({
+        message: "There are no connections to that the link could target.",
+        iconId: "transit-connection-variant",
+        severity: ToastSeverity.Error,
+      });
       return;
     }
     openCreateActionLinkWizard(action);
@@ -446,13 +435,11 @@ export function R_Actions(props: ActionsProps) {
     skipConfirmation = false,
   ) {
     if (props.connections.length === 0) {
-      props.bakeToast(
-        new Toast(
-          "There are no connections to run the action configured.",
-          "transit-connection-variant",
-          ToastSeverity.Error,
-        ),
-      );
+      props.bakeToast({
+        message: "There are no connections to run the action configured.",
+        iconId: "transit-connection-variant",
+        severity: ToastSeverity.Error,
+      });
       return;
     }
 

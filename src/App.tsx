@@ -1,5 +1,10 @@
 import { useEffect, useRef } from "react";
-import { Toast, ToastSeverity, Toaster } from "./modules/toaster";
+import {
+  Toast,
+  ToastInitializer,
+  ToastSeverity,
+  Toaster,
+} from "./modules/toaster";
 import { R_Toaster } from "./components/Toaster/Toaster";
 import "./App.scss";
 import { R_Nav } from "./components/Nav/Nav";
@@ -62,13 +67,12 @@ export function R_App() {
 
   useEffect(() => {
     if (!navigator.cookieEnabled)
-      bakeToast(
-        new Toast(
+      bakeToast({
+        message:
           "Cookies are disabled. No current changes will be restored in the next session. Some functionality may be crippled.",
-          "cookie-remove",
-          ToastSeverity.Error,
-        ),
-      );
+        iconId: "cookie-remove",
+        severity: ToastSeverity.Error,
+      });
   }, []);
 
   useLocalStorage(logRecords, setLogRecords, {
@@ -195,7 +199,11 @@ export function R_App() {
 
   function onRecoverError(errorMessage: string, name: string) {
     const text = `Failed to recover ${name}. ${errorMessage}`;
-    bakeToast(new Toast(text, "alert", ToastSeverity.Error));
+    bakeToast({
+      message: text,
+      iconId: "alert",
+      severity: ToastSeverity.Error,
+    });
     console.error(text);
   }
 
@@ -254,9 +262,7 @@ export function R_App() {
     connectionName: string,
   ) {
     const message = request.createInfoMessage(connectionName, outgoingComment);
-    bakeToast(
-      new Toast(message, "transit-connection-variant", ToastSeverity.Info),
-    );
+    bakeToast({ message, iconId: "transit-connection-variant" });
   }
 
   function notifyIncomingRequest(
@@ -348,13 +354,11 @@ export function R_App() {
       log(requestLog);
 
       if (requestLog.errorMessage) {
-        bakeToast(
-          new Toast(
-            `Failed to confirm text share request. ${requestLog.errorMessage}`,
-            "alert",
-            ToastSeverity.Error,
-          ),
-        );
+        bakeToast({
+          message: `Failed to confirm text share request. ${requestLog.errorMessage}`,
+          iconId: "alert",
+          severity: ToastSeverity.Error,
+        });
       }
     }
 
@@ -369,13 +373,11 @@ export function R_App() {
       log(requestLog);
 
       if (requestLog.errorMessage) {
-        bakeToast(
-          new Toast(
-            `Failed to confirm notification request. ${requestLog.errorMessage}`,
-            "alert",
-            ToastSeverity.Error,
-          ),
-        );
+        bakeToast({
+          message: `Failed to confirm notification request. ${requestLog.errorMessage}`,
+          iconId: "alert",
+          severity: ToastSeverity.Error,
+        });
       }
     }
   }
@@ -384,13 +386,11 @@ export function R_App() {
     errorMessage: string,
     connection: Connection,
   ) {
-    bakeToast(
-      new Toast(
-        `An incoming request with an invalid structure was received. ${errorMessage}`,
-        "alert",
-        ToastSeverity.Error,
-      ),
-    );
+    bakeToast({
+      message: `An incoming request with an invalid structure was received. ${errorMessage}`,
+      iconId: "alert",
+      severity: ToastSeverity.Error,
+    });
     log({
       comment: "Invalid request",
       connectionName: connection.name,
@@ -414,19 +414,21 @@ export function R_App() {
     reportConnectionListenerHealthiness(connectionIndex, false);
     const connection = connections[connectionIndex];
     const errorMessage = `Connection ${connection.name} listener was suspended or failed.`;
-    bakeToast(new Toast(errorMessage, "alert", ToastSeverity.Error));
+    bakeToast({
+      message: errorMessage,
+      iconId: "alert",
+      severity: ToastSeverity.Error,
+    });
   }
 
   function handleListenSucceeded(connectionIndex: number) {
     const connection = connections[connectionIndex];
     if (!connection.listenerHealthy) {
-      bakeToast(
-        new Toast(
-          `Connection ${connection.name} listener was reestablished.`,
-          "transit-connection-variant",
-          ToastSeverity.Success,
-        ),
-      );
+      bakeToast({
+        message: `Connection ${connection.name} listener was reestablished.`,
+        iconId: "transit-connection-variant",
+        severity: ToastSeverity.Success,
+      });
     }
     reportConnectionListenerHealthiness(connectionIndex, true);
   }
@@ -452,8 +454,8 @@ export function R_App() {
     setCompanionMacroWizardOpen(true);
   }
 
-  function bakeToast(toast: Toast) {
-    toaster.current.bake(toast);
+  function bakeToast(toastInitializer: ToastInitializer) {
+    toaster.current.bake(toastInitializer);
   }
 
   function log(record: LogRecordInitializer) {

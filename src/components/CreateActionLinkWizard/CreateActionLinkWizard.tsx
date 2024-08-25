@@ -14,7 +14,7 @@ import {
 import { Random } from "../../modules/random";
 import { OutgoingRequestType } from "../../modules/outgoing_request";
 import { R_Button } from "../Button/Button";
-import { BakeToast, Toast, ToastSeverity } from "../../modules/toaster";
+import { BakeToast } from "../../modules/toaster";
 import "./CreateActionLinkWizard.scss";
 import { useKey } from "../../modules/use_key";
 import { R_InfoCard } from "../InfoCard/InfoCard";
@@ -111,9 +111,7 @@ export function R_CreateActionLinkWizard(props: CreateActionLinkWizardProps) {
 
   function copyLink() {
     navigator.clipboard.writeText(link);
-    props.bakeToast(
-      new Toast("Link copied.", "content-copy", ToastSeverity.Info),
-    );
+    props.bakeToast({ message: "Link copied.", iconId: "content-copy" });
   }
 
   function generateInteractiveLink(

@@ -3,7 +3,7 @@ import { R_Button } from "../Button/Button";
 import { R_Icon } from "../Icon/Icon";
 import { R_SplashBox } from "../SplashBox/SplashBox";
 import "./NotificationPermissionSplashBox.scss";
-import { BakeToast, Toast, ToastSeverity } from "../../modules/toaster";
+import { BakeToast } from "../../modules/toaster";
 import { R_WarningCard } from "../WarningCard/WarningCard";
 import { R_SimpleCard } from "../SimpleCard/SimpleCard";
 
@@ -32,32 +32,24 @@ export function R_NotificationPermissionSplashBox(
 
   async function request() {
     if (Notification.permission === "granted") {
-      props.bakeToast(
-        new Toast(
-          "The Notification permission is already granted.",
-          "transit-connection-variant",
-        ),
-      );
+      props.bakeToast({
+        message: "The Notification permission is already granted.",
+        iconId: "transit-connection-variant",
+      });
       return;
     }
     const granted = await Notification.requestPermission();
     setStatus(getStatus());
     if (granted === "granted") {
-      props.bakeToast(
-        new Toast(
-          "Notification permission granted.",
-          "check",
-          ToastSeverity.Info,
-        ),
-      );
+      props.bakeToast({
+        message: "Notification permission granted.",
+        iconId: "check",
+      });
     } else {
-      props.bakeToast(
-        new Toast(
-          "Notification permission denied.",
-          "close",
-          ToastSeverity.Info,
-        ),
-      );
+      props.bakeToast({
+        message: "Notification permission denied.",
+        iconId: "close",
+      });
     }
   }
 

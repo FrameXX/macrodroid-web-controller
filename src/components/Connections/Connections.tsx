@@ -4,7 +4,7 @@ import { R_Connection } from "../ConnectionCard/ConnectionCard";
 import { R_FAB } from "../FAB/FAB";
 import { R_CreateConnectionWizard } from "../CreateConnectionWizard/CreateConnectionWizard";
 import { Connection } from "../../modules/connection";
-import { BakeToast, Toast, ToastSeverity } from "../../modules/toaster";
+import { BakeToast, ToastSeverity } from "../../modules/toaster";
 import { LogRecordInitializer } from "../../modules/logger";
 import { OutgoingRequest } from "../../modules/outgoing_request";
 import { useImmer } from "use-immer";
@@ -36,32 +36,26 @@ export function R_Connections(props: ConnectionsProps) {
 
   async function pokeConnection(connection: Connection) {
     const request = OutgoingRequest.createPokeRequest();
-    props.bakeToast(
-      new Toast(
-        "Making connection confirmation request.",
-        "message-arrow-right",
-      ),
-    );
+    props.bakeToast({
+      message: "Making connection confirmation request.",
+      iconId: "message-arrow-right",
+    });
     const requestLog = await connection.makeRequest(request);
     props.log(requestLog);
 
     if (requestLog.errorMessage) {
-      props.bakeToast(
-        new Toast(
-          `Failed to request connection confirmation webhook. ${requestLog.errorMessage}`,
-          "alert",
-          ToastSeverity.Error,
-        ),
-      );
+      props.bakeToast({
+        message: `Failed to request connection confirmation webhook. ${requestLog.errorMessage}`,
+        iconId: "alert",
+        severity: ToastSeverity.Error,
+      });
       return;
     } else {
-      props.bakeToast(
-        new Toast(
-          "Connection confirmation webhook requested.",
-          "webhook",
-          ToastSeverity.Success,
-        ),
-      );
+      props.bakeToast({
+        message: "Connection confirmation webhook requested.",
+        iconId: "webhook",
+        severity: ToastSeverity.Success,
+      });
     }
   }
 

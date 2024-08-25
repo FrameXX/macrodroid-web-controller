@@ -8,7 +8,7 @@ import { AnimatePresence } from "framer-motion";
 import { R_SearchInput } from "../SearchInput/SearchInput";
 import { useImmer } from "use-immer";
 import { R_Icon } from "../Icon/Icon";
-import { BakeToast, Toast } from "../../modules/toaster";
+import { BakeToast } from "../../modules/toaster";
 import { R_InfoCard } from "../InfoCard/InfoCard";
 import { useKey } from "../../modules/use_key";
 import { R_MultiColList } from "../MultiColList/MultiColList";
@@ -64,9 +64,10 @@ export function R_MagicTextCheatSheetWizard(
               {filteredEntries.map((entry) => (
                 <R_MagicTextEntry
                   onCopy={() =>
-                    props.bakeToast(
-                      new Toast("Copied to clipboard.", "content-copy"),
-                    )
+                    props.bakeToast({
+                      message: "Copied to clipboard.",
+                      iconId: "content-copy",
+                    })
                   }
                   title={entry.title}
                   magicText={entry.magicText}

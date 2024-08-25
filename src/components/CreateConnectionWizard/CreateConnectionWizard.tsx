@@ -6,7 +6,7 @@ import {
   CONFIRM_CONNECTION_REQUEST_COMMENT,
   MACRODROID_APP_URL,
 } from "../../modules/const";
-import { BakeToast, Toast, ToastSeverity } from "../../modules/toaster";
+import { BakeToast, ToastSeverity } from "../../modules/toaster";
 import { Connection } from "../../modules/connection";
 import {
   IncomingRequest,
@@ -76,13 +76,11 @@ export function R_CreateConnectionWizard(props: AddConnectionWizardProps) {
     connection.lastActivityTimestamp = Date.now();
     connection.removeRequestListeners();
     props.onConnectionConfirm(connection);
-    props.bakeToast(
-      new Toast(
-        "Connection was confirmed and added.",
-        "transit-connection-variant",
-        ToastSeverity.Success,
-      ),
-    );
+    props.bakeToast({
+      message: "Connection was confirmed and added.",
+      iconId: "transit-connection-variant",
+      severity: ToastSeverity.Success,
+    });
     reset();
   }
 
@@ -90,7 +88,10 @@ export function R_CreateConnectionWizard(props: AddConnectionWizardProps) {
     if (!lastConnection) return;
     lastConnection.closeReceiver();
     lastConnection.removeRequestListeners();
-    props.bakeToast(new Toast("Connection initialization canceled.", "cancel"));
+    props.bakeToast({
+      message: "Connection initialization canceled.",
+      iconId: "cancel",
+    });
   }
 
   function cantNextPage() {
@@ -106,31 +107,26 @@ export function R_CreateConnectionWizard(props: AddConnectionWizardProps) {
 
     const request = OutgoingRequest.createAddConnectionRequest();
     setConnectionAddRequestId(request.id);
-    props.bakeToast(
-      new Toast(
-        "Making connection confirmation request.",
-        "message-arrow-right",
-      ),
-    );
+    props.bakeToast({
+      message: "Making connection confirmation request.",
+      iconId: "message-arrow-right",
+    });
     const requestLog = await connection.makeRequest(request);
     props.log(requestLog);
 
     if (requestLog.errorMessage) {
-      props.bakeToast(
-        new Toast(
-          `Failed to request connection creation confirmation. ${requestLog.errorMessage}`,
-          "alert",
-          ToastSeverity.Error,
-        ),
-      );
+      props.bakeToast({
+        message: `Failed to request connection creation confirmation. ${requestLog.errorMessage}`,
+        iconId: "alert",
+        severity: ToastSeverity.Error,
+      });
     } else {
-      props.bakeToast(
-        new Toast(
+      props.bakeToast({
+        message:
           "Connection creation confirmation requested. Waiting for response.",
-          "transit-connection-variant",
-          ToastSeverity.Success,
-        ),
-      );
+        iconId: "transit-connection-variant",
+        severity: ToastSeverity.Success,
+      });
     }
 
     connection.openReceiver();
@@ -144,13 +140,11 @@ export function R_CreateConnectionWizard(props: AddConnectionWizardProps) {
   }
 
   function handleListenFailed() {
-    props.bakeToast(
-      new Toast(
-        "Failed to listen for incoming requests.",
-        "alert",
-        ToastSeverity.Error,
-      ),
-    );
+    props.bakeToast({
+      message: "Failed to listen for incoming requests.",
+      iconId: "alert",
+      severity: ToastSeverity.Error,
+    });
   }
 
   function handleInvalidConfirmationRequest(
@@ -158,7 +152,11 @@ export function R_CreateConnectionWizard(props: AddConnectionWizardProps) {
     connectionName: string,
     requestId: string,
   ) {
-    props.bakeToast(new Toast(errorMessage, "alert", ToastSeverity.Error));
+    props.bakeToast({
+      message: errorMessage,
+      iconId: "alert",
+      severity: ToastSeverity.Error,
+    });
     props.log({
       comment: "Invalid request",
       connectionName: connectionName,

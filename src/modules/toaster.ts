@@ -6,7 +6,7 @@ import {
   TOAST_START_DELAY_MS,
 } from "./const";
 
-export type BakeToast = (toast: Toast) => void;
+export type BakeToast = (toastInitializer: ToastInitializer) => void;
 
 export enum ToastSeverity {
   Success = "success",
@@ -66,7 +66,25 @@ export class Toaster {
     this.updateToasts();
   }
 
-  public bake(toast: Toast) {
+  public bake(toastInitializer: ToastInitializer) {
+    const readingDurationMs = toastInitializer.readingDurationMs
+      ? toastInitializer.readingDurationMs
+      : TOAST_START_DELAY_MS +
+        toastInitializer.message.length * TOAST_MS_PER_CHAR;
+
+    if (readingDurationMs <= 0)
+      throw new RangeError(
+        "The toast reading duration has to be a positive number.",
+      );
+
+    const toast: Toast = {
+      message: toastInitializer.message,
+      iconId: toastInitializer.iconId,
+      severity: toastInitializer.severity || ToastSeverity.Info,
+      readingDurationMs,
+      id: Random.id(),
+    };
+
     if (this.isFull) {
       this.clearToastReadingTimeout();
       this.removeMostBakedToast();
@@ -77,25 +95,13 @@ export class Toaster {
   }
 }
 
-export class Toast {
-  public readonly readingDurationMs: number;
-  public readonly id: number = Random.id();
+export interface ToastInitializer {
+  message: string;
+  iconId: string;
+  severity?: ToastSeverity;
+  readingDurationMs?: number;
+}
 
-  constructor(
-    public readonly message: string,
-    public readonly iconId: string,
-    public readonly severity: ToastSeverity = ToastSeverity.Info,
-    readingDurationMs?: number,
-  ) {
-    if (!readingDurationMs) {
-      this.readingDurationMs =
-        TOAST_START_DELAY_MS + message.length * TOAST_MS_PER_CHAR;
-      return;
-    }
-    if (readingDurationMs < 0)
-      throw new RangeError(
-        "The toast reading duration has to be a positive number.",
-      );
-    this.readingDurationMs = readingDurationMs;
-  }
+export interface Toast extends Required<ToastInitializer> {
+  id: number;
 }

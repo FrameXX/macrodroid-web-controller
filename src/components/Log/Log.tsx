@@ -12,7 +12,7 @@ import { LogRecord } from "../../modules/logger";
 import { R_Button } from "../Button/Button";
 import { Confirm } from "../../modules/confirm_dialog";
 import { R_SearchInput } from "../SearchInput/SearchInput";
-import { BakeToast, Toast } from "../../modules/toaster";
+import { BakeToast } from "../../modules/toaster";
 import { useKey } from "../../modules/use_key";
 
 interface LogProps {
@@ -166,12 +166,16 @@ export function R_Log(props: LogProps) {
                 key={record.id}
                 record={record}
                 onCopyText={() =>
-                  props.bakeToast(new Toast("Text copied.", "content-copy"))
+                  props.bakeToast({
+                    message: "Text copied.",
+                    iconId: "content-copy",
+                  })
                 }
                 onCopyWebhookURL={() =>
-                  props.bakeToast(
-                    new Toast("Webhook URL copied.", "content-copy"),
-                  )
+                  props.bakeToast({
+                    message: "Webhook URL copied.",
+                    iconId: "content-copy",
+                  })
                 }
               />
             );
