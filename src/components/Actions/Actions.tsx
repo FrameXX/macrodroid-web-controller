@@ -24,6 +24,7 @@ import {
   CUSTOM_ACTIONS_STORAGE_KEY,
   RECENT_ACTIONS_LIMIT,
   RECENT_ACTIONS_STORAGE_KEY,
+  REQUIRE_CONFIRMATION_PARAM_NAME,
   SAVED_ACTIONS_STORAGE_KEY,
 } from "../../modules/const";
 import { R_CreateActionWizard } from "../CreateActionWizard/CreateActionWizard";
@@ -32,6 +33,7 @@ import { moveElement } from "../../modules/misc";
 import { useEffect, useMemo } from "react";
 import { Confirm } from "../../modules/confirm_dialog";
 import { R_CustomActionsWizard } from "../CustomActionsWizard/CustomActionsWizard";
+import { R_CreateActionLinkWizard } from "../CreateActionLinkWizard/CreateActionLinkWizard";
 
 interface ActionsProps {
   confirm: Confirm;
@@ -50,9 +52,12 @@ export function R_Actions(props: ActionsProps) {
   const [createArgumentWizardOpen, setCreateArgumentWizardOpen] =
     useImmer(false);
   const [customActionsWizardOpen, setCustomActionsWizardOpen] = useImmer(false);
+  const [createActionLinkWizardOpen, setCreateActionLinkWizardOpen] =
+    useImmer(false);
   const [recentActions, setRecentActions] = useImmer<Action[]>([]);
   const [savedActions, setSavedActions] = useImmer<Action[]>([]);
   const [runAction, setRunAction] = useImmer<Action | null>(null);
+  const [createLinkAction, setCreateLinkAction] = useImmer<Action | null>(null);
   const [runActionWizardSkipArgs, setRunActionWizardSkipArgs] = useImmer(false);
   const [runActionWizardSkipConfirmation, setRunActionWizardSkipConfirmation] =
     useImmer(false);
@@ -124,13 +129,13 @@ export function R_Actions(props: ActionsProps) {
   }
 
   function isActionURLParamPresent() {
-    const urlParams = new URLSearchParams(window.location.search);
+    const urlParams = new URLSearchParams(location.search);
     const actionArg = urlParams.get("action");
     return actionArg !== null;
   }
 
   function parseActionURLParams(): [Action, Connection[], boolean] {
-    const urlParams = new URLSearchParams(window.location.search);
+    const urlParams = new URLSearchParams(location.search);
 
     function getAction() {
       const actionId = urlParams.get("id");
@@ -166,7 +171,9 @@ export function R_Actions(props: ActionsProps) {
     const action = getAction();
     const connections = getConnections();
 
-    const requireConfirmationParam = urlParams.get("requireConfirmation");
+    const requireConfirmationParam = urlParams.get(
+      REQUIRE_CONFIRMATION_PARAM_NAME,
+    );
     const requireConfirmation =
       requireConfirmationParam !== null
         ? Boolean(requireConfirmationParam)
@@ -212,10 +219,6 @@ export function R_Actions(props: ActionsProps) {
     setCreateArgumentWizardOpen(false);
   }
 
-  function openRunActionWizard() {
-    setRunActionWizardOpen(true);
-  }
-
   function closeRunActionWizard() {
     setRunActionWizardOpen(false);
   }
@@ -228,6 +231,15 @@ export function R_Actions(props: ActionsProps) {
     setCustomActionsWizardOpen(true);
   }
 
+  function closeCreateActionLinkWizard() {
+    setCreateActionLinkWizardOpen(false);
+  }
+
+  function openCreateActionLinkWizard(action: Action) {
+    setCreateLinkAction(action);
+    setCreateActionLinkWizardOpen(true);
+  }
+
   function onActionConfigure(action: Action, save: boolean) {
     updateJSONString(action);
     if (save) {
@@ -238,7 +250,7 @@ export function R_Actions(props: ActionsProps) {
     }
   }
 
-  function runRunActionWizard(
+  function openRunActionWizard(
     action: Action,
     skipArgs = false,
     skipConfirmation = false,
@@ -247,7 +259,7 @@ export function R_Actions(props: ActionsProps) {
     setRunAction(structuredClone(action));
     setRunActionWizardSkipArgs(skipArgs);
     setRunActionWizardSkipConfirmation(skipConfirmation);
-    openRunActionWizard();
+    setRunActionWizardOpen(true);
   }
 
   async function dispatchAction(
@@ -414,6 +426,20 @@ export function R_Actions(props: ActionsProps) {
     dispatchAction(action, connections, requireConfirmation);
   }
 
+  function handleActionLinkCreationRequest(action: Action) {
+    if (props.connections.length === 0) {
+      props.bakeToast(
+        new Toast(
+          "There are no connections to that the link could target.",
+          "transit-connection-variant",
+          ToastSeverity.Error,
+        ),
+      );
+      return;
+    }
+    openCreateActionLinkWizard(action);
+  }
+
   function handleActionRunRequest(
     action: Action,
     skipArgs = false,
@@ -435,7 +461,7 @@ export function R_Actions(props: ActionsProps) {
       return;
     }
 
-    runRunActionWizard(action, skipArgs, skipConfirmation);
+    openRunActionWizard(action, skipArgs, skipConfirmation);
   }
 
   return (
@@ -449,6 +475,7 @@ export function R_Actions(props: ActionsProps) {
             {savedActions.map((action, index) => (
               <R_ConfiguredActionCard
                 saved
+                onCreateLink={() => handleActionLinkCreationRequest(action)}
                 onToggleSave={() => unsaveAction(index)}
                 key={action.JSONstring}
                 name={action.name}
@@ -468,6 +495,7 @@ export function R_Actions(props: ActionsProps) {
           <AnimatePresence>
             {recentActions.map((action, index) => (
               <R_ConfiguredActionCard
+                onCreateLink={() => handleActionLinkCreationRequest(action)}
                 onToggleSave={() => saveActionFromRecentActions(index)}
                 key={action.JSONstring}
                 name={action.name}
@@ -492,6 +520,13 @@ export function R_Actions(props: ActionsProps) {
         onCancel={closeConfigActionWizard}
         onActionConfigure={onActionConfigure}
         onConfigCustomActions={openCustomActionsWizard}
+      />
+      <R_CreateActionLinkWizard
+        bakeToast={props.bakeToast}
+        action={createLinkAction}
+        open={createActionLinkWizardOpen}
+        connections={props.connections}
+        onCancel={closeCreateActionLinkWizard}
       />
       <R_RunActionWizard
         skipConfirmation={runActionWizardSkipConfirmation}

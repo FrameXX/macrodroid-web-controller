@@ -1,5 +1,13 @@
-import { Action, ActionArg, ActionArgType } from "./action";
-import { CONFIRM_CONNECTION_REQUEST_COMMENT } from "./const";
+import {
+  Action,
+  ActionArg,
+  ActionArgType,
+  generateActionSearchParams,
+} from "./action";
+import {
+  CONFIRM_CONNECTION_REQUEST_COMMENT,
+  REQUIRE_CONFIRMATION_PARAM_NAME,
+} from "./const";
 import { Random } from "./random";
 
 export enum OutgoingRequestType {
@@ -14,26 +22,6 @@ export interface SearchParam {
   value: string;
 }
 
-function searchParamNameFromActionArgument(
-  argType: ActionArgType,
-  argId: string,
-) {
-  switch (argType) {
-    case ActionArgType.Boolean:
-      return `booleanArgs(${argId})`;
-    case ActionArgType.Integer:
-    case ActionArgType.Selection:
-      return `integerArgs(${argId})`;
-    case ActionArgType.Decimal:
-      return `decimalArgs(${argId})`;
-    case ActionArgType.String:
-    case ActionArgType.MultiLineString:
-      return `stringArgs(${argId})`;
-    default:
-      throw new TypeError("Unsupported argument type.");
-  }
-}
-
 function generateActionArgDetail(arg: ActionArg<unknown>) {
   const value =
     arg.type === ActionArgType.Selection &&
@@ -42,17 +30,6 @@ function generateActionArgDetail(arg: ActionArg<unknown>) {
       ? arg.options[arg.value]
       : arg.value;
   return `${arg.name}: ${value}`;
-}
-
-function actionArgsToSearchParams(
-  actionArgs: ActionArg<unknown>[],
-): SearchParam[] {
-  return actionArgs.map((arg) => {
-    return {
-      name: searchParamNameFromActionArgument(arg.type, arg.id),
-      value: `${arg.value}`,
-    };
-  });
 }
 
 export class OutgoingRequest {
@@ -103,10 +80,9 @@ export class OutgoingRequest {
     const comment = `Action: ${action.name}`;
     const details = action.args.map(generateActionArgDetail);
     const searchParams = [
-      ...actionArgsToSearchParams(action.args),
-      { name: "actionId", value: action.id },
+      ...generateActionSearchParams(action),
       {
-        name: "requireConfirmation",
+        name: REQUIRE_CONFIRMATION_PARAM_NAME,
         value: requireConfirmation.toString(),
       },
     ];

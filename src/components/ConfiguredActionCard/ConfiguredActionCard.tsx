@@ -17,6 +17,7 @@ interface ActionCardProps {
   onToggleSave: () => unknown;
   onRun: () => unknown;
   onRunWithOptions: () => unknown;
+  onCreateLink: () => unknown;
 }
 
 const defaultProps: Partial<ActionCardProps> = {
@@ -62,7 +63,10 @@ export function R_ConfiguredActionCard(requiredProps: ActionCardProps) {
             iconId="link-variant"
             title={`Create link to action ${props.name}`}
             text="Create link"
-            onClick={() => {}}
+            onClick={() => {
+              props.onCreateLink();
+              setShowMoreActions(false);
+            }}
           />
           <R_Button
             onClick={() => {

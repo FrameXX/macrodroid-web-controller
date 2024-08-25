@@ -1,4 +1,43 @@
 import { array, number, object, optional, string, unknown } from "superstruct";
+import { SearchParam } from "./outgoing_request";
+
+export function generateActionSearchParams(action: Action): SearchParam[] {
+  return [
+    ...actionArgsToSearchParams(action.args),
+    { name: "actionId", value: action.id },
+  ];
+
+  function actionArgsToSearchParams(
+    actionArgs: ActionArg<unknown>[],
+  ): SearchParam[] {
+    return actionArgs.map((arg) => {
+      return {
+        name: searchParamNameFromActionArgument(arg.type, arg.id),
+        value: `${arg.value}`,
+      };
+    });
+
+    function searchParamNameFromActionArgument(
+      argType: ActionArgType,
+      argId: string,
+    ) {
+      switch (argType) {
+        case ActionArgType.Boolean:
+          return `booleanArgs(${argId})`;
+        case ActionArgType.Integer:
+        case ActionArgType.Selection:
+          return `integerArgs(${argId})`;
+        case ActionArgType.Decimal:
+          return `decimalArgs(${argId})`;
+        case ActionArgType.String:
+        case ActionArgType.MultiLineString:
+          return `stringArgs(${argId})`;
+        default:
+          throw new TypeError("Unsupported argument type.");
+      }
+    }
+  }
+}
 
 export function parseActionArg(arg: string, type: ActionArgType) {
   switch (type) {

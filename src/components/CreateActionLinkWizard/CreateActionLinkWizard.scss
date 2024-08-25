@@ -1,0 +1,12 @@
+@use "../../partials/mixins" as *;
+
+.link {
+  @include card;
+  white-space: pre-wrap;
+  word-break: break-word;
+  background-color: var(--color-surface-top);
+  text-align: start;
+  max-width: var(--tab-items-max-width);
+  margin-bottom: 20px;
+  user-select: all;
+}

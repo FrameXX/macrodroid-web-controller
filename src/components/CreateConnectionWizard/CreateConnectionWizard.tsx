@@ -24,14 +24,14 @@ import { R_InfoCard } from "../InfoCard/InfoCard";
 interface AddConnectionWizardProps {
   open: boolean;
   bakeToast: BakeToast;
-  onCancel: () => void;
-  onConnectionConfirm: (connection: Connection) => void;
+  onCancel: () => unknown;
+  onConnectionConfirm: (connection: Connection) => unknown;
   log: Log;
   handleIncomingInvalidRequest: (
     errorMessage: string,
     connection: Connection,
-  ) => void;
-  onClickCompanionMacro: () => void;
+  ) => unknown;
+  onClickCompanionMacro: () => unknown;
 }
 
 export function R_CreateConnectionWizard(props: AddConnectionWizardProps) {

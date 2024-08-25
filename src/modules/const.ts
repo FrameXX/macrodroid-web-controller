@@ -9,6 +9,7 @@ export const WEBHOOK_REQUEST_ID_PREFIX = "mdwc";
 export const WEBHOOK_ADD_REQUEST_ID = "add";
 export const CONNECTION_ID_PARAM_NAME = "connectionId";
 export const REQUEST_ID_PARAM_NAME = "requestId";
+export const REQUIRE_CONFIRMATION_PARAM_NAME = "requireConfirmation";
 export const NTFY_DOMAIN = "ntfy.sh";
 export const NTFY_TOPIC_PREFIX = "macrodroid-wc";
 export const CONFIRM_CONNECTION_REQUEST_COMMENT =
