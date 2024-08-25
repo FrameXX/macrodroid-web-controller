@@ -56,8 +56,8 @@ export function R_WelcomeWizard(props: WelcomeWizardProps) {
         <R_SplashBox splash={<R_Icon iconId="play" />}>
           <h2>Trigger actions</h2>
           Request actions on a single or multiple connections, see your last
-          requested actions, save actions as favourite and create your custom
-          actions.
+          requested actions, save actions as favourite, create your custom
+          actions and create links to your actions.
         </R_SplashBox>,
         <R_SplashBox splash={<R_Icon iconId="text-box" />}>
           <h2>Inspect log</h2>

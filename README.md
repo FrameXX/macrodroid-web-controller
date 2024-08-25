@@ -17,7 +17,7 @@ The app is available at [https://macrodroid-wc.web.app/](https://macrodroid-wc.w
 ## Features
 
 - Easily create connections with devices running MacroDroid. Manage multiple connections and see when they were last active.
-- Request actions on a single or multiple connections, see your last requested actions, save actions as favourite and create your custom actions.
+- Request actions on a single or multiple connections, see your last requested actions, save actions as favourite, create your custom actions and create links to your actions.
 - Send notifications from your MacroDroid devices to the web client (usually on desktop), or share any text you wish.
 - Inspect log to see responses to your actions or history of web client and connections activity.
 - Use the magic text cheat sheet to remind yourself of MacroDroid's magic text options, without leaving the web UI.
