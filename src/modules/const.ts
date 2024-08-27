@@ -16,7 +16,7 @@ export const CONFIRM_CONNECTION_REQUEST_COMMENT =
   "Connection creation confirmation";
 
 // UI
-export const SPLASHSCREEN_TIMEOUT_MS = 350;
+export const SPLASHSCREEN_TIMEOUT_MS = 500;
 export const DEFAULT_TRANSITION_TRANSLATE_PX = 40;
 export const DEFAULT_TRANSITION_UNMOUNTED_SCALE = 0.8;
 export const DEFAULT_TRANSITION_DURATION_S = 0.3;
