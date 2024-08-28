@@ -8,7 +8,6 @@ import {
   ActionArg,
   ActionsStruct,
   parseActionArg,
-  updateJSONString,
 } from "../../modules/action";
 import { BakeToast, ToastSeverity } from "../../modules/toaster";
 import { AnimatePresence } from "framer-motion";
@@ -237,7 +236,6 @@ export function R_Actions(props: ActionsProps) {
   }
 
   function onActionConfigure(action: Action, save: boolean) {
-    updateJSONString(action);
     if (save) {
       addSavedAction(action);
       setConfigActionWizardOpen(false);
@@ -300,7 +298,6 @@ export function R_Actions(props: ActionsProps) {
   }
 
   function addRecentAction(action: Action) {
-    updateJSONString(action);
     if (recentActions.length >= RECENT_ACTIONS_LIMIT)
       setRecentActions((recentActions) => {
         recentActions.pop();

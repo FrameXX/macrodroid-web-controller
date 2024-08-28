@@ -8,7 +8,7 @@ import { useEffect, useMemo, useRef } from "react";
 import { R_Icon } from "../Icon/Icon";
 import { R_SearchInput } from "../SearchInput/SearchInput";
 import { R_IconNotice } from "../IconNotice/IconNotice";
-import { Action } from "../../modules/action";
+import { Action, updateJSONString } from "../../modules/action";
 import { R_StringOption } from "../StringOption/StringOption";
 import { R_BooleanOption } from "../BooleanOption/BooleanOption";
 import { R_ActionArgInputList } from "../ActionArgInputList/ActionArgInputList";
@@ -86,7 +86,10 @@ export function R_ConfigActionWizard(props: ConfigActionWizardProps) {
   }
 
   function onActionConfigurationConfirm() {
-    configuredAction.current!.name = actionName;
+    if (!configuredAction.current)
+      throw Error("Configured action is not defined.");
+    configuredAction.current.name = actionName;
+    updateJSONString(configuredAction.current);
     props.onActionConfigure(configuredAction.current!, saveWithoutRunning);
   }
 
