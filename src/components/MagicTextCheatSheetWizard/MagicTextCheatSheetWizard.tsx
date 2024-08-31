@@ -12,6 +12,7 @@ import { BakeToast } from "../../modules/toaster";
 import { R_InfoCard } from "../InfoCard/InfoCard";
 import { useKey } from "../../modules/use_key";
 import { R_MultiColList } from "../MultiColList/MultiColList";
+import { R_IconNotice } from "../IconNotice/IconNotice";
 
 interface MagicTextCheatSheetWizardProps {
   open: boolean;
@@ -59,6 +60,12 @@ export function R_MagicTextCheatSheetWizard(
             Entries that are present only on some devices or are relevant to the
             currently running macro like macro category etc. are not shown here.
           </R_InfoCard>
+          <R_IconNotice
+            iconId="filter-remove"
+            hidden={filteredEntries.length !== 0}
+          >
+            All entries have been filtered out.
+          </R_IconNotice>
           <R_MultiColList items={MAGIC_TEXT_ENTRIES} minColWidthPx={300}>
             <AnimatePresence>
               {filteredEntries.map((entry) => (
