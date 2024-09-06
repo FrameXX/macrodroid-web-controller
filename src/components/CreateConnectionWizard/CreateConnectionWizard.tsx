@@ -198,6 +198,22 @@ export function R_CreateConnectionWizard(props: AddConnectionWizardProps) {
     onSuccess(connection);
   }
 
+  function handleWebhookIdChange(newValue: string, validity: boolean) {
+    setWebhookId(newValue);
+    setWebhookIdValid(validity);
+    const webhookURLPattern = new RegExp(".*trigger.macrodroid.com/(.*?)/.*");
+    const match = newValue.match(webhookURLPattern);
+    if (!match) return;
+    if (!match.length) return;
+    const extractedWebhookId = match[1];
+    setWebhookId(extractedWebhookId);
+    props.bakeToast({
+      message:
+        "Webhook URL detected. The webhook ID was automatically extracted.",
+      iconId: "text-box-search",
+    });
+  }
+
   return (
     <R_Wizard
       id="wizard-create-connection"
@@ -292,10 +308,7 @@ export function R_CreateConnectionWizard(props: AddConnectionWizardProps) {
           <R_StringOption
             iconId="webhook"
             ref={webhookIdInput}
-            onChange={(newValue, validity) => {
-              setWebhookId(newValue);
-              setWebhookIdValid(validity);
-            }}
+            onChange={handleWebhookIdChange}
             onKeyUp={(event) => {
               if (event.key === "Enter" && !cantNextPage()) nextPage();
             }}
@@ -311,7 +324,8 @@ export function R_CreateConnectionWizard(props: AddConnectionWizardProps) {
                 <div>
                   You can find webhook URL of your connection by going to New
                   macro &gt; Add trigger &gt; Connectivity &gt; Webhook (Url).
-                  Enter just the ID (between last 2 forward slashes).
+                  Enter just the ID (between last 2 forward slashes) or paste
+                  the whole URL and the ID will be automatically extracted.
                 </div>
                 <img alt="screenshot" src={screenshot1Path} />
               </>

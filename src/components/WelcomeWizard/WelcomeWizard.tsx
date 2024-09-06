@@ -67,7 +67,7 @@ export function R_WelcomeWizard(props: WelcomeWizardProps) {
           <h2>Disclaimer of liability and warranty</h2>
           <p>
             <b>
-              I urge you to refrain from sending any sensitive or personal data
+              I urge you to refrain from sending any sensitive personal data
               from or to MacroDroid Web Controller web client inside action
               arguments or responses. Also generally it's a good practice not to
               share your webhook ID and connection ID with anyone.
