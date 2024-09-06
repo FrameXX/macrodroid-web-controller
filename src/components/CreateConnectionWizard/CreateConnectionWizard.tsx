@@ -259,10 +259,10 @@ export function R_CreateConnectionWizard(props: AddConnectionWizardProps) {
             </h3>
           </R_SimpleCard>
           <R_InfoCard id="companion-safety-notice">
-            The companion macro will ignore all action requests that do not
-            contain a connection ID that was generated and send over secure
-            connection during this connection creation process after approval on
-            both sides of the connection.
+            The companion macro will ignore all action requests triggering the
+            webhook that do not contain a connection ID that was generated and
+            send over secure connection during this connection creation process
+            after approval on both sides of the connection.
           </R_InfoCard>
         </>,
         <>

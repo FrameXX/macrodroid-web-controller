@@ -4,7 +4,6 @@ import { R_FAB } from "../FAB/FAB";
 import { R_SplashBox } from "../SplashBox/SplashBox";
 import { R_Icon } from "../Icon/Icon";
 import "./WelcomeWizard.scss";
-import { NTFY_TOPIC_PREFIX } from "../../modules/const";
 import { R_BooleanOption } from "../BooleanOption/BooleanOption";
 import { R_NotificationPermissionSplashBox } from "../NotificationPermissionSplashBox/NotificationPermissionSplashBox";
 import { BakeToast } from "../../modules/toaster";
@@ -64,25 +63,14 @@ export function R_WelcomeWizard(props: WelcomeWizardProps) {
           Inspect log to see responses to your actions or history of web client
           and connections activity.
         </R_SplashBox>,
-        <R_SplashBox splash={<R_Icon iconId="security" />}>
+        <R_SplashBox splash={<R_Icon iconId="emoticon-cool" />}>
           <h2>Disclaimer of liability and warranty</h2>
           <p>
-            The outging requests from this website are routed through MacroDroid
-            webhook servers and are thus fairly private, however the incoming
-            requests to this website are routed through ntfy.sh servers over
-            topic that follows the following format:
-          </p>
-          <pre>{NTFY_TOPIC_PREFIX}-&#123;connection ID&#125;</pre>
-          <p>For example "macrodroid-wc-muqaruha" could be such a topic.</p>
-          <p>
-            I cannot gurantee that someone else won't be able to read the
-            contents of these requests <b>(while it is very improbable)</b> and
-            I urge you to{" "}
             <b>
-              refrain from sending any sensitive or personal data from or to
-              MacroDroid Web Controller web client. Also generally it's a good
-              practice not to share your webhook ID and connection ID with
-              anyone.
+              I urge you to refrain from sending any sensitive or personal data
+              from or to MacroDroid Web Controller web client inside action
+              arguments or responses. Also generally it's a good practice not to
+              share your webhook ID and connection ID with anyone.
             </b>
           </p>
           <p>
@@ -99,11 +87,11 @@ export function R_WelcomeWizard(props: WelcomeWizardProps) {
               </a>{" "}
               for more details.
             </b>
-          </p>{" "}
+          </p>
           <R_BooleanOption
             value={acceptTOS}
             onChange={setAcceptTOS}
-            iconId="emoticon-cool"
+            iconId="check-all"
             title="I understand and agree"
           />
         </R_SplashBox>,

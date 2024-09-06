@@ -934,6 +934,34 @@ export const ACTIONS: Action[] = [
       "share",
     ],
   },
+  {
+    name: "Enable macro",
+    id: "enable_macro",
+    iconId: "playlist-check",
+    args: [
+      {
+        name: "Name",
+        value: "",
+        type: ActionArgType.String,
+        id: "name",
+      },
+    ],
+    keywords: ["macro", "enable", "macrodroid"],
+  },
+  {
+    name: "Disable macro",
+    id: "disable_macro",
+    iconId: "playlist-remove",
+    args: [
+      {
+        name: "Name",
+        value: "",
+        type: ActionArgType.String,
+        id: "name",
+      },
+    ],
+    keywords: ["macro", "disable", "macrodroid"],
+  },
 ] as const;
 
 export const MAGIC_TEXT_ENTRIES: MagicTextEntryProps[] = [
