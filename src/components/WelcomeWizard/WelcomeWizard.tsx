@@ -65,7 +65,7 @@ export function R_WelcomeWizard(props: WelcomeWizardProps) {
           and connections activity.
         </R_SplashBox>,
         <R_SplashBox splash={<R_Icon iconId="security" />}>
-          <h2>Disclaimer of liability</h2>
+          <h2>Disclaimer of liability and warranty</h2>
           <p>
             The outging requests from this website are routed through MacroDroid
             webhook servers and are thus fairly private, however the incoming
@@ -87,9 +87,17 @@ export function R_WelcomeWizard(props: WelcomeWizardProps) {
           </p>
           <p>
             <b>
-              I am not responsible for any possible data loss. This software is
-              distributed "as is", with no warranty expressed or implied, and no
-              guarantee for accuracy or applicability to any purpose.
+              This program is distributed in the hope that it will be useful,
+              but WITHOUT ANY WARRANTY; without even the implied warranty of
+              MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the{" "}
+              <a
+                rel="noopener"
+                href="https://www.gnu.org/licenses/agpl-3.0.en.html#license-text"
+                target="_blank"
+              >
+                GNU Affero General Public License
+              </a>{" "}
+              for more details.
             </b>
           </p>{" "}
           <R_BooleanOption

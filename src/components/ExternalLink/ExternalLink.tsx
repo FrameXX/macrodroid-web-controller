@@ -17,6 +17,7 @@ export function R_ExternalLink(props: ExternalLinkProps) {
       className="external-link"
       href={props.href}
       target={target}
+      rel="noopener"
       download={props.download}
     >
       <R_Icon iconId={props.iconId} />

@@ -76,6 +76,13 @@ export function R_Extras(props: ExtrasProps) {
         >
           Source code
         </R_ExternalLink>
+        <R_ExternalLink
+          iconId="license"
+          href="https://www.gnu.org/licenses/agpl-3.0.en.html#license-text"
+          title="License (AGPL v3.0)"
+        >
+          License (AGPL v3.0)
+        </R_ExternalLink>
         Made with ❤️ by Jiří Král.
       </footer>
     </>

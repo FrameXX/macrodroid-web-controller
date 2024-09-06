@@ -1,6 +1,6 @@
 import { R_FAB } from "../FAB/FAB";
 import { R_StringOption } from "../StringOption/StringOption";
-import screenshot1Src from "../../assets/img/screenshot_1.webp";
+import screenshot1Path from "../../assets/img/screenshot_1.webp?url";
 import { R_Wizard } from "../Wizard/Wizard";
 import {
   CONFIRM_CONNECTION_REQUEST_COMMENT,
@@ -313,7 +313,7 @@ export function R_CreateConnectionWizard(props: AddConnectionWizardProps) {
                   macro &gt; Add trigger &gt; Connectivity &gt; Webhook (Url).
                   Enter just the ID (between last 2 forward slashes).
                 </div>
-                <img src={screenshot1Src} />
+                <img alt="screenshot" src={screenshot1Path} />
               </>
             }
           />
