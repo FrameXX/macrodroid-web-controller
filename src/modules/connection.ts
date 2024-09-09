@@ -1,8 +1,6 @@
 import {
   CONNECTION_ID_PARAM_NAME,
   MACRODROID_WEBHOOK_DOMAIN,
-  NTFY_DOMAIN,
-  NTFY_TOPIC_PREFIX,
   WEBHOOK_REQUEST_ID_PREFIX,
 } from "./const";
 import { Random } from "./random";
@@ -12,9 +10,11 @@ import {
   OutgoingRequestType,
   SearchParam,
 } from "./outgoing_request";
-import { IncomingRequest } from "./incoming_request";
 import { LogRecordInitializer, LogRecordType } from "./logger";
 import { array, number, object, string } from "superstruct";
+import { stringifyError } from "./misc";
+import { NtfyIncomingServer } from "./ntfy_incoming_server";
+import { IncomingServer } from "./incoming_server";
 
 export const ConnectionsStruct = array(
   object({
@@ -26,12 +26,9 @@ export const ConnectionsStruct = array(
 );
 
 export class Connection {
-  public listenerHealthy = true;
-  public receiverOpened = false;
   public isListening = false;
   public lastActivityTimestamp = 0;
-  private eventSource?: EventSource;
-  private _removeListeners?: () => void;
+  public incomingServer: IncomingServer;
 
   constructor(
     public readonly name: string,
@@ -39,15 +36,10 @@ export class Connection {
     public readonly id: string = Random.readableId(),
     lastActivityTimestamp?: number,
   ) {
+    this.incomingServer = new NtfyIncomingServer(this.id);
     if (lastActivityTimestamp) {
       this.lastActivityTimestamp = lastActivityTimestamp;
     }
-  }
-
-  private get ntfyTopicURL() {
-    return new URL(
-      `https://${NTFY_DOMAIN}/${NTFY_TOPIC_PREFIX}-${this.id}/sse`,
-    );
   }
 
   public generateRequestURL(
@@ -73,82 +65,6 @@ export class Connection {
     };
   }
 
-  public openReceiver() {
-    if (this.receiverOpened) throw Error("This connection is already open.");
-    this.eventSource = new EventSource(this.ntfyTopicURL);
-    this.receiverOpened = true;
-  }
-
-  public closeReceiver() {
-    if (!this.receiverOpened) throw Error("This connection is already closed.");
-    this.eventSource?.close();
-    this.receiverOpened = false;
-  }
-
-  private handleIncomingRequest(
-    event: MessageEvent<string>,
-    onRequest: (request: IncomingRequest) => void,
-    onFailedRequest?: (errorMessage: string) => void,
-  ) {
-    let request: IncomingRequest | null = null;
-    try {
-      request = IncomingRequest.fromNtfyRequest(event.data);
-    } catch (error) {
-      if (onFailedRequest)
-        error instanceof Error
-          ? onFailedRequest(error.message)
-          : onFailedRequest("Unknown error.");
-    }
-    if (request) onRequest(request);
-  }
-
-  public listenRequests(
-    onRequest: (request: IncomingRequest) => void,
-    onFailedRequest?: (errorMessage: string) => void,
-    onListenFailed?: (event: Event) => void,
-    onOpen?: (event: Event) => void,
-  ) {
-    if (!this.eventSource)
-      throw new Error(
-        "This connection does not have eventSource defined. It has probably not been opened.",
-      );
-
-    if (this.isListening)
-      throw new Error(
-        "This connection already has listeners added. Remove old listeners before adding new.",
-      );
-
-    const handleMessage = (event: MessageEvent<string>) => {
-      this.handleIncomingRequest(event, onRequest, onFailedRequest);
-    };
-
-    this.eventSource.addEventListener("message", handleMessage);
-    if (onListenFailed)
-      this.eventSource.addEventListener("error", onListenFailed);
-    if (onOpen) this.eventSource.addEventListener("open", onOpen);
-
-    this._removeListeners = () => {
-      if (!this.eventSource)
-        throw new Error(
-          "This connection does not have eventSource defined. It has probably not been opened.",
-        );
-      this.eventSource.removeEventListener("message", handleMessage);
-      if (onListenFailed)
-        this.eventSource.removeEventListener("error", onListenFailed);
-    };
-
-    this.isListening = true;
-  }
-
-  public removeRequestListeners() {
-    if (!this._removeListeners)
-      throw new Error(
-        "The method to remove listeners has not been defined. Event listeners probably have not been added.",
-      );
-    this._removeListeners();
-    this.isListening = false;
-  }
-
   public async makeRequest(request: OutgoingRequest) {
     const URLParams = [
       { name: CONNECTION_ID_PARAM_NAME, value: this.id },
@@ -169,9 +85,7 @@ export class Connection {
     try {
       response = await fetch(URL);
     } catch (error) {
-      console.log("Caught.");
-      requestLog.errorMessage =
-        error instanceof Error ? error.message : "Unknown error.";
+      requestLog.errorMessage = stringifyError(error);
       return requestLog;
     }
     if (!response.ok)

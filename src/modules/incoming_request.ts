@@ -16,7 +16,7 @@ const IncomingRequestStruct = object({
 export class IncomingRequest {
   public static textShareRequireConfirmIndex = 0;
   public static notificationRequireConfirmIndex = 0;
-  public static clipboardFillTextIndex = 1;
+  public static textShareTextIndex = 1;
   public static notificationTitleIndex = 1;
   public static notificationBodyIndex = 2;
 
@@ -59,7 +59,7 @@ export class IncomingRequest {
     if (this.type !== IncomingRequestType.TextShare) {
       throw new TypeError("An unexpected type request.");
     }
-    return this.details[IncomingRequest.clipboardFillTextIndex];
+    return this.details[IncomingRequest.textShareTextIndex];
   }
 
   public getNotificationRequireConfirm() {
@@ -80,11 +80,8 @@ export class IncomingRequest {
     );
   }
 
-  public static fromNtfyRequest(data: string): IncomingRequest {
-    const parsedResponse = JSON.parse(data);
-    if (!("message" in parsedResponse))
-      throw new Error("Parsed response is missing the message property.");
-    const parsedRequest = JSON.parse(parsedResponse.message);
+  public static fromString(string: string): IncomingRequest {
+    const parsedRequest = JSON.parse(string);
     assert(parsedRequest, IncomingRequestStruct);
     IncomingRequest.checkRequestRequiredDetails(parsedRequest);
     return new IncomingRequest(

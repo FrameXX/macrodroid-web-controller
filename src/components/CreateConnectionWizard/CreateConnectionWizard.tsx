@@ -74,7 +74,7 @@ export function R_CreateConnectionWizard(props: AddConnectionWizardProps) {
 
   function onSuccess(connection: Connection) {
     connection.lastActivityTimestamp = Date.now();
-    connection.removeRequestListeners();
+    connection.incomingServer.removeRequestListener();
     props.onConnectionConfirm(connection);
     props.bakeToast({
       message: "Connection was confirmed and added.",
@@ -86,8 +86,8 @@ export function R_CreateConnectionWizard(props: AddConnectionWizardProps) {
 
   function cancelNewConnection() {
     if (!lastConnection) return;
-    lastConnection.closeReceiver();
-    lastConnection.removeRequestListeners();
+    lastConnection.incomingServer.closeConnection();
+    lastConnection.incomingServer.removeRequestListener();
     props.bakeToast({
       message: "Connection initialization canceled.",
       iconId: "cancel",
@@ -129,8 +129,7 @@ export function R_CreateConnectionWizard(props: AddConnectionWizardProps) {
       });
     }
 
-    connection.openReceiver();
-    connection.listenRequests(
+    connection.incomingServer.listenRequests(
       (request) => handleIncomingRequest(request, connection, request.id),
       (errorMessage) => {
         props.handleIncomingInvalidRequest(errorMessage, connection);

@@ -22,3 +22,11 @@ export function moveElement(
 
   return arr;
 }
+
+export function stringifyError(
+  error: unknown,
+  defaultMessage = "Unknown error.",
+) {
+  if (error instanceof Error) return error.message;
+  return defaultMessage;
+}

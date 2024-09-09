@@ -28,7 +28,7 @@ import {
 } from "../../modules/const";
 import { R_CreateActionWizard } from "../CreateActionWizard/CreateActionWizard";
 import { R_CreateArgumentWizard } from "../CreateArgumentWizard/CreateArgumentWizard";
-import { moveElement } from "../../modules/misc";
+import { moveElement, stringifyError } from "../../modules/misc";
 import { useEffect, useMemo } from "react";
 import { Confirm } from "../../modules/confirm_dialog";
 import { R_CustomActionsWizard } from "../CustomActionsWizard/CustomActionsWizard";
@@ -104,19 +104,11 @@ export function R_Actions(props: ActionsProps) {
     try {
       actionDispatchArgs = parseActionURLParams();
     } catch (error) {
-      if (error instanceof Error) {
-        props.bakeToast({
-          message: `Action URL parsing failed. ${error.message}`,
-          iconId: "alert",
-          severity: ToastSeverity.Error,
-        });
-      } else {
-        props.bakeToast({
-          message: `Action URL parsing failed. Unknown error.`,
-          iconId: "alert",
-          severity: ToastSeverity.Error,
-        });
-      }
+      props.bakeToast({
+        message: `Action URL parsing failed. ${stringifyError(error)}.`,
+        iconId: "alert",
+        severity: ToastSeverity.Error,
+      });
       return;
     }
     dispatchAction(...actionDispatchArgs);

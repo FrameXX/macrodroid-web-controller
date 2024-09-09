@@ -11,7 +11,7 @@ import {
 import { R_Icon } from "../Icon/Icon";
 
 interface ConnectionProps {
-  listenerHealthy: boolean;
+  incomingServerListenerIsHealthy: boolean;
   name: string;
   id: string;
   lastActivityTimestamp: number;
@@ -30,12 +30,15 @@ export function R_Connection(props: ConnectionProps) {
       exit={ANIMATE_SCALE_UNMOUNTED}
       className="connection-card-container"
     >
-      <div hidden={props.listenerHealthy} className="error-message">
+      <div
+        hidden={props.incomingServerListenerIsHealthy}
+        className="error-message"
+      >
         <R_Icon side iconId="alert" />
         Listener was suspended or failed.
       </div>
       <div
-        className={`connection-card ${props.listenerHealthy ? "" : "listener-unhealthy"}`}
+        className={`connection-card ${props.incomingServerListenerIsHealthy ? "" : "listener-unhealthy"}`}
       >
         <div className="info">
           <h3 className="name">{props.name}</h3>

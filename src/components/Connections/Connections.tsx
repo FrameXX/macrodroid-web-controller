@@ -86,7 +86,9 @@ export function R_Connections(props: ConnectionsProps) {
               name={connection.name}
               id={connection.id}
               lastActivityTimestamp={connection.lastActivityTimestamp}
-              listenerHealthy={connection.listenerHealthy}
+              incomingServerListenerIsHealthy={
+                connection.incomingServer.listenerIsHealthy
+              }
             />
           ))}
         </AnimatePresence>

@@ -146,7 +146,7 @@ export function R_App() {
 
   function addListenerToAllConnections() {
     connections.forEach((connection, index) => {
-      connection.listenRequests(
+      connection.incomingServer.listenRequests(
         (request) => {
           handleIncomingRequest(request, index);
         },
@@ -161,7 +161,7 @@ export function R_App() {
 
   function removeListenerOfAllConnections() {
     connections.forEach((connection) => {
-      connection.removeRequestListeners();
+      connection.incomingServer.removeRequestListener();
     });
   }
 
@@ -212,7 +212,6 @@ export function R_App() {
       prevConnections.push(connection);
       return prevConnections;
     });
-    if (!connection.receiverOpened) connection.openReceiver();
   }
 
   function updateConnectionLastActivity(connectionIndex: number) {
@@ -312,7 +311,6 @@ export function R_App() {
     const outgoingComment =
       findIncomingRequestOutgoingComment(request) || UKNOWN_REQUEST_COMMENT;
     const comment = commentIncomingRequest(request.type, outgoingComment);
-    console.log(comment);
     const isResponse =
       request.type === IncomingRequestType.Confirmation ||
       request.type === IncomingRequestType.Response;
@@ -337,7 +335,10 @@ export function R_App() {
 
     if (isTabActive(NavTabId.Log)) return;
 
-    if (Notification.permission === "granted") {
+    if (
+      Notification.permission === "granted" &&
+      document.visibilityState === "hidden"
+    ) {
       notifyIncomingRequest(request, outgoingComment, connection.name);
     } else {
       toastifyIncomingRequest(request, outgoingComment, connection.name);
@@ -400,18 +401,18 @@ export function R_App() {
     });
   }
 
-  function reportConnectionListenerHealthiness(
+  function reportConnectionIncomingServerListenerHealthiness(
     connectionIndex: number,
     healthy: boolean,
   ) {
     setConnections((draft) => {
-      draft[connectionIndex].listenerHealthy = healthy;
+      draft[connectionIndex].incomingServer.listenerIsHealthy = healthy;
       return draft;
     });
   }
 
   function handleListenFailed(connectionIndex: number) {
-    reportConnectionListenerHealthiness(connectionIndex, false);
+    reportConnectionIncomingServerListenerHealthiness(connectionIndex, false);
     const connection = connections[connectionIndex];
     const errorMessage = `Connection ${connection.name} listener was suspended or failed.`;
     bakeToast({
@@ -423,14 +424,14 @@ export function R_App() {
 
   function handleListenSucceeded(connectionIndex: number) {
     const connection = connections[connectionIndex];
-    if (!connection.listenerHealthy) {
+    if (!connection.incomingServer.listenerIsHealthy) {
       bakeToast({
         message: `Connection ${connection.name} listener was reestablished.`,
         iconId: "transit-connection-variant",
         severity: ToastSeverity.Success,
       });
     }
-    reportConnectionListenerHealthiness(connectionIndex, true);
+    reportConnectionIncomingServerListenerHealthiness(connectionIndex, true);
   }
 
   async function deleteConnection(connection: Connection) {
@@ -440,8 +441,9 @@ export function R_App() {
       ))
     )
       return;
-    if (connection.isListening) connection.removeRequestListeners();
-    if (connection.receiverOpened) connection.closeReceiver();
+    if (connection.incomingServer.isListening)
+      connection.incomingServer.removeRequestListener();
+    connection.incomingServer.closeConnection();
     setConnections(
       connections.filter(
         (currentConnection) => currentConnection.id !== connection.id,

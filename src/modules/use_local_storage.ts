@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import { Struct, assert } from "superstruct";
+import { stringifyError } from "./misc";
 
 type ManualSave<T> = (customState?: T) => void;
 
@@ -65,8 +66,7 @@ function validateObject(
   try {
     assert(object, struct);
   } catch (error) {
-    if (error instanceof Error) return error.message;
-    return "Object has an invalid structure.";
+    return stringifyError(error, "Object has an invalid structure.");
   }
   return;
 }
@@ -82,7 +82,7 @@ function recover<T>(
   try {
     parsed = config.parse(stringified);
   } catch (error) {
-    if (onError && error instanceof Error) onError(error.message);
+    if (onError) onError(stringifyError(error));
     return null;
   }
 

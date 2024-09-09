@@ -16,6 +16,7 @@ import {
 } from "../../modules/const";
 import { BakeToast, ToastSeverity } from "../../modules/toaster";
 import { array, assert, size, string } from "superstruct";
+import { stringifyError } from "../../modules/misc";
 
 interface ManageDataWizardProps {
   bakeToast: BakeToast;
@@ -108,12 +109,7 @@ export function R_ManageDataWizard(props: ManageDataWizardProps) {
     try {
       text = await file.text();
     } catch (error) {
-      let errorMessage: string;
-      if (error instanceof Error) {
-        errorMessage = `Failed to read file. ${error.message}`;
-      } else {
-        errorMessage = "Failed to read file. Unknown error.";
-      }
+      const errorMessage = `Failed to read file. ${stringifyError(error)}`;
       props.bakeToast({
         message: errorMessage,
         iconId: "file-alert",
@@ -126,12 +122,7 @@ export function R_ManageDataWizard(props: ManageDataWizardProps) {
     try {
       entries = JSON.parse(text);
     } catch (error) {
-      let errorMessage: string;
-      if (error instanceof Error) {
-        errorMessage = `Failed to parse file data. ${error.message}`;
-      } else {
-        errorMessage = "Failed to parse file data. Unknown error.";
-      }
+      const errorMessage = `Failed to parse file data. ${stringifyError(error)}`;
       props.bakeToast({
         message: errorMessage,
         iconId: "file-alert",
@@ -143,13 +134,7 @@ export function R_ManageDataWizard(props: ManageDataWizardProps) {
     try {
       assert(entries, exportedDataStruct);
     } catch (error) {
-      let errorMessage: string;
-      if (error instanceof Error) {
-        errorMessage = `The file structure could not be verified. ${error.message}`;
-      } else {
-        errorMessage =
-          "The file structure could not be verified. Unknown error.";
-      }
+      const errorMessage = `The file structure could not be verified. ${stringifyError(error)}`;
       props.bakeToast({
         message: errorMessage,
         iconId: "file-alert",
