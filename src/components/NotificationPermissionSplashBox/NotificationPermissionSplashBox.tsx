@@ -2,10 +2,9 @@ import { useImmer } from "use-immer";
 import { R_Button } from "../Button/Button";
 import { R_Icon } from "../Icon/Icon";
 import { R_SplashBox } from "../SplashBox/SplashBox";
-import "./NotificationPermissionSplashBox.scss";
 import { BakeToast } from "../../modules/toaster";
 import { R_WarningCard } from "../WarningCard/WarningCard";
-import { R_SimpleCard } from "../SimpleCard/SimpleCard";
+import { R_StatusCard } from "../StatusCard/StatusCard";
 
 type PermissionStatus = "Granted" | "Denied" | "Not granted";
 
@@ -16,8 +15,8 @@ interface NotificationPermissionSplashBoxProps {
 export function R_NotificationPermissionSplashBox(
   props: NotificationPermissionSplashBoxProps,
 ) {
-  const [status, setStatus] = useImmer<PermissionStatus>(getStatus());
-  const iconId = status === "Granted" ? "check" : "close";
+  const [statusText, setStatusText] = useImmer<PermissionStatus>(getStatus());
+  const StatusIconId = statusText === "Granted" ? "check" : "close";
 
   function getStatus(): PermissionStatus {
     switch (Notification.permission) {
@@ -39,7 +38,7 @@ export function R_NotificationPermissionSplashBox(
       return;
     }
     const granted = await Notification.requestPermission();
-    setStatus(getStatus());
+    setStatusText(getStatus());
     if (granted === "granted") {
       props.bakeToast({
         message: "Notification permission granted.",
@@ -59,14 +58,12 @@ export function R_NotificationPermissionSplashBox(
       splash={<R_Icon iconId="bell-ring" />}
     >
       <h2>Notification permission</h2>
-      <R_SimpleCard className="status" iconId={iconId}>
-        {status}
-      </R_SimpleCard>
+      <R_StatusCard iconId={StatusIconId}>{statusText}</R_StatusCard>
       The notification permission is used to notify you about action responses
       from connections and other incoming requests. It is not required.
       <br />
       <br />
-      <R_WarningCard hidden={status !== "Denied"}>
+      <R_WarningCard hidden={statusText !== "Denied"}>
         Once you deny the notification permission you have to grant it manually
         using in your web browser settings for this website. Some browser block
         notification permission requests by default.
