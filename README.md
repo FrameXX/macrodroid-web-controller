@@ -45,7 +45,7 @@ Run `npm install` or just `npm i` inside the project's root folder.
 
 - Run local server
 
-Run `npm run dev` or `npm run landev` to start the server on LAN instead of localhost, but you have to have you local ip address defined coreectly in the `landev` command in [package.json](package.json#L8).
+Run `npm run dev` or `npm run landev` to run the server also on LAN instead of just localhost.
 
 ### Distributing
 
