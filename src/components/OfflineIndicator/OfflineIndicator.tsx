@@ -1,29 +1,10 @@
-import { useEffect } from "react";
 import { R_Icon } from "../Icon/Icon";
 import "./OfflineIndicator.scss";
-import { useImmer } from "use-immer";
 import { motion, Target } from "framer-motion";
+import { useOnline } from "../../modules/use_online";
 
 export function R_OfflineIndicator() {
-  const [online, setOnline] = useImmer(navigator.onLine);
-
-  function handleOffline() {
-    setOnline(false);
-  }
-
-  function handleOnline() {
-    setOnline(true);
-  }
-
-  useEffect(() => {
-    addEventListener("offline", handleOffline);
-    addEventListener("online", handleOnline);
-
-    return () => {
-      removeEventListener("offline", handleOffline);
-      removeEventListener("online", handleOnline);
-    };
-  }, []);
+  const online = useOnline();
 
   const animateUnmounted: Target = {
     opacity: 0,

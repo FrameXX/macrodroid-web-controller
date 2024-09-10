@@ -8,10 +8,6 @@
   align-items: start;
   break-inside: avoid;
 
-  &.listener-unhealthy {
-    border: var(--border-width) solid var(--color-accent-trigger);
-  }
-
   &:first-child {
     margin-top: 0;
   }
