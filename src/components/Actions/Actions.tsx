@@ -409,7 +409,8 @@ export function R_Actions(props: ActionsProps) {
   function handleActionLinkCreationRequest(action: Action) {
     if (props.connections.length === 0) {
       props.bakeToast({
-        message: "There are no connections that the link could target.",
+        message:
+          "There are no configured connections that the link could target.",
         iconId: "transit-connection-variant",
         severity: ToastSeverity.Error,
       });
@@ -425,7 +426,7 @@ export function R_Actions(props: ActionsProps) {
   ) {
     if (props.connections.length === 0) {
       props.bakeToast({
-        message: "There are no connections to run the action configured.",
+        message: "There are no configured connections to trigger actions on.",
         iconId: "transit-connection-variant",
         severity: ToastSeverity.Error,
       });

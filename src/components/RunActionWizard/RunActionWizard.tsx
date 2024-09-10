@@ -49,7 +49,9 @@ export function R_RunActionWizard(props: RunActionWizardProps) {
     ) {
       throw new Error("There's nothing to configure about the action.");
     } else if (props.open && props.connections.length === 0) {
-      throw new Error("There are no connections to make action requests with.");
+      throw new Error(
+        "There are no configured connections to trigger actions on.",
+      );
     }
   }, [props.open]);
 
