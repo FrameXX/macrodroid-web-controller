@@ -3,9 +3,11 @@ import "./IconNotice.scss";
 import { useDefaultProps } from "../../modules/use_default_props";
 import { R_Accordion } from "../Accordion/Accordion";
 
-interface IconNoticeProps extends React.PropsWithChildren {
+interface IconNoticeProps {
   hidden?: boolean;
   iconId?: string;
+  title: string;
+  description?: string;
 }
 
 const defaultProps: Partial<IconNoticeProps> = {
@@ -20,7 +22,8 @@ export function R_IconNotice(requiredProps: IconNoticeProps) {
     <R_Accordion open={!props.hidden}>
       <div className="icon-notice">
         <R_Icon iconId={props.iconId} />
-        <div>{requiredProps.children}</div>
+        <h3>{props.title}</h3>
+        {props.description}
       </div>
     </R_Accordion>
   );

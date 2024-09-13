@@ -40,7 +40,7 @@ export function R_SelectOptionCard(props: SelectOptionCardProps) {
       </div>
       <input
         required
-        placeholder="Option title"
+        placeholder={`Enter ${props.index}. option title`}
         onChange={(event) =>
           props.onChange(event.target.value, event.target.validity.valid)
         }

@@ -18,6 +18,8 @@ interface ActionArgumentInputProps {
 }
 
 export function R_ActionArgInput(props: ActionArgumentInputProps) {
+  const inputPlaceholder = `Enter ${props.argument.name}`;
+
   function renderArgument() {
     switch (props.argument.type) {
       case ActionArgType.Boolean:
@@ -34,7 +36,7 @@ export function R_ActionArgInput(props: ActionArgumentInputProps) {
           <R_StringOption
             onChange={props.onChange}
             type="text"
-            placeholder={props.argument.name}
+            placeholder={inputPlaceholder}
             title={props.argument.name}
             description={props.argument.description}
             value={props.value as string}
@@ -44,7 +46,7 @@ export function R_ActionArgInput(props: ActionArgumentInputProps) {
         return (
           <R_MultiLineStringOption
             onChange={props.onChange}
-            placeholder={props.argument.name}
+            placeholder={inputPlaceholder}
             title={props.argument.name}
             description={props.argument.description}
             value={props.value as string}
@@ -80,7 +82,7 @@ export function R_ActionArgInput(props: ActionArgumentInputProps) {
           />
         );
       default:
-        return <>Invalid argument type</>;
+        throw new TypeError("Invalid argument type");
     }
   }
 

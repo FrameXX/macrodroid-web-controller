@@ -167,7 +167,7 @@ export function R_CreateArgumentWizard(props: AddArgumentWizardProps) {
               value={name}
               required
               title="Name"
-              placeholder="Name"
+              placeholder="Enter argument name"
               iconId="rename"
               description="The name of the argument shown in the web UI"
               onKeyUp={(event) => {
@@ -180,7 +180,7 @@ export function R_CreateArgumentWizard(props: AddArgumentWizardProps) {
               value={id}
               required
               title="ID"
-              placeholder="ID"
+              placeholder="Enter argument ID"
               iconId="identifier"
               description="The ID of the argument that will be send to MacroDroid"
               onKeyUp={(event) => {
@@ -192,7 +192,7 @@ export function R_CreateArgumentWizard(props: AddArgumentWizardProps) {
               onChange={setDescription}
               value={description}
               title="Description"
-              placeholder="Description"
+              placeholder="Enter argument description"
               iconId="rename"
               description="Describe what is the argument for. This is not required."
             />
@@ -261,9 +261,11 @@ export function R_CreateArgumentWizard(props: AddArgumentWizardProps) {
             <br />
             <hr />
             <h2>Select options</h2>
-            <R_IconNotice hidden={selectOptions.length > 0}>
-              No options configured
-            </R_IconNotice>
+            <R_IconNotice
+              title="No options configured"
+              description="You can add them by clicking the button below."
+              hidden={selectOptions.length > 0}
+            />
             <div>
               <AnimatePresence>
                 {selectOptions.map((option, index) => (

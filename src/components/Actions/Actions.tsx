@@ -444,9 +444,12 @@ export function R_Actions(props: ActionsProps) {
   return (
     <>
       <R_ExpandableCategory defaultOpen name="Saved" iconId="star">
-        <R_IconNotice hidden={savedActions.length > 0}>
-          No actions saved
-        </R_IconNotice>
+        <R_IconNotice
+          title="No actions saved"
+          description="Create new action by clicking the + button in the bottom right
+            corner."
+          hidden={savedActions.length > 0}
+        />
         <div id="saved-actions">
           <AnimatePresence>
             {savedActions.map((action, index) => (
@@ -465,9 +468,11 @@ export function R_Actions(props: ActionsProps) {
         </div>
       </R_ExpandableCategory>
       <R_ExpandableCategory defaultOpen name="Recently run" iconId="history">
-        <R_IconNotice hidden={recentActions.length > 0}>
-          No actions run
-        </R_IconNotice>
+        <R_IconNotice
+          title="No actions run"
+          description="Run new action by clicking the + button in the bottom right corner."
+          hidden={recentActions.length > 0}
+        />
         <div id="recent-actions">
           <AnimatePresence>
             {recentActions.map((action, index) => (
@@ -487,7 +492,7 @@ export function R_Actions(props: ActionsProps) {
       <R_FAB
         onClick={openConfigActionWizard}
         title="Configure new action"
-        iconId="cog-play"
+        iconId="plus"
       />
       <R_ConfigActionWizard
         actions={actions}

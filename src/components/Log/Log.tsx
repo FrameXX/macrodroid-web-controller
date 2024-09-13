@@ -137,15 +137,15 @@ export function R_Log(props: LogProps) {
         onClick={clearLog}
         iconId="delete"
       />
-      <R_IconNotice hidden={props.logRecords.length > 0}>
-        No logs recorded
-      </R_IconNotice>
       <R_IconNotice
+        title="No logs recorded"
+        hidden={props.logRecords.length > 0}
+      />
+      <R_IconNotice
+        title="All logs have been filtered out."
         iconId="filter-remove"
         hidden={props.logRecords.length === 0 || filteredLogRecords.length > 0}
-      >
-        All logs have been filtered out.
-      </R_IconNotice>
+      />
       <div id="logs">
         <AnimatePresence>
           {filteredLogRecords.map((record) => {

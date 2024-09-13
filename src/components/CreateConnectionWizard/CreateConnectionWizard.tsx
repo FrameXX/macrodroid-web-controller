@@ -316,15 +316,15 @@ export function R_CreateConnectionWizard(props: AddConnectionWizardProps) {
             pattern="(?:[a-z]|\d|-){25,50}"
             type="text"
             autoCapitalize="none"
-            placeholder="Enter webhook ID"
-            title="Webhook ID"
+            placeholder="Enter webhook ID or paste the whole URL"
+            title="Webhook ID (target device)"
             description={
               <>
                 <div>
-                  You can find webhook URL of your connection by going to New
-                  macro &gt; Add trigger &gt; Connectivity &gt; Webhook (Url).
-                  Enter just the ID (between last 2 forward slashes) or paste
-                  the whole URL and the ID will be automatically extracted.
+                  You can find the webhook ID of the target device by creating a
+                  new macro &gt; add trigger &gt; Connectivity &gt; Webhook
+                  (Url). You can paste the whole copied URL and the ID will be
+                  automatically extracted.
                 </div>
                 <img alt="screenshot" src={screenshot1Path} />
               </>

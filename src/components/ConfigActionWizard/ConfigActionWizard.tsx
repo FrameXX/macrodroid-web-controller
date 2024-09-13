@@ -116,11 +116,10 @@ export function R_ConfigActionWizard(props: ConfigActionWizardProps) {
             />
           </div>
           <R_IconNotice
+            title="All actions have been filtered out."
             iconId="filter-remove"
             hidden={filteredActions.length !== 0}
-          >
-            All actions have been filtered out.
-          </R_IconNotice>
+          />
           <R_MultiColList items={props.actions} minColWidthPx={320}>
             <AnimatePresence>
               {filteredActions.map((action) => (
@@ -145,11 +144,10 @@ export function R_ConfigActionWizard(props: ConfigActionWizardProps) {
             {configuredAction.current?.notice}
           </R_InfoCard>
           <R_IconNotice
+            title="This action has no arguments to configure. You can skip adhead!"
             hidden={configuredAction.current?.args.length !== 0}
             iconId="emoticon-wink"
-          >
-            This action has no arguments to configure. You can skip adhead!
-          </R_IconNotice>
+          />
           <R_ActionArgInputList
             configuredAction={configuredAction.current}
             onArgChange={(index, newValue) =>

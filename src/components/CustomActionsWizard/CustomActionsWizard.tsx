@@ -28,9 +28,11 @@ export function R_CustomActionsWizard(props: CustomActionsWizardProps) {
       pages={[
         <>
           <h2>Custom actions</h2>
-          <R_IconNotice hidden={props.actions.length > 0}>
-            No custom actions configured
-          </R_IconNotice>
+          <R_IconNotice
+            title="No custom actions configured"
+            description="Create custom action by clicking the + button in the bottom right corner."
+            hidden={props.actions.length > 0}
+          />
           <R_MultiColList items={props.actions}>
             <AnimatePresence>
               {props.actions.map((action, index) => (

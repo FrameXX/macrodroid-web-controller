@@ -61,13 +61,11 @@ export function R_Connections(props: ConnectionsProps) {
 
   return (
     <>
-      <R_IconNotice hidden={props.connections.length > 0}>
-        No connections configured
-        <br />
-        <small>
-          Create connection by clicking the + button in the bottom right corner.
-        </small>
-      </R_IconNotice>
+      <R_IconNotice
+        title="No connections configured"
+        description="Create connection by clicking the + button in the bottom right corner."
+        hidden={props.connections.length > 0}
+      />
       <R_MultiColList
         items={props.connections}
         id="connections"

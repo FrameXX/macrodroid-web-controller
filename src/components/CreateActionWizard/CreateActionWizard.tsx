@@ -96,7 +96,7 @@ export function R_CreateActionWizard(props: CreateActionWizardProps) {
             value={name}
             required
             title="Action name"
-            placeholder="Action name"
+            placeholder="Enter action name"
             iconId="rename"
             description="The name of the action shown in the web UI"
             ref={nameInput}
@@ -113,7 +113,7 @@ export function R_CreateActionWizard(props: CreateActionWizardProps) {
             value={id}
             required
             title="Action ID"
-            placeholder="Action ID"
+            placeholder="Enter action ID"
             iconId="identifier"
             description="The ID of the action that will be send to MacroDroid"
             ref={idInput}
@@ -125,11 +125,11 @@ export function R_CreateActionWizard(props: CreateActionWizardProps) {
         </>,
         <>
           <h2>Arguments</h2>
-          <R_IconNotice hidden={props.args.length > 0}>
-            No arguments configured
-            <br />
-            <small>Action does not have to have arguments.</small>
-          </R_IconNotice>
+          <R_IconNotice
+            title="No arguments configured"
+            description="Action does not have to have arguments. You can add them by clicking the button below."
+            hidden={props.args.length > 0}
+          />
           <div>
             <AnimatePresence>
               {props.args.map((arg, index) => (

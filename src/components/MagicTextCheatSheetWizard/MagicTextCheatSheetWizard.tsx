@@ -61,11 +61,10 @@ export function R_MagicTextCheatSheetWizard(
             currently running macro like macro category etc. are not shown here.
           </R_InfoCard>
           <R_IconNotice
+            title="All entries have been filtered out."
             iconId="filter-remove"
             hidden={filteredEntries.length !== 0}
-          >
-            All entries have been filtered out.
-          </R_IconNotice>
+          />
           <R_MultiColList items={MAGIC_TEXT_ENTRIES} minColWidthPx={300}>
             <AnimatePresence>
               {filteredEntries.map((entry) => (

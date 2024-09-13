@@ -28,3 +28,8 @@
   background: var(--color-action);
   color: var(--color-primary-item);
 }
+
+@mixin no-select {
+  user-select: none;
+  -webkit-user-select: none;
+}
