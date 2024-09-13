@@ -120,7 +120,7 @@ export function R_CreateActionLinkWizard(props: CreateActionLinkWizardProps) {
     requireConfirmation: boolean,
   ) {
     if (connections.length === 0)
-      throw new Error("Link requires it least 1 connection.");
+      throw new Error("Link requires at least 1 connection.");
     const link = new URL(
       `${location.protocol}//${location.host}${location.pathname}`,
     );
@@ -129,14 +129,14 @@ export function R_CreateActionLinkWizard(props: CreateActionLinkWizardProps) {
     for (const connection of connections) {
       link.searchParams.append(CONNECTION_ID_PARAM_NAME, connection.id);
     }
-    link.searchParams.append(
-      REQUIRE_CONFIRMATION_PARAM_NAME,
-      requireConfirmation.toString(),
-    );
+    if (requireConfirmation)
+      link.searchParams.append(REQUIRE_CONFIRMATION_PARAM_NAME, "");
     for (const arg of action.args) {
       link.searchParams.append(`arg_${arg.id}`, `${arg.value}`);
     }
-    return link.toString();
+    let linkStr = link.toString();
+    linkStr = linkStr.replace(/=&/g, "&");
+    return linkStr;
   }
 
   function generateWebhookLink(
@@ -168,7 +168,7 @@ export function R_CreateActionLinkWizard(props: CreateActionLinkWizardProps) {
       <h2>Interactive link?</h2>
       <R_BooleanOption
         description={
-          "Non-interactive link is just a MacroDroid webhook link that can be triggered without loading the website using HTTP GET request and such. An interactive link has to be opened in the browser for the script to trigger the webhook, however the user can request action on multiple reponses at once and immidiately see the result or responses of the request."
+          "Non-interactive link is just a MacroDroid webhook link that can be triggered without loading the website using HTTP GET request and such. An interactive link has to be opened in the browser for the script to trigger the webhook, however the user can request action (trigger webhook) on multiple connections at once and immidiately see the results or responses to the request."
         }
         title="Interactive"
         iconId="eye"

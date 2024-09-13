@@ -158,13 +158,7 @@ export function R_Actions(props: ActionsProps) {
     const action = getAction();
     const connections = getConnections();
 
-    const requireConfirmationParam = urlParams.get(
-      REQUIRE_CONFIRMATION_PARAM_NAME,
-    );
-    const requireConfirmation =
-      requireConfirmationParam !== null
-        ? Boolean(requireConfirmationParam)
-        : false;
+    const requireConfirmation = urlParams.has(REQUIRE_CONFIRMATION_PARAM_NAME);
 
     for (const argIndex in action.args) {
       const id = action.args[argIndex].id;

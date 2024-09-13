@@ -167,8 +167,7 @@ export function R_App() {
 
   function isCompanionURLParamPresent() {
     const urlParams = new URLSearchParams(window.location.search);
-    const companionArg = urlParams.get("companion");
-    return companionArg !== null;
+    return urlParams.has("companion");
   }
 
   function addLogScrollableContainerListener() {
