@@ -1,6 +1,14 @@
+@use "../../partials/mixins" as *;
+
 .status-card {
-  font-size: 1.2rem;
+  @include card;
+  padding: 8px 12px;
   font-weight: bold;
   width: fit-content;
-  padding-right: 20px;
+  display: flex;
+  align-items: center;
+  max-width: var(--tab-items-max-width);
+  background: var(--color-surface-top);
+  border-style: solid;
+  border-width: var(--border-width);
 }

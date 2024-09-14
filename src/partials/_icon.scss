@@ -1,5 +1,7 @@
+@use "./mixins" as *;
+
 .icon {
-  user-select: none;
+  @include no-select;
   flex-shrink: 0;
   margin: 4px;
   width: var(--icon-size);
@@ -7,7 +9,7 @@
   fill: currentColor;
 
   &.side {
-    margin: 4px 8px 4px 0;
+    margin: 4px 6px 4px 0;
   }
 
   &.hidden {

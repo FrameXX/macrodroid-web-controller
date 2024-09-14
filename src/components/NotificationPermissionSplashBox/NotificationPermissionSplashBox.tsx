@@ -4,7 +4,8 @@ import { R_Icon } from "../Icon/Icon";
 import { R_SplashBox } from "../SplashBox/SplashBox";
 import { BakeToast } from "../../modules/toaster";
 import { R_WarningCard } from "../WarningCard/WarningCard";
-import { R_StatusCard } from "../StatusCard/StatusCard";
+import { R_StatusCard, StatusCardState } from "../StatusCard/StatusCard";
+import { R_Accordion } from "../Accordion/Accordion";
 
 type PermissionStatus = "Granted" | "Denied" | "Not granted";
 
@@ -16,7 +17,7 @@ export function R_NotificationPermissionSplashBox(
   props: NotificationPermissionSplashBoxProps,
 ) {
   const [statusText, setStatusText] = useImmer<PermissionStatus>(getStatus());
-  const StatusIconId = statusText === "Granted" ? "check" : "close";
+  const statusIconId = statusText === "Granted" ? "check" : "close";
 
   function getStatus(): PermissionStatus {
     switch (Notification.permission) {
@@ -52,13 +53,29 @@ export function R_NotificationPermissionSplashBox(
     }
   }
 
+  function permissionStatusToState(status: PermissionStatus) {
+    switch (status) {
+      case "Granted":
+        return StatusCardState.Good;
+      case "Denied":
+        return StatusCardState.Bad;
+      case "Not granted":
+        return StatusCardState.Bad;
+    }
+  }
+
   return (
     <R_SplashBox
       className="notification-permission-splash-box"
       splash={<R_Icon iconId="bell-ring" />}
     >
       <h2>Notification permission</h2>
-      <R_StatusCard iconId={StatusIconId}>{statusText}</R_StatusCard>
+      <R_StatusCard
+        state={permissionStatusToState(statusText)}
+        iconId={statusIconId}
+      >
+        {statusText}
+      </R_StatusCard>
       The notification permission is used to notify you about action responses
       from connections and other incoming requests. It is not required.
       <br />
@@ -68,12 +85,14 @@ export function R_NotificationPermissionSplashBox(
         using in your web browser settings for this website. Some browser block
         notification permission requests by default.
       </R_WarningCard>
-      <R_Button
-        title="Grant permission"
-        text="Grant permission"
-        iconId="security"
-        onClick={request}
-      />
+      <R_Accordion open={statusText !== "Granted"}>
+        <R_Button
+          title="Grant permission"
+          text="Grant permission"
+          iconId="security"
+          onClick={request}
+        />
+      </R_Accordion>
     </R_SplashBox>
   );
 }

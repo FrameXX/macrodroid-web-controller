@@ -1,10 +1,12 @@
+@use "../../partials/mixins" as *;
+
 .toast {
+  @include no-select;
   display: flex;
   justify-content: center;
   align-items: center;
   border-radius: var(--border-radius);
   cursor: pointer;
-  user-select: none;
   contain: paint;
   pointer-events: all;
   margin: 8px;
