@@ -26,6 +26,7 @@ export default defineConfig({
             type: "image/svg+xml",
           },
         ],
+        theme_color: "#3e526d",
       },
       workbox: {
         cleanupOutdatedCaches: true,
