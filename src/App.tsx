@@ -138,14 +138,15 @@ export function R_App() {
   }, []);
 
   useEffect(() => {
-    addListenerToAllConnections();
+    addListenerAllConnections();
     return () => {
-      removeListenerOfAllConnections();
+      removeListenerAllConnections();
     };
   }, [connections, logRecords]);
 
-  function addListenerToAllConnections() {
+  function addListenerAllConnections() {
     connections.forEach((connection, index) => {
+      if (connection.incomingServer.isListening) return;
       connection.incomingServer.listenRequests(
         (request) => {
           handleIncomingRequest(request, index);
@@ -159,9 +160,10 @@ export function R_App() {
     });
   }
 
-  function removeListenerOfAllConnections() {
+  function removeListenerAllConnections() {
     connections.forEach((connection) => {
-      connection.incomingServer.removeRequestListener();
+      if (connection.incomingServer.isListening)
+        connection.incomingServer.removeRequestListener();
     });
   }
 
