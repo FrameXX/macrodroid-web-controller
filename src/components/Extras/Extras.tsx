@@ -70,11 +70,22 @@ export function R_Extras(props: ExtrasProps) {
       />
       <footer>
         <R_ExternalLink
+          iconId="help"
+          href="https://macrodroidforum.com/index.php?threads/macrodroid-web-controller-thread.8242/"
+          title="Forum thread"
+        >
+          Forum thread
+          <br />
+          <small>Get help or request features</small>
+        </R_ExternalLink>
+        <R_ExternalLink
           iconId="github"
           href="https://github.com/FrameXX/macrodroid-web-controller"
           title="Source code"
         >
           Source code
+          <br />
+          <small>See what nasty things are happening behind the scenes</small>
         </R_ExternalLink>
         <R_ExternalLink
           iconId="copyleft"

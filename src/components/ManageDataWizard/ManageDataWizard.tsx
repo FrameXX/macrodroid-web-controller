@@ -39,9 +39,8 @@ export function R_ManageDataWizard(props: ManageDataWizardProps) {
   function downloadBlob(blob: Blob) {
     const downloadURL = URL.createObjectURL(blob);
     const date = new Date();
-    const fileName = `macrodroid_wc_data_${date.getFullYear()}-${
-      date.getMonth() + 1
-    }-${date.getDate()}_${date.getHours()}-${date.getMinutes()}`;
+    const fileName = `macrodroid_wc_data_${date.getFullYear()}-${date.getMonth() + 1
+      }-${date.getDate()}_${date.getHours()}-${date.getMinutes()}`;
 
     const link = document.createElement("a");
     link.style.visibility = "hidden";
@@ -203,8 +202,7 @@ export function R_ManageDataWizard(props: ManageDataWizardProps) {
             When importing an exported file, only data included in the export
             will be overwritten. For example if you exported only connections
             your current connections will be replaced with the ones from the
-            imported file. Your saved actions and any other data won't be
-            touched. Other data will be left unchanged. The page will be
+            imported file. Your saved actions and any other data will be left unchanged. The app will be
             reloaded after import.
           </R_InfoCard>
           <div className="actions">

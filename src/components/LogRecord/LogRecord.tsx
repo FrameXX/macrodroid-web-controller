@@ -53,7 +53,7 @@ export function R_LogRecord(props: LogRecordProps) {
   }
 
   return (
-    <div
+    <div className="log-record-container"
     >
       <div hidden={!props.record.isResponse} className="response">
         <R_Icon side iconId="keyboard-return" />
