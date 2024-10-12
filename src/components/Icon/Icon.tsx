@@ -1,6 +1,5 @@
 import defaultSourceFilePath from "../../assets/img/icons.svg";
 import { useDefaultProps } from "../../modules/use_default_props";
-import { Target, motion } from "framer-motion";
 
 interface IconProps extends React.PropsWithChildren {
   iconId: string;
@@ -22,18 +21,14 @@ const defaultProps: Partial<IconProps> = {
 export function R_Icon(requiredProps: IconProps) {
   const props = useDefaultProps(requiredProps, defaultProps);
   const href = `${props.sourceFilePath}#${props.iconId}`;
-  const animate: Target = {
-    transform: `scaleY(${props.upsideDown ? -1 : 1})`,
-  };
   return (
-    <motion.svg
+    <svg
       aria-hidden
-      animate={animate}
       onClick={props.onClick}
       role="img"
       className={`icon ${props.side ? "side" : ""} ${props.hidden ? "hidden" : ""} ${props.className || ""}`}
     >
       <use href={href} />
-    </motion.svg>
+    </svg>
   );
 }

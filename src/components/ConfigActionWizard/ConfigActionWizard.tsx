@@ -2,7 +2,6 @@ import { useImmer } from "use-immer";
 import { R_Wizard } from "../Wizard/Wizard";
 import { R_FAB } from "../FAB/FAB";
 import { R_ActionCard } from "../ActionCard/ActionCard";
-import { AnimatePresence } from "framer-motion";
 import "./ConfigActionWizard.scss";
 import { useEffect, useMemo, useRef } from "react";
 import { R_Icon } from "../Icon/Icon";
@@ -121,18 +120,16 @@ export function R_ConfigActionWizard(props: ConfigActionWizardProps) {
             hidden={filteredActions.length !== 0}
           />
           <R_MultiColList items={props.actions} minColWidthPx={320}>
-            <AnimatePresence>
-              {filteredActions.map((action) => (
-                <R_ActionCard
-                  key={action.id}
-                  name={action.name}
-                  iconId={action.iconId}
-                  onClick={() => {
-                    selectAction(action);
-                  }}
-                />
-              ))}
-            </AnimatePresence>
+            {filteredActions.map((action) => (
+              <R_ActionCard
+                key={action.id}
+                name={action.name}
+                iconId={action.iconId}
+                onClick={() => {
+                  selectAction(action);
+                }}
+              />
+            ))}
           </R_MultiColList>
         </>,
         <>

@@ -1,4 +1,3 @@
-import { AnimatePresence } from "framer-motion";
 import { R_ActionArgInput } from "../ActionArgInput/ActionArgInput";
 import { Action, ActionArg } from "../../modules/action";
 import { useEffect } from "react";
@@ -33,7 +32,7 @@ export function R_ActionArgInputList(props: ActionArgInputListProps) {
   return (
     <R_MultiColList items={configuredArgs} minColWidthPx={400}>
       {props.configuredAction && (
-        <AnimatePresence>
+        <>
           {configuredArgs.map(
             (arg, index) =>
               shouldArgBeRendered(arg) && (
@@ -52,7 +51,7 @@ export function R_ActionArgInputList(props: ActionArgInputListProps) {
                 />
               ),
           )}
-        </AnimatePresence>
+        </>
       )}
     </R_MultiColList>
   );

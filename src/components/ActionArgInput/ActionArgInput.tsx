@@ -5,11 +5,6 @@ import { R_MultiLineStringOption } from "../MultiLineStringOption/MultiLineStrin
 import { R_SelectOption } from "../SelectOption/SelectOption";
 import { R_StringOption } from "../StringOption/StringOption";
 import "./ActionArgInput.scss";
-import { motion } from "framer-motion";
-import {
-  ANIMATE_SCALE_MOUNTED,
-  ANIMATE_SCALE_UNMOUNTED,
-} from "../../modules/const";
 
 interface ActionArgumentInputProps {
   argument: ActionArg<unknown>;
@@ -87,14 +82,10 @@ export function R_ActionArgInput(props: ActionArgumentInputProps) {
   }
 
   return (
-    <motion.div
+    <div
       className="action-argument-input"
-      layout
-      initial={ANIMATE_SCALE_UNMOUNTED}
-      animate={ANIMATE_SCALE_MOUNTED}
-      exit={ANIMATE_SCALE_UNMOUNTED}
     >
       {renderArgument()}
-    </motion.div>
+    </div>
   );
 }

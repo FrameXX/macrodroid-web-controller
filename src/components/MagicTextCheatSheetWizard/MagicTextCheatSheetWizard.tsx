@@ -4,7 +4,6 @@ import { R_FAB } from "../FAB/FAB";
 import { R_MagicTextEntry } from "../MagicTextEntry/MagicTextEntry";
 import { R_Wizard } from "../Wizard/Wizard";
 import "./MagicTextCheatSheetWizard.scss";
-import { AnimatePresence } from "framer-motion";
 import { R_SearchInput } from "../SearchInput/SearchInput";
 import { useImmer } from "use-immer";
 import { R_Icon } from "../Icon/Icon";
@@ -66,21 +65,19 @@ export function R_MagicTextCheatSheetWizard(
             hidden={filteredEntries.length !== 0}
           />
           <R_MultiColList items={MAGIC_TEXT_ENTRIES} minColWidthPx={300}>
-            <AnimatePresence>
-              {filteredEntries.map((entry) => (
-                <R_MagicTextEntry
-                  onCopy={() =>
-                    props.bakeToast({
-                      message: "Copied to clipboard.",
-                      iconId: "content-copy",
-                    })
-                  }
-                  title={entry.title}
-                  magicText={entry.magicText}
-                  key={entry.magicText}
-                />
-              ))}
-            </AnimatePresence>
+            {filteredEntries.map((entry) => (
+              <R_MagicTextEntry
+                onCopy={() =>
+                  props.bakeToast({
+                    message: "Copied to clipboard.",
+                    iconId: "content-copy",
+                  })
+                }
+                title={entry.title}
+                magicText={entry.magicText}
+                key={entry.magicText}
+              />
+            ))}
           </R_MultiColList>
         </>,
       ]}

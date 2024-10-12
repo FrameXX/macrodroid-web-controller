@@ -1,4 +1,3 @@
-import { AnimatePresence } from "framer-motion";
 import { R_Icon } from "../Icon/Icon";
 import { R_LogRecord } from "../LogRecord/LogRecord";
 import { useInnerSize } from "../../modules/use_inner_size";
@@ -147,40 +146,38 @@ export function R_Log(props: LogProps) {
         hidden={props.logRecords.length === 0 || filteredLogRecords.length > 0}
       />
       <div id="logs">
-        <AnimatePresence>
-          {filteredLogRecords.map((record) => {
-            return (
-              <R_LogRecord
-                onConnectionNameClick={() => {
-                  setFilter(
-                    record.connectionName ?? "",
-                    FilterType.ConnectionName,
-                  );
-                }}
-                onRequestIdClick={() => {
-                  setFilter(record.requestId ?? "", FilterType.RequestId);
-                }}
-                onCommentClick={() => {
-                  setFilter(record.comment ?? "", FilterType.Comment);
-                }}
-                key={record.id}
-                record={record}
-                onCopyText={() =>
-                  props.bakeToast({
-                    message: "Text copied.",
-                    iconId: "content-copy",
-                  })
-                }
-                onCopyWebhookURL={() =>
-                  props.bakeToast({
-                    message: "Webhook URL copied.",
-                    iconId: "content-copy",
-                  })
-                }
-              />
-            );
-          })}
-        </AnimatePresence>
+        {filteredLogRecords.map((record) => {
+          return (
+            <R_LogRecord
+              onConnectionNameClick={() => {
+                setFilter(
+                  record.connectionName ?? "",
+                  FilterType.ConnectionName,
+                );
+              }}
+              onRequestIdClick={() => {
+                setFilter(record.requestId ?? "", FilterType.RequestId);
+              }}
+              onCommentClick={() => {
+                setFilter(record.comment ?? "", FilterType.Comment);
+              }}
+              key={record.id}
+              record={record}
+              onCopyText={() =>
+                props.bakeToast({
+                  message: "Text copied.",
+                  iconId: "content-copy",
+                })
+              }
+              onCopyWebhookURL={() =>
+                props.bakeToast({
+                  message: "Webhook URL copied.",
+                  iconId: "content-copy",
+                })
+              }
+            />
+          );
+        })}
         <div className="fab-placeholder" />
       </div>
       <R_FAB
