@@ -203,9 +203,10 @@ export function R_CreateConnectionWizard(props: AddConnectionWizardProps) {
     const webhookURLPattern = new RegExp(".*trigger.macrodroid.com/(.*?)/.*");
     const match = newValue.match(webhookURLPattern);
     if (!match) return;
-    if (!match.length) return;
+    if (match.length != 2) return;
     const extractedWebhookId = match[1];
     setWebhookId(extractedWebhookId);
+    setWebhookIdValid(true);
     props.bakeToast({
       message:
         "Webhook URL detected. The webhook ID was automatically extracted.",
