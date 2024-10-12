@@ -604,7 +604,7 @@ export const ACTIONS: Action[] = [
       {
         name: "Text",
         value: "",
-        type: ActionArgType.String,
+        type: ActionArgType.MultiLineString,
         id: "text",
       },
     ],
